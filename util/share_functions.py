@@ -24,5 +24,4 @@ def global_add_func(function):
   add_func_to_dict(funcs, function)
 def global_add_funcs(functions):
   add_funcs_to_dict(funcs, functions)
-add_func = global_add_func
-add_funcs = global_add_funcs
+

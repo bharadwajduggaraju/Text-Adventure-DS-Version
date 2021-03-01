@@ -1,4 +1,4 @@
-from functions import funcs
+from util.share_functions import funcs
 import random
 
 class Move:

@@ -1,6 +1,5 @@
 from fighting.effects import Effect
 from fighting.moveList import Move
-from fighting.battle import Battle
 from entities.character import Character
 from entities.enemies import Enemy
 #Will organize later

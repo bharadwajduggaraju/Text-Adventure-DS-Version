@@ -1,18 +1,23 @@
 #Import Libraries
 import sys
 import time
-import signal
 import os
 import random
+import pygame
+from replit import audio
+
 from fighting.effects import Effect
 from fighting.moveList import Move
 from fighting.battle import Battle
+from fighting.timer import *
+
 from entities.character import Character
 from entities.enemies import Enemy
+
+from util.colors import ColorToColor
 from util.colors import *
-from replit import audio
-import pygame
-from multiprocessing import Process
+from util.variables import *
+import util.share_functions as functions
 
 def clearConsole():
   os.system('clear')
@@ -23,120 +28,6 @@ def getTimerMode():
 
 clearConsole()  #Remove text repl.it gives at the beginning
 
-#Effect format:
-#exampleEffect = Effect(name, damage, duration, wounds, op_phys, op_ment, op_delay)
-fire = Effect("Burning", 3, 3, True)
-electro = Effect("Electrocuted", 10, 1, True)
-intox = Effect("Intoxicated", 0, 30, False, 0, 1)
-weak = Effect("Weakened", 0, 30, False, 1)
-rally = Effect("Rallying", 0, 5, False, -1, -1)
-flinch = Effect("Flinching", 0, 1, False, 1)
-
-#Effects
-effects = {
-  "Fire": fire,
-  "Electrocution": electro,
-  "Intoxication": intox,
-  "Weakness": weak,
-  "Flinching": flinch,
-  "Rally": rally
-}
-
-Rally = [rally]
-
-#Format of making a new move
-#exampleMove = Move(name, damageTrait, damageMult, critChanceTrait, critChanceMult, failChanceTrait, failChanceMult, comboTimeTrait, comboMult, accuracyTrait, accuracyMult, effects, effectLevelTrait, effectMult, charactersHitTrait, hitMult, op_TargetType)
-
-#Instances for Spells
-damage = Move("Damaging Spell", "MagicalAffinity", 2, "MagicalControl", 2, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 2, effects, "MagicalAffinity", 1, "MagicalAffinity", 0)
-element = Move("Elemental Spell", "MagicalAffinity", 1, "MagicalControl", 1, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 1, effects, "MagicalAffinity", 3, "MagicalAffinity", 0)
-area = Move("Area Spell", "MagicalAffinity", 1, "MagicalControl", 2, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 1, effects, "MagicalAffinity", 1, "MagicalAffinity", 0)
-heal = Move("Healing Spell", "MagicalAffinity", -2, "MagicalControl", 0, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 3, effects, "MagicalAffinity", 0, "MagicalAffinity", 0, 1)
-rally = Move("Rallying Cry", "MagicalAffinity", 0, "MagicalControl", 0, "MagicalControl", 0, "PhysicalGrace", 0, "SocialPresence", 4, Rally, "SocialHeart", 1, "SocialHeart", 1)
-attack = Move("Physical Attack", "PhysicalSkill", 1, "PhysicalSkill", 1, "MagicalControl", 0, "PhysicalGrace", 2, "PhysicalGrace", 2, effects, "SocialHeart", 0, "PhysicalGrace", 0)
-
-#Move types.
-spells = {
-  "Damage": damage,
-  "Element": element,
-  "Area": area,
-  "Heal": heal,
-  "Rally": rally,
-  "Attack": attack,
-}
-
-#Example = Character(name, HP, MaxHP, SP, MaxSP, MP, MaxMP, SPresence, SHeart, SStability, PGrace, PSkill, PPoise, MAffinity, MControl, MConcentration, InventoryList, TraumaList, EffectsList, TagsList, Move, Move2, Move3, op_maxDeaths, op_deaths)
-
-#Instances for characters
-Esteri = Character("Esteri", 11, 11, 16, 16, 3, 3, 3, 3, 1, 5, 4, 3, 0, 0, 1, [], [], [], [], attack, rally, area)
-Cressida = Character("Cressida", 9, 9, 6, 6, 15, 15, 4, 3, 3, 0, 1, 3, 2, 3, 3, [], [], [], [], heal, damage, rally)
-Kosu = Character("Kosu", 14, 14, 13, 13, 3, 3, 4, 5, 3, 3, 4, 1, 0, 0, 0, [], [], [], [], attack, rally, element)
-Ai = Character("Ai", 11, 11, 5, 5, 14, 14, 1, 4, 0, 0, 1, 0, 4, 5, 5, [], ['grief'], [], [], damage, element, area)
-#We had determined that Ai starts with grief
-Amaliyah = Character("Amaliyah", 11, 11, 16, 16, 3, 3, 3, 3, 1, 5, 4, 3, 4, 0, 1, [], [], [], [], attack, element, heal)
-
-#Characters
-characters = {
-  "Esteri": Esteri,
-  "Cressida": Cressida,
-  "Kosugade": Kosu,
-  "Ai": Ai,
-  "Amaliyah": Amaliyah,
-}
-
-party = [Amaliyah]
-
-#List of Trauma Entities (Placeholder)
-trauma_entities = ["", Esteri.Name, Cressida.Name]
-
-#Trauma Generator Variables
-fear_name = [
-  "fire", "suffocation", "brutality", "necromancy", "magic", "facing "
-]
-wound_name = [
-  "wounded arm",
-  "broken arm",
-  "wounded leg",
-  "broken leg",
-  "bruised rib",
-  "broken rib",
-  "wounded eye",
-  "concussion",
-  "disfiguring wound",
-  "infected wound",
-]
-trauma_name = [
-  'grief', 'moral conflict', 'failure', 'cowardice', 'undeclared love for ',
-  'worry for '
-]
-true_fear_name = [
-  "fire", "suffocation", "brutality", "necromancy", "magic", "death",
-  "facing "
-]
-true_wound_name = [
-  "severed arm ",
-  "severed leg ",
-  "internal injuries ",
-  "coma ",
-  "permanent disfiguration ",
-  "lingering weakness ",
-]
-true_trauma_name = [
-  'deep concern for ', 'terrible regret', 'true failure', 'true cowardice',
-  'forever undeclared love for ', 'memories of the death of ',
-  "memories of the death of their lover "
-]
-
-#Sample location
-locations = {
-  "Home": {
-    "time": 0,
-  },
-  "Woods": {
-    "time": 0,
-  }
-}
-
 #Random Encounters
 possibility = 5
 
@@ -146,57 +37,9 @@ def randencounter(battle):
   if battle_happening > possibility:
     battle.begin()
 
-#enemies
-#Enemy(name, maxHP, HP, TimeGiven, AC, damage, op_effects)
-Joke = Enemy("The Joker", 1, 1, 0, 100, 0)
-#T1 Kirin
-InexperiencedKirin = Enemy("Inexperienced Kirin", 10, 10, 10, 3, 1)
-#T2 Kirin
-NormalKirin = Enemy("Kirin", 30, 30, 10, 3, 3)
-#T3 Kirin
-VeteranKirin = Enemy("Veteran Kirin", 50, 50, 10, 10, 3)
-#Special Kirin
-BossKirin = Enemy("The Boss Kirin", 100, 100, 10, 10, 3)
-#T1 Bandits
-Bandit = Enemy("Bandit", 10, 10, 10, 10, 2)
-BanditThug = Enemy("Bandit Thug", 15, 15, 10, 13, 1)
-BanditRuffian = Enemy("Bandit Ruffian", 7, 7, 10, 8, 5)
-#T2 Bandits
-BanditFugitive = Enemy("Bandit Fugitive", 20, 20, 7, 13, 4)
-BanditBruiser = Enemy("Bandit Bruiser", 30, 30, 7, 16, 2)
-BanditHitman = Enemy("Bandit Hitman", 15, 15, 7, 9, 10)
-#T3 Bandits
-BanditElite = Enemy("Bandit Elite", 40, 40, 4, 15, 8)
-BanditStalwart = Enemy("Bandit Stalwart", 65, 65, 4, 18, 4)
-BanditAssassin = Enemy("Bandit Assassin", 15, 15, 4, 12, 20)
-#
-#Sample enemyList
-enemies = {
-  "joke": Joke,
-  "baby kirin": InexperiencedKirin,
-  "teen kirin": NormalKirin,
-  "kirin": NormalKirin,
-  "boss kirin": BossKirin,
-  "bandit": Bandit,
-  "bandit thug": BanditThug,
-  "bandit ruffian": BanditRuffian,
-  "bandit fugitive": BanditFugitive,
-  "bandit bruiser": BanditBruiser,
-  "bandit hitman": BanditHitman,
-  "bandit elite": BanditElite,
-  "bandit stalwart": BanditStalwart,
-  "bandit assassin": BanditAssassin,
-}
-
-#Other
-inventory = []
-timerMode = "on"
-
-long = 0.025
-punc_delays = {',': 3, '(': 4, ')': 4, ';': 4, ':': 5, '.': 5, '?': 5, '!': 5}
 punc_pause = True
 #Text Scrolling Function
-def delay_print(s="", speed=None, end='\n'):
+def delay_print(s="", speed=None, end='\n', color="WHITE"):
   global long, punc_delays
   if speed != None:
     timer = speed
@@ -204,7 +47,11 @@ def delay_print(s="", speed=None, end='\n'):
     timer = long
   true_delay = 0.1 / (100.0 * timer)  #Makes greater timer values correspond to greater speeds- Helpful for the user setting the scroll speed
 
+  print(ColorToColor[color], end="")
+
   is_num = False
+  #for i in range(len(s)):
+    #c = s[i]
   for c in s:
     sys.stdout.write(c)
     sys.stdout.flush()
@@ -220,6 +67,8 @@ def delay_print(s="", speed=None, end='\n'):
   if end != "":
     sys.stdout.write(end)
     sys.stdout.flush()
+
+  print(RESET, end="")
 
   time.sleep(0.5)
 
@@ -279,63 +128,6 @@ def give_trauma(character, trauma, fear_type, giveTrue=False, target=0):
       + traus[trauma] + trauma_entities[target] +
       " gnawing at them. The pain will remain with them even after the sun rises."
     )
-
-#Battle
-class TimeOut(Exception):  #Use this instead of a general Exception- Avoid accidentally catching other errors
-  pass
-
-def signalHandler(sign, frame):
-  raise TimeOut("Sorry, time is out.")
-
-#Variables
-processArray = []
-pause_timers = False
-#Clears/stops all existing timers
-def clearTimers():
-  global processArray
-  signal.alarm(0)
-  for i in range(len(processArray)):
-    processArray[i].kill()
-    processArray.pop(i)
-
-def pauseTimers(is_set, pause=False):
-  global pause_timers
-  if not is_set:
-    pause_timers = pause
-  return pause_timers
-
-#Stops old timers and creates a new one
-def resetTimer(timeEnd):
-  global processArray
-  global timerMode
-
-  #Clear existing timers
-  clearTimers()
-
-  if (timerMode == "on"):
-    #Starting a new signal
-    signal.signal(signal.SIGALRM, signalHandler)
-    signal.alarm(timeEnd)
-
-    #Starting another process too
-    p2 = Process(target=timer, args=(timeEnd, ))
-    p2.start()
-    processArray.append(p2)
-
-timer_res = 1
-def timer(t):
-  org = t
-  while (t > 0):
-    if pause_timers:
-      continue
-    comp_t = int(timer_res * (t // timer_res))
-    if (comp_t == int(org / 2)):
-      print(RED_BOLD + "\nHalf Time Left!" + RESET)
-    if (comp_t == int(org / 4)):
-      print(RED_BOLD + "\nAlmost up!" + RESET)
-
-    time.sleep(timer_res)
-    t -= timer_res
 
 def death(character):
   if character.die():
@@ -484,20 +276,34 @@ def loading_effect():
   global long
   old = long
   long = 0.0015 * punc_delays['.']
+  loading_speed = 0.0015 * punc_delays['.']
   #Because of how delay_print calculates the delay, multiplying long by punc_delays['.'] divides the time delay by punc_delays['.']
 
   clearConsole()
   for i in range(3):
     time.sleep(0.5)
-    delay_print("...", end="")
+    delay_print("...", speed=loading_speed, end="")
     clearConsole()
 
   long = old
 
+def finley():
+  time.sleep(1)
+  clearConsole()
+
+def otis(string):
+  print(DARK_RED + string + RESET)
 
 #Villages
+minu_visits = 0
+stole_something = False
+minu_mad = False
 def village_1():
-  quest_completion = False
+  global minu_visits
+  global stole_something
+  global minu_mad
+  quest_completion = True
+  clearConsole()
   delay_print("Please select which location you would like to visit.")
   delay_print(" 1. Chief's House")
   delay_print(" 2. Noble House")
@@ -510,78 +316,199 @@ def village_1():
   delay_print(" 9. Town Square")
   delay_print(" 10. Servants' Quarters")
   delay_print(" 11. Dark Forest")
+  if quest_completion == True:
+    delay_print(" 12. Bright Forest Path")
   snowball = validate_int_input(
-    range(1, 12), "Invalid input",
+    range(1, 13), "Invalid input",
     "Type the number of your destination here: ")  #Limited to 1 through 11
   if snowball == 1:
     if quest_completion == False:
       print(DARK_RED + "CHIEF'S HOUSE" + DARK_RED)
+      time.sleep(0.25)
       delay_print(WHITE + 
         "The door is locked!" + WHITE)
       time.sleep(1)
       clearConsole()
+      village_1()
     if quest_completion == True:
       print(DARK_RED + "CHIEF'S HOUSE" + DARK_RED)
+      time.sleep(0.25)
       delay_print(WHITE + 
-      "You take in your surroundings. Much of the room is carved in dark stained oak. "
-      )
+      "You take in your surroundings. Much of the room is carved in dark stained oak. " + WHITE)
   elif snowball == 2:
     print(DARK_RED + "NOBLE HOUSE" + DARK_RED)
     time.sleep(0.25)
-    print(FOREST_GREEN + "BUTLER: " + FOREST_GREEN)
-    delay_print(WHITE +
-      "Stay out of this house! The master is not expecting visitors!" +
-      WHITE)
-    delay_print("You were shoved out of the house!")
-    time.sleep(0.5)
-    clearConsole()
+    if quest_completion == False:
+      delay_print(WHITE + "The door is locked!" + WHITE)
+      time.sleep(1)
+      clearConsole()
+      village_1()
+    if quest_completion == True:
+      delay_print(WHITE + "The knocker thumps hollowly against the door." + WHITE)
+      delay_print("You hear frantic footsteps scuttling in your direction.")
+      delay_print("The door creaks open, revealing a stout old butler in a tuxedo.")
+      delay_print(
+        "'Stay out of this house!' he whines. 'The master is not expecting visitors!'" +
+        WHITE)
+      delay_print("You were shoved out of the house!")
+      time.sleep(1)
+      clearConsole()
+      village_1()
   elif snowball == 3:
-    print(DARK_RED + "CARPENTER'S HOUSE" + DARK_RED)
-    time.sleep(0.25)
-    delay_print(WHITE + "Who would you like to talk to?" + WHITE)
-    delay_print(" 1. Carpenter")
-    delay_print(" 2. Carpenter's Wife")
-    delay_print(" 3. Carpenter's Daughter")
-    delay_print(" 4. Exit House")
-    carpenter_family = validate_input(["1", "2", "3", "4"], "Invalid input")
-    if carpenter_family == "1":
-      print(FOREST_GREEN + "Carpenter: " + FOREST_GREEN)
-      delay_print(WHITE +
-        "Hello, ma'am! I'm sorry, but my shop is closed." +
-        WHITE)
-      delay_print(
-        "Would you like to have breakfast with me, my wife, and my daughter?"
-      )
-      carpenter_breakfast = validate_input(["YES", "Y", "NO", "N"],"Invalid input").lower()
-      if carpenter_breakfast == "yes" or "y":
-        delay_print(
-          "Wonderful!")
-        delay_print(
-          "You munch on the rice you were offered. It's delicious!")
-      elif carpenter_breakfast == "no" or "n":
-        delay_print(
-          "That's all right. Come back another time!")
-    elif carpenter_family == 2:
-        print(FOREST_GREEN + "Carpenter's Wife: " + FOREST_GREEN)
-        delay_print(WHITE +
-          "Mmm... this rice is so delicious! I have the best husband." +
-          WHITE)
-    elif carpenter_family == 3:
-      print(FOREST_GREEN + "Carpenter's Daughter" + FOREST_GREEN)
-      delay_print(WHITE +
-        "I wonder if my dad is disappointed that I'm not a boy..." +
-        WHITE)
-      delay_print(
-        "I wouldn't make a very good carpenter. I like swordfighting more."
-      )
-      delay_print()
-    else:  #carpenter_family == 4
-        pass
+    def carpenterhouse():
+      global minu_visits
+      global stole_something
+      global minu_mad
+      if stole_something == True:
+        delay_print("You can't enter! They might find out that you stole Minu's amulet!")
+        time.sleep(1)
+        clearConsole()
+        village_1()
+      else:
+        if quest_completion == False:
+          clearConsole()
+          print(DARK_RED + "CARPENTER'S HOUSE" + DARK_RED)
+          time.sleep(0.25)
+          delay_print("The door is locked!")
+          time.sleep(1)
+          clearConsole()
+          village_1()
+        elif quest_completion == True:
+          clearConsole()
+          print(DARK_RED + "CARPENTER'S HOUSE" + DARK_RED)
+          time.sleep(0.25)
+          delay_print(WHITE + "Who would you like to talk to?" + WHITE)
+          delay_print(" 1. Carpenter")
+          delay_print(" 2. Carpenter's Wife")
+          delay_print(" 3. Carpenter's Daughter")
+          delay_print(" 4. Exit House")
+          carpenter_family = validate_input(["1", "2", "3", "4"], "Invalid input")
+          clearConsole()
+          if carpenter_family == "1":
+            delay_print("The carpenter glances up at you with a bit of confusion. His eyes crinkle kindly when he recognizes you.")
+            delay_print("'Hello, hero!' he says, standing frantically and bowing. 'I greatly appreciate your help. Thank you for saving my wife, my daughter, and I!'")
+            delay_print("He looks down at his daughter for a second, expression soft and proud. 'I would never forgive myself if I let her be hurt.'")
+            time.sleep(0.25)
+            delay_print("You're hit by a pang of jealousy.")
+            time.sleep(0.25)
+            delay_print("He looks back at you, slightly disoriented. 'Where was I? Ah, yes. We're eating breakfast right now. All we have is rice, but it may be able to help you replenish your energy. Would you like to eat some?'")
+            carpenter_breakfast = yes_no(False, "Invalid input").lower()
+            if carpenter_breakfast == "yes" or carpenter_breakfast == "y":
+              delay_print(
+                "'Wonderful!' He grins and proffers a bowl of steaming-hot rice.")
+              delay_print(
+                "You munch on the food you were offered. It's delicious!")
+              time.sleep(1)
+              carpenterhouse()
+            if carpenter_breakfast == "no" or carpenter_breakfast == "n":
+              delay_print(
+                "'That's all right,' the carpenter says, slightly disappointed. 'Don't forget to come back another time!'")
+              time.sleep(1)
+              clearConsole()
+              village_1()
+          elif carpenter_family == "2":
+              delay_print("The carpenter's wife gnaws on rice. She seems distracted.")
+              delay_print("'Mmmmm... such good rice...'")
+              time.sleep(1)
+              carpenterhouse()
+          elif carpenter_family == "3":
+            if minu_mad == False:
+              if minu_visits == 0:
+                delay_print("The carpenter's daughter looks downcast. She picks at her rice.")
+                delay_print("She glances up at you.")
+                delay_print("'Oh, you're the village hero!' she says, recognizing you immediately.")
+                delay_print("She kneads her hands. 'What's your name?'")
+                delay_print("What will you say?")
+                delay_print(" 1. I'm Esteri! I'm the heir to the chiefdom of *insert village name*!")
+                delay_print(" 2. You don't deserve to know.")
+                delay_print(" 3. Who's the village hero?")
+                carpenter_daughter_response = validate_input(["1", "2", "3"],"Invalid input")
+                if carpenter_daughter_response == "1":
+                  delay_print("'Nice to meet you, Esteri!'")
+                  delay_print("The girl bows slightly. 'My name is Minu.'")
+                  delay_print("Her expression becomes one of trepidation. 'Can I trust you with a secret?'")
+                  delay_print("Choose your response.")
+                  delay_print(" 1. Sure!")
+                  delay_print(" 2. No way.")
+                  carpenter_daughter_secret = validate_input(["1", "2"], "Invalid input")
+                  if carpenter_daughter_secret == "1":
+                    delay_print("She furtively flicks her gaze to her father.")
+                    delay_print("'I'm afraid that my dad is disappointed that I'm not a carpenter,' she confesses.")
+                    delay_print("She looks sheepish. 'I wish I could be a good carpenter, I really do. But I enjoy taking care of animals more.'")
+                    delay_print("She looks down at her lap. 'Do you think he's mad at me?'")
+                    delay_print("What will you say?")
+                    delay_print(" 1. I'm sure he loves you a lot. He isn't angry.")
+                    delay_print(" 2. I think he is... he seems angry.")
+                    carpenter_daughter_disappointed = validate_input(["1", "2"], "Invalid input")
+                    if carpenter_daughter_disappointed == "1":
+                      delay_print("'Thank you!' Minu's face brightens. 'That makes me feel a lot more confident.'")
+                      delay_print("She looks down for a second. 'It's been a while since I'd had a good friend...'")
+                      time.sleep(0.5)
+                      delay_print("The moment of silence passes, and Minu smiles awkwardly.")
+                      time.sleep(0.5)
+                      delay_print("She holds out her palm. In it is a small purple stone, pusling with blue light.")
+                      delay_print("She grins. 'I'd like you to have this as thanks.'")
+                      delay_print("You take the amulet and slip it into your bag.")
+                      inventory.append(["Minu's Amulet", "An amulet containing a mysterious healing power."])
+                      minu_visits += 1
+                      time.sleep(1)
+                      clearConsole()
+                      carpenterhouse()
+                    if carpenter_daughter_disappointed == "2":
+                      delay_print("'Oh...' Minu looks concerned. 'I suppose you're right. Thank you for your time, Esteri.'")
+                      delay_print("She turns away, looking disheartened.")
+                      delay_print("You notice a stone next to her plate, bright red and pulsing with fiery orange streaks.")
+                      delay_print("Do you take it?")
+                      delay_print(" 1. Yes")
+                      delay_print(" 2. No")
+                      take_minus_amulet = validate_input(["1", "2"], "Invalid input")
+                      if take_minus_amulet == "1":
+                        delay_print("You sneak the stone into your bag. No one notices.")
+                        inventory.append(["Minu's Amulet", "An amulet containing the power to harm others."])
+                        delay_print("You decide to sneak out of the carpenter's house before anyone can catch you.")
+                        stole_something = True
+                        minu_visits += 1
+                        time.sleep(1)
+                        clearConsole()
+                        village_1()
+                      if take_minus_amulet == "2":
+                        delay_print("You rescind your hand and smile stiffly.")
+                        time.sleep(1)
+                        clearConsole()
+                        carpenterhouse()
+                  if carpenter_daughter_secret == "2":
+                    delay_print("Minu smiles softly. 'That's all right. Maybe you can come back another time to hear my secret!'")
+                    time.sleep(1)
+                    clearConsole()
+                    carpenterhouse()
+                if carpenter_daughter_response == "2":
+                  delay_print("'Well, that was rude!' She looks slightly offended.")
+                  minu_mad = True
+                  time.sleep(1)
+                  clearConsole()
+                  carpenterhouse()
+                if carpenter_daughter_response == "3":
+                  delay_print("'Oh... maybe I picked the wrong person. Sorry!' She looks slightly uncomfortable.")
+                  time.sleep(1)
+                  clearConsole()
+                  carpenterhouse()
+              else:
+                delay_print("'This rice is delicious!'")
+            elif minu_mad == True: 
+              delay_print("You shouldn't go over to her! She's angry!")
+              time.sleep(1)
+              clearConsole()
+              carpenterhouse()
+          else:  #carpenter_family == 4
+              time.sleep(0.5)
+              clearConsole()
+              village_1()
+    carpenterhouse()
   elif snowball == 4:
     #Cobbler's House
     pass
   elif snowball == 5:
-    #Tailor's House
+    
     pass
   elif snowball == 6:
     #Old Lady's House
@@ -598,9 +525,14 @@ def village_1():
   elif snowball == 10:
     #Servants' Quarters
     pass
-  else: #snowball == 11
-    #Dark forest
+  elif snowball == 11:
     pass
+  elif snowball == 12:
+    if quest_completion == False:
+      delay_print("Sorry, but you can't access this area yet. Please try again.")
+      village_1()
+    else:
+      pass
 
 
 #An ironic function for testing functions
@@ -692,11 +624,9 @@ def getInput(prompt=""):
   return userAnswer
 
 #Give Battle and Move access to functions and necessary variables
-import functions
-#functions.global_add_funcs([delay_print, getInput, clearConsole, clearTimers, resetTimer, validate_input, validate_int_input, getTimerMode])
-functions.add_funcs([delay_print, getInput, clearConsole, clearTimers, resetTimer, validate_input, validate_int_input, getTimerMode])
+functions.global_add_funcs([delay_print, getInput, clearConsole, validate_input, validate_int_input, getTimerMode])
 
-Battle.setup(party, locations, enemies, TimeOut)
+#Battle.setup(party, locations, enemies)
 
 #GAME CODE - Introduction
 def introduction():
@@ -813,7 +743,7 @@ def welcome():
   introScreen = pygame.display.set_mode((800, 800))
   introScreen.fill((148, 226, 255))
 
-  welcome = pygame.image.load("util/images/welcome.png")
+  welcome = pygame.image.load("files/images/welcome.png")
   welcome = pygame.transform.scale(welcome, (710, 300))
   position = (40, 70)
   introScreen.blit(welcome, position)
@@ -865,11 +795,11 @@ def welcome():
   pygame.quit()
 
 #MUSIC
-#source = audio.play_file('util/sound/EsteriTheme.mp3')
+#source = audio.play_file('files/sound/EsteriTheme.mp3')
 #source.volume += 0.01
 clearConsole()
 
-def finley():
+def adventureBeg():
   #Game Code
   delay_print(WHITE +
     "The voice of the chaplain rings out in sonorous tones across the hall. \"Esteri. Today, you are come of age, and eligible to ascend the throne. As it has been for the many centuries...\"\n The chaplain drones on as you kneel on the flagstones, watching the play of candlelight on the polished rock. Slowly, the chaplain's voice drones to a close."
@@ -1183,6 +1113,5 @@ def finley():
   delay_print("'Let's go look,' Kosu says.")
 
 welcome()
-finley()
 village_1()
 
