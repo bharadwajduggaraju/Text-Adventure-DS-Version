@@ -37,6 +37,7 @@ class Character:
     self.Move3 = Move3
     self.MaxDeaths = maxDeaths
     self.Deaths = deaths
+    self.Tags = Tags
   
   def get_stat(self, stat_name):
     if stat_name == "SocialPresence":

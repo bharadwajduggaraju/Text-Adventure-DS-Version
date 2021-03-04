@@ -1,4 +1,4 @@
-from util.share_functions import funcs
+from util.console.input import validate_int_input
 import random
 
 class Move:
@@ -22,7 +22,6 @@ class Move:
     self.TargetType = TargetType
   
   def use(self, actor, party, enemies):
-    validate_int_input = funcs["validate_int_input"]
     isAttack = self.TargetType == 0
     if isAttack:
       group = enemies

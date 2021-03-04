@@ -1,7 +1,9 @@
 import util.colors as col
-from util.share_functions import funcs
-from util.variables import party, locations, enemies
-from fighting.timer import clearTimers, resetTimer, TimeOut
+from util.console.output import delay_print, clearConsole
+from util.console.input import validate_input
+from util.instances import enemies
+from util.variables import party, locations
+from fighting.timer import clearTimers, resetTimer, TimeOut, Timer
 
 class Battle:
   def __init__(self, battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
@@ -30,10 +32,6 @@ class Battle:
     return 0
   
   def begin(self): #If you have better name suggestions, go ahead and change this (and the calls in main.py)
-    delay_print = funcs["delay_print"]
-    validate_input = funcs["validate_input"]
-    clearConsole = funcs["clearConsole"]
-    
     delay_print(str(self.intro))
     validate_input([], "", "Are you ready to start the battle? ", validate=False)
     #Prompt may be changed
@@ -84,12 +82,8 @@ class Battle:
     clearTimers()
     return var
 
-  def turn(self, actor):
-    delay_print = funcs["delay_print"]
-    validate_input = funcs["validate_input"]
-    getTimerMode = funcs["getTimerMode"]
-  
-    timerMode = getTimerMode()
+  def turn(self, actor): 
+    timerMode = Timer.settings("timerMode")
     timeEnd = enemies[self.primaryEnemyName].TimeGiven + locations[self.location]["time"]
     resetTimer(timeEnd)
     

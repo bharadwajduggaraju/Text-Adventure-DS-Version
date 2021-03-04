@@ -6,27 +6,17 @@ import random
 import pygame
 from replit import audio
 
-from fighting.effects import Effect
-from fighting.moveList import Move
 from fighting.battle import Battle
-from fighting.timer import *
 
-from entities.character import Character
-from entities.enemies import Enemy
-
-from util.colors import ColorToColor
+from adventures.shop import Shop
 from util.colors import *
 from util.variables import *
-import util.share_functions as functions
+from util.variables import inventory, add_party_member, add_item
+from util.instances import *
+from util.console.output import delay_print, loading_effect, clearConsole
+from util.console.input import validate_input, validate_int_input, yes_no, tutorial, inventorymenu, settings, battle_tutorial
 
-def clearConsole():
-  os.system('clear')
-
-def getTimerMode():
-  #Uses global timerMode
-  return timerMode
-
-clearConsole()  #Remove text repl.it gives at the beginning
+add_party_member(Amaliyah)
 
 #Random Encounters
 possibility = 5
@@ -37,255 +27,11 @@ def randencounter(battle):
   if battle_happening > possibility:
     battle.begin()
 
-punc_pause = True
-#Text Scrolling Function
-def delay_print(s="", speed=None, end='\n', color="WHITE"):
-  global long, punc_delays
-  if speed != None:
-    timer = speed
-  else:
-    timer = long
-  true_delay = 0.1 / (100.0 * timer)  #Makes greater timer values correspond to greater speeds- Helpful for the user setting the scroll speed
-
-  print(ColorToColor[color], end="")
-
-  is_num = False
-  #for i in range(len(s)):
-    #c = s[i]
-  for c in s:
-    sys.stdout.write(c)
-    sys.stdout.flush()
-    delay = true_delay
-    if punc_pause and not is_num:
-      try:
-        delay *= punc_delays[c]
-      except KeyError:  #If c is not a key in the dictionary
-        pass
-      # Code by Caden
-    is_num = ('0' <= c <= '9') or (is_num and c == '.')
-    time.sleep(delay)
-  if end != "":
-    sys.stdout.write(end)
-    sys.stdout.flush()
-
-  print(RESET, end="")
-
-  time.sleep(0.5)
-
-#Input with Error Message
-def validate_input(accepted_list, errMessage, prompt="", validate=True):
-  user_input = getInput(prompt).upper()
-  validate = validate and accepted_list != []
-  while (user_input not in accepted_list) and validate:
-    print(str(errMessage))
-    user_input = getInput(prompt).upper()
-  return user_input
-
-def validate_int_input(accepted_list, errMessage, prompt=""):
-  options = []
-  for option in accepted_list:
-    options.append(str(option))
-  answer = validate_input(options, errMessage, prompt)
-  return int(answer)
-
-def yes_no(allow_maybe, errMessage, prompt=""):
-  options = ["YES", "Y", "N", "NO"]
-  if allow_maybe:
-    options += ["MAYBE", "POSSIBLY"]
-  answer = validate_input(options, errMessage, prompt)
-  if answer == "YES":
-    answer = "Y"
-  elif answer == "NO":
-    answer = "N"
-  return answer
-
-#Trauma Generator
-def give_trauma(character, trauma, fear_type, giveTrue=False, target=0):
-  if giveTrue:
-    fears = true_fear_name
-    traus = true_trauma_name
-    wounds = true_wound_name
-  else:
-    fears = fear_name
-    traus = trauma_name
-    wounds = wound_name
-
-  if fear_type == 0:
-    delay_print(
-      "That night, " + character.Name + " had a vivid dream- of " +
-      fears[trauma] + trauma_entities[target] +
-      ". They awoke screaming, and despite their best efforts, the fear will not leave."
-    )
-  elif fear_type == 1:
-    delay_print(
-      "That night, " + character.Name +
-      " felt the injury more than ever. Despite the care given to them, their "
-      + wounds[trauma] + " is here to stay.")
-  else:
-    delay_print(
-      "That night, " + character.Name +
-      " sat with their head in their hands, the dark pressing in around them, their "
-      + traus[trauma] + trauma_entities[target] +
-      " gnawing at them. The pain will remain with them even after the sun rises."
-    )
-
 def death(character):
   if character.die():
     delay_print(
       "placeholder - will probably write if statements so that each character can get a customized death scene"
     )
-
-#Game Settings
-def settings():
-  global long
-  global punc_pause
-  global timerMode
-  delay_print(CYAN_BOLD + "~~~~Settings~~~~" + CYAN)
-  delay_print("Here, you can modify your settings.")
-  delay_print("Here are your current settings:")
-  delay_print("\t1 - Text Scrolling Speed: " + str(long * 100))
-  delay_print("\t2 - Punctuation Pause: " + "on" if punc_pause else "off")  #Python e1 if b else e2 is equivalent to b ? e1 : e2
-  delay_print("\t3 - Battle Timer: " + str(timerMode))
-  delay_print("\t4 - Leave Settings")
-  delay_print("Which setting would you like to change (type the number)? ")
-
-  modify = validate_input(['1', '2', '3', '4'], "That is an invalid number.")
-
-  if modify == "1":
-    delay_print("Type a number from 1 to 10 to act as your text scroll speed.")
-    textSpeed = float(input())
-    while (textSpeed < 1 or textSpeed > 10):
-      delay_print("That value is not between 1 and 10.")
-      delay_print("Please enter a new value between 1 and 10 as your text scroll speed.")
-      textSpeed = float(input())
-      print("\n")
-      time.sleep(1)
-    delay_print("Text scroll speed is now set to " + str(textSpeed) + ".")
-    time.sleep(1)
-    long = float(textSpeed) / 100
-  elif modify == "2":
-    delay_print("Would you like to pause for punctuation?")
-    value = validate_input(["YES", "Y", "NO", "N"], "That is an invalid value.")
-    punc_pause = (value == "YES") or (value == "Y")
-    if punc_pause:
-      punc_mode = "on"
-    else:
-      punc_mode = "off"
-    delay_print("Punctuation pause is " + punc_mode + ".")
-    time.sleep(1)
-  elif (modify == "3"):
-    delay_print("Would you like your battle timer to be on or off?")
-    value = validate_input(["ON", "OFF"], "That is an invalid value. ")
-    timerMode = value.lower()
-    delay_print("Your battle timer is now set to " + timerMode + ".")
-    time.sleep(1)
-  print(RESET, end="")  #end="" prevents the trailing \n
-  clearConsole()
-
-
-#Inventory menu
-def inventorymenu(clear=True):
-  clearConsole()
-  delay_print(RED_BOLD + "~~~~Inventory~~~~" + RED)
-  delay_print("Items:")
-
-  for i in range(len(inventory)):
-    delay_print(
-      str(i + 1) + ": " + inventory[i][0] + " - " + inventory[i][1])
-
-  if not inventory:
-    delay_print(RED_ITALIC + "None")
-  print(RESET, end="")  #end="" prevents the trailing \n
-
-  time.sleep(1)
-  if clear:
-    clearConsole()
-
-
-def getItemFromInventory():
-  global inventory
-  if (len(inventory) == 0):
-    delay_print("You cannot grab an item from an empty inventory.")
-    return None
-  inventorymenu(False)
-  item_index = validate_int_input(range(1, len(inventory) + 1), "Invalid item in array.", "Enter the number for the item. ") - 1
-  item = inventory[item_index]
-  inventory.remove(item)
-  return item
-
-#Tutorial
-def tutorial():
-  clearConsole()
-  global long
-  global timerMode
-  delay_print(RESET + PURPLE_BOLD + "~~~~TUTORIAL~~~~" + RESET + LIGHT_PURPLE)
-  delay_print(
-    "When you are posed with a yes or no question and want to answer, you may type either 'yes'/'y' or 'no'/'n'. It is not case sensitive."
-  )
-  delay_print(
-    "When posed a question, you may type 'menu' to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented."
-    + RESET)
-  time.sleep(1)
-  clearConsole()
-  #This is just the omnipresent tutorial, the original tutorial is going to be in a fight. Samiya will explain to the player how to access the omnipresent tutorial in the original tutorial.
-
-def battle_tutorial():
-  clearConsole()
-  delay_print(
-    "Let's learn how to play in battle!"
-  )
-  delay_print(
-    "The first thing to note is that you are have a battle timer. You can turn this off or on in your settings menu."
-  )
-  delay_print(
-    "You can change your settings before the battle begins, but not during."
-  )
-  delay_print(
-    "Structure:"
-  )
-  delay_print(
-    "1. It prints out all your enemies and their HP."
-  )
-  delay_print(
-    "2. It prints out everyone on your team and their HP."
-  )
-  delay_print(
-    "3. It tells you who's turn it is and the time you are given"
-  )
-  delay_print(
-    "If it is your turn, then you are presented a set of 4 options that are customized to the current character."
-  )
-  delay_print(
-    "What to do: "
-  )
-  delay_print(
-    "Input #1 - Type in 1-4 based on which move you want to do."
-  )
-  delay_print(
-    "Input #2 - Type in the enemy # that you want to attack (the corresponding number for each enemy is printed at the beginning with the HP)"
-  )
-  delay_print(
-    "If you have your timer on, you have to do this all in the time limit given."
-  )
-  delay_print(
-    "Good luck!"
-  )
-
-#Loading Effect()
-def loading_effect():
-  global long
-  old = long
-  long = 0.0015 * punc_delays['.']
-  loading_speed = 0.0015 * punc_delays['.']
-  #Because of how delay_print calculates the delay, multiplying long by punc_delays['.'] divides the time delay by punc_delays['.']
-
-  clearConsole()
-  for i in range(3):
-    time.sleep(0.5)
-    delay_print("...", speed=loading_speed, end="")
-    clearConsole()
-
-  long = old
 
 def finley():
   time.sleep(1)
@@ -294,14 +40,38 @@ def finley():
 def otis(string):
   print(DARK_RED + string + RESET)
 
+
 #Villages
+
+vStoreInventory = [{"name": "Simple Boot", }]
+vStoreStats = []   
+VillageStore = Shop("Village", vStoreInventory, vStoreStats)
+
 minu_visits = 0
 stole_something = False
 minu_mad = False
+square_visits = 0
+balliya_coat = False
+
+''' Beginning a village modularization.'''
+def town_nav(buildingList, name):
+  clearConsole()
+  delay_print("Please select which location you would like to visit.")
+  iteration = 0
+  for building in buildingList:
+      delay_print(str(iteration) + ". " + str(buildingList[iteration]))
+      iteration += 1
+  destination = validate_int_input(
+    range(1, len(buildingList)), "Invalid input",
+    "Type the number of your destination here: ") 
+  #Here we'd then put the destinations we receive, and see how they react. How, I'm not too sure.
+
 def village_1():
   global minu_visits
   global stole_something
   global minu_mad
+  global square_visits
+  global balliya_coat
   quest_completion = True
   clearConsole()
   delay_print("Please select which location you would like to visit.")
@@ -319,7 +89,7 @@ def village_1():
   if quest_completion == True:
     delay_print(" 12. Bright Forest Path")
   snowball = validate_int_input(
-    range(1, 13), "Invalid input",
+    range(1, 12), "Invalid input",
     "Type the number of your destination here: ")  #Limited to 1 through 11
   if snowball == 1:
     if quest_completion == False:
@@ -449,7 +219,7 @@ def village_1():
                       delay_print("She holds out her palm. In it is a small purple stone, pusling with blue light.")
                       delay_print("She grins. 'I'd like you to have this as thanks.'")
                       delay_print("You take the amulet and slip it into your bag.")
-                      inventory.append(["Minu's Amulet", "An amulet containing a mysterious healing power."])
+                      add_item("Minu's Amulet", "An amulet containing a mysterious healing power.")
                       minu_visits += 1
                       time.sleep(1)
                       clearConsole()
@@ -464,7 +234,7 @@ def village_1():
                       take_minus_amulet = validate_input(["1", "2"], "Invalid input")
                       if take_minus_amulet == "1":
                         delay_print("You sneak the stone into your bag. No one notices.")
-                        inventory.append(["Minu's Amulet", "An amulet containing the power to harm others."])
+                        add_item("Minu's Amulet", "An amulet containing the power to harm others.")
                         delay_print("You decide to sneak out of the carpenter's house before anyone can catch you.")
                         stole_something = True
                         minu_visits += 1
@@ -506,25 +276,108 @@ def village_1():
     carpenterhouse()
   elif snowball == 4:
     #Cobbler's House
-    pass
+    VillageStore.getItems()
   elif snowball == 5:
-    
+    if quest_completion == False:
+          clearConsole()
+          print(DARK_RED + "TAILOR'S HOUSE" + DARK_RED)
+          time.sleep(0.25)
+          delay_print("The door is locked!")
+          time.sleep(1)
+          clearConsole()
+          village_1()
+    elif quest_completion == True:
+          clearConsole()
+          otis("TAILOR'S HOUSE")
+          time.sleep(0.25)
+          delay_print(WHITE + "You fiddle with the doorknob and the door squeaks open, scuffing the dirt floor." + WHITE)
+          delay_print("The inside of the house is filthy. Do you still want to go in?")
     pass
   elif snowball == 6:
     #Old Lady's House
     pass
   elif snowball == 7:
-    #Apotehcary
+    if quest_completion == False:
+          clearConsole()
+          print(DARK_RED + "APOTHECARY" + DARK_RED)
+          time.sleep(0.25)
+          delay_print("The door is locked!")
+          time.sleep(1)
+          clearConsole()
+          village_1()
     pass
   elif snowball == 8:
     #Church
     pass
   elif snowball == 9:
-    #Town Square
-    pass
+    if quest_completion == False:
+        clearConsole()
+        print(DARK_RED + "TOWN SQUARE" + DARK_RED)
+        time.sleep(0.25)
+        delay_print("The area seems barren...")
+        time.sleep(1)
+        clearConsole()
+        village_1()
+    elif quest_completion == True:
+        clearConsole()
+        print(DARK_RED + "TOWN SQUARE" + DARK_RED)
+        time.sleep(0.25)
+        if square_visits == 0:
+          delay_print(WHITE + """
+            The town square is a bustling place, even in overcast weather. Then again, today is market day, so the people are buying goods.
+            Still, it feels vaguely like a holiday. The square is decorated with banners, and everyone seems cheerful.
+            You turn to Kosu and ask, "Is today a holiday?"
+            Kosu shrugs. "I'm not sure. They taught us more about where things are than what people do."
+            Still curious, you ask someone selling scarves, "Excuse me, is today a holiday?"
+            He smiles. "Not before," he says, "but who knows about the future?" He winks at you before returning to his hawking.
+          """, indent=12)
+        elif square_visits == 1:
+          delay_print(WHITE + """
+            Kosu says, "I'm going to ask the locals about the surrounding area."
+            You tell him, "Okay, don't get into trouble."
+            Kosu nods. "Of course! I'll stay in the town square."
+
+            You look around slightly uncertainly.
+            "Hello!"
+            You turn towards the voice. It's the scarf seller from earlier!
+            "Excuse me, but where're you from? Your coat looks a little different," he asks.
+            Slightly surprised, you answer, "From the mountains."
+            "Hm. It looks a bit thick."
+            You shrug. "It's very comfortable."
+            He nods. "I can see that. But let me know if you want a thinner coat. My name's Balliya, by the way."
+          """, indent=12)
+          get_coat = yes_no(False, "Please choose again.", "Do you accept Balliya's offer? ")
+          balliya_coat = (get_coat == "Y") or (get_coat == "YES")
+          delay_print(WHITE + """
+            "Okay, then. See you later!"
+          """, indent=12)
+        elif square_visits == 2:
+          delay_print(WHITE + """
+            "Hi, Esteri!"
+            You wave back. "Hello... Balliya, right?"
+          """, indent=12)
+          if balliya_coat:
+            delay_print(WHITE + """
+              "Here's the coat my wife made for you. Hope you like it!"
+            """, indent=14)
+            add_item("Coat from Balliya", "A lighter coat Balliya's wife made for you.")
+
+        if square_visits <= 3: #3 is placeholder max number of unique events
+          square_visits += 1
   elif snowball == 10:
-    #Servants' Quarters
-    pass
+    if quest_completion == False:
+        clearConsole()
+        print(DARK_RED + "SERVANT'S QUARTERS" + DARK_RED)
+        time.sleep(0.25)
+        delay_print("The door is locked!")
+        time.sleep(1)
+        clearConsole()
+        village_1()
+    elif quest_completion == True:
+        clearConsole()
+        print(DARK_RED + "SERVANT'S QUARTERS" + DARK_RED)
+        time.sleep(0.25)
+        delay_print(WHITE + "You open the door and step down onto the rough dirt floor, stumbling a little." + WHITE)
   elif snowball == 11:
     pass
   elif snowball == 12:
@@ -534,165 +387,41 @@ def village_1():
     else:
       pass
 
-
-#An ironic function for testing functions
-def test_functions():
-  function = input("Function: ")
-  if function == "delay_print":
-    global punc_delays
-    yarn = input("Text to print: ")  #yarn- Pun on string
-    speed = input("Scroll speed: ")
-    while True:
-      punc = input("Enter punctuation: ")
-      delay = input("Enter delay: ")
-      if punc == "" or delay == "":
-        break
-      punc_delays[punc] = float(delay)
-    print(punc_delays)
-    if speed == "":
-      delay_print(yarn)
-    else:
-      delay_print(yarn, float(speed))
-  elif function == "give_trauma":
-    character = [input()]
-    trauma = int(input())
-    fear_type = int(input())
-    arr_type = input("True or False: ")
-    target = int(input())
-    give_trauma(characters[character], trauma, fear_type, arr_type, target)
-  elif function == "loading_effect":
-    clearConsole()
-    loading_effect()
-  elif function == "getItemFromInventory":
-    item = getItemFromInventory()
-    if item != None:
-      print(item[0] + ": " + item[1])
-      inventory.append(item)
-      time.sleep(1)
-  elif function == "village_1":
-    village_1()
-
-#Call-menu
-def menu():
-  clearConsole()
-  pauseTimers(True, True)
-  print(RESET, end="")
-  options = [
-    "settings", "inventory", "tutorial", "leave menu", "exit game", "test function"
-  ]
-  leave = False
-  while not leave:
-    print(
-      "Options:\n\"settings\", \"inventory\", \"tutorial\", \"leave menu\", and \"exit game\"."
-    )
-    selection = input("What would you like to do? ")
-    while selection not in options:
-      print("Sorry, I do not recognize that input.")
-      selection = input("What would you like to do? ")
-    clearConsole()
-
-    if (selection == "settings"):
-      settings()
-    elif (selection == "inventory"):
-      inventorymenu()
-    elif (selection == "tutorial"):
-      tutorial()
-    elif (selection == "exit game"):
-      sys.exit(0)
-    elif (selection == "leave menu"):
-      leave = True
-    elif (selection == "test function"):
-      test_functions()
-    clearConsole()
-  pauseTimers(True, False)
-
-
-#File writing
-def file_writing(file_name):
-  with open(file_name, 'r') as reader:
-    arr = reader.read()
-    lines = arr.split("\n\n")  #So that paragraphs can stick together
-  for line in lines:
-    delay_print(line)
-
-#Formerly functionCall()
-def getInput(prompt=""):
-  userAnswer = input(prompt)
-  while userAnswer.lower() == "menu":
-    menu()
-    userAnswer = input(prompt) #So that, after using the menu, the user can reenter an answer to the prompt or reenter the menu
-  return userAnswer
-
-#Give Battle and Move access to functions and necessary variables
-functions.global_add_funcs([delay_print, getInput, clearConsole, validate_input, validate_int_input, getTimerMode])
-
-#Battle.setup(party, locations, enemies)
-
 #GAME CODE - Introduction
 def introduction():
-  delay_print(
-    "Amaliyah scampered through the trees, ducking and dodging low-hanging branches and sliding over the slick leaves scattered on the ground."
-  )
-  delay_print(
-    "The air was musty with the smell of petrichor as rain dribbled down around her, wetting the soil and leading it to convalesce into a muddy slush."
-  )
-  delay_print()
-  delay_print(
-    "Breath ragged, she tore down the badly marked forest path."
-  )
-  delay_print(
-    "Her footsteps pounded with urgency."
-  )
-  delay_print(
-    "In the distance, howls rang through the air- the distinct call of a pack of Kirin that had caught the smell of fresh meat."
-  )
-  delay_print(
-    "Her chest seized as she thought of the bloodthirsty expressions etched on each of their psychopathic wolfish faces, foreboding masks of doom."
-  )
+  delay_print("""
+    Amaliyah scampered through the trees, ducking and doging low-handing branches and sliding over the slick leaves scattered on the ground.
+    The air was musty with the smell of petrichor as rain dibbled down around her, wetting the soil and leading it to convalesce into a muddy slush.
+
+    Breath ragged, she tore down the badly marked forest path.
+    Her footsteps pounded with urgency.
+    In the distance, howls rang through the air- the distinct call of a pack of Kirin that had caught the smell of fresh meat.
+    Her chest seized as she thought of the bloodthirsty expressions etched on each of their psychopathic wolfish faces, foreboding masks of doom.
+  """, end="", indent=4)
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "Amaliyah gripped her sword tightly in one sweaty hand and her shield in the other."
-  )
-  delay_print(
-    "Her eyes widened instinctively with fear as she rounded the corner and saw the Clearing of the Kirin awaiting her arrival."
-  )
-  delay_print(
-    "Feet smashing leaves into pulp as she fled across the packed dirt, she wildly attempted to escape from the circular gap in the trees."
-  )
+  delay_print("""
+    Amaliyah gripped her sword tightly in one sweaty hand and her shield in the other.
+    Her eyes widened instinctively with fear as she rounded the corner and saw the Clearing of the Kirin awaiting her arrival.
+    Feet smashing leaves into pulp as she fled across the packed dirt, she wildly attempted to escape from the circular gap in the trees.
+  """, end="", indent=4)
   time.sleep(1)
-  delay_print(
-    "But the Kirin were not so easily tricked."
-  )
-  delay_print(
-    "A magical barrier shot up, twinkling with light and blocking her path."
-  )
-  delay_print(
-    "She knelt on the ground, catching her breath."
-  )
-  delay_print(
-    "The clearing was still, with the exception of a few stray leaves that twirled through the air and gently came to a rest on the grass."
-  )
-  delay_print(
-    "Trees waved about in a leisurely fashion, flaunting the autumn leaves dangling from their branches and burning with the colors of flame."
-  )
+  delay_print("""
+    But the Kirin were not so easily tricked.
+    A magical barrier shot up, twinkling with light and blocking her path.
+    She knelt on the ground, catching her breath.
+    The clearing was still, with the exception of a few stray leaves that twirled through the air and gently came to a rest on the grass.
+    Trees waved about in a leisurely fashion, flaunting the autumn leaves dangling from their branches and burning with the colors of flame.
+  """, end="", indent=4)
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "Strained now, Amaliyah forced herself to stand up, drawing her sword from its scabbard with a steely hiss."
-  )
-  delay_print(
-    "Assuming a confident fighting stance, she whipped her blade behind her suddenly as a rustle sounded in the grass."
-  )
-  delay_print(
-    "Nothing."
-  )
-  delay_print(
-    "Amaliyah gripped the hilt of her sword harder, nerves taut."
-  )
-  delay_print(
-    "Jarring howls pierced through the still air."
-  )
+  delay_print("""
+    Strained now, Amaliyah forced herself to stand up, drawing her sword from its scabbard with a steely hiss.
+    Assuming a confident fighting stance, she whipped her blade behind her suddenly as a rustle sounded in the grass.
+    Nothing.
+    Amaliyah gripped the hilt of her sword harder, nerves taut.
+    Jarring howls pierced through the still air.
+  """, end="", indent=4)
   delay_print()
   time.sleep(1)
 
@@ -754,9 +483,8 @@ def welcome():
   print(" \\     /\\    /  |       |      |       |    |  | \\/ |  |")
   print("  \\   /  \\  /   |--     |      |       |    |  |    |  |--")
   print("   \\      \\/    |-----  |_____  ----    ----   |    |  |----")
-
   print()
-  #answer = getInput("Press s to skip the intro. Press b just to play the intro battle. Else, press any key to start playing: ")
+
   answer = validate_input([], "", prompt="Press s to skip the intro. Press b just to play the intro battle. Else, press any key to start playing: ", validate=False).lower()
 
   clearConsole()
@@ -766,9 +494,9 @@ def welcome():
       introduction()
       clearConsole()
     option = yes_no(
-      False, "Please decide soon...",
+      False, "Decide quickly...",
       "Do you want instructions on how to fight the battle? (this option will not be provided later): "
-    )  #OG errMessage: "Decide quickly..."
+    )
     if (option == 'YES' or option == 'Y'):
       battle_tutorial()
 
@@ -800,34 +528,24 @@ def welcome():
 clearConsole()
 
 def adventureBeg():
-  #Game Code
-  delay_print(WHITE +
-    "The voice of the chaplain rings out in sonorous tones across the hall. \"Esteri. Today, you are come of age, and eligible to ascend the throne. As it has been for the many centuries...\"\n The chaplain drones on as you kneel on the flagstones, watching the play of candlelight on the polished rock. Slowly, the chaplain's voice drones to a close."
-    + WHITE)
-  delay_print(
-    "\"In the absence of the Chieftess Amaliyah, and with no kinswomen to anoint you, I hereby pronounce you a noble citizen of the Confederacy of Elyria.\" You rise, turning to face the assembled servants and courtiers with a graceful curtsy as the first rays of sunrise burst over the highest peak."
-  )
-  delay_print(
-    "Beneath you, the capital unfolds in the light, with its stone causeways swooping over the lake and from the mountains. You remain there as the hall slowly empties, despite the cold."
-  )
-  delay_print(
-    "A servant approaches, carrying a small bowl and a missive.\n\"Lady Esteri, this missive from Regent Avivaki. She requests your presence.\"\nYou nod, scanning the parchment. \"I will be there.\""
-  )
-  delay_print(
-    "The servant shakes her head. \"I was also told to relay a second message, from Kosugadde. Er...\"  The servant shrugs. \"He says, \'But first, you should eat your breakfast!\'\""
-  )
-
-  delay_print(
-    "A few minutes later, you strap your spear to your back, don your breastplate over your tunic, adjust your hair to look mildly presentable, push a bag over your shoulders, and quickly walk out of your chambers. The regent is waiting for you!"
-  )
+  delay_print("""
+    The voice of the chaplain rings out in sonorous tones across the hall. "Esteri. Today, you are come of age, and eligible to ascend the throne. As it has been for the many centuries..."
+    The chaplain drones on as you kneel on the flagstones, watching the play of candlelight on the polished rock. Slowly, the chaplain's voice drones to a close.
+    "In the absence of the Chieftess Amaliyah, and with no kinswomen to anoint you, I hereby pronounce you a noble citizen of the Confederacy of Elyria." You rise, turning to face the assembled servants and courtiers with a graceful curtsy as the first rays of sunrise burst over the highest peak.
+    Beneath you, the capital unfolds in the light, with its stone causeways swooping over the lake and from the mountains. You remain there as the hall slowly empties, despite the cold.
+    A servant approaches, carrying a small bowl and a missive.
+    "Lady Esteri, this missive from Regent Avivaki. She requests your presence."
+    You nod, scanning the parchment. "I will be there."
+    The servant shakes her head. "I was also told to relay a second message, from Kosugadde. Er..." The servant shrugs. "He says, 'But first, you should eat your breakfast!'"
+    A few minutes later, you strap your spear to your back, don your breastplate over your tunic, adjust your hair to look mildly presentable, push a bag over your shoulders, and quickly walk out of your chambers. The regent is waiting for you!
+  """, end="", indent=4)
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "You dash through the streets, veering wildly around the small stone huts that characterize your village, your spear clanking rhythmically on your back. Smoke floats leisurely out of the chimneys, and all around you can hear the sound of the village waking up as the sun begins to rise over the peaks of the snow-capped mountains.\n"
-  )
-  delay_print(
-    "Your eyes land on a pair of stately doors with ornate staffs carved deep into the wood. You have found the regent's residence!"
-  )
+  delay_print("""
+    You dash through the streets, veering wildly around the small stone huts that characterize your village, your spear clanking rhythmically on your back. Smoke floats leisurely out of the chimneys, and all around you can hear the sound of the village waking up as the sun begins to rise over the peaks of the snow-capped mountains.
+    
+    Your eyes land on a pair of stately doors with ornate staffs carved deep into the wood. You have found the regent's residence!
+  """, indent=4)
 
   option = yes_no(False, "You must decide.", "Do you want to go inside?\n")
   while (option != "YES") and (option != "Y"):
@@ -836,45 +554,35 @@ def adventureBeg():
     )
     option = yes_no(False, "You must decide.", "Do you want to go inside?\n")
 
-  delay_print(
-    "You walk towards the door and are stopped by two guards. \n'Excuse me, miss. You're not allowed here without permission.'"
-  )
-  delay_print(
-    "\"Don't you know who I am?\" You raise an eyebrow with some annoyance.")
-  delay_print(
-    "The guards look at each other, blank-faced, before one of them blinks and winces. \"Oh dear- Apologies, Lady Esteri. Please come inside. The village regent has been waiting for you.\" The guards bow and step aside."
-  )
+  delay_print("""
+    You walk towards the door and are stopped by two guards.
+
+    "Excuse me, miss. You're not allowed here without permission."
+    "Don't you know who I am?" You raise an eyebrow with some annoyance.
+    The guards look at each other, blank-faced, before one of them blinks and winces. "Oh dear- Apologies, Lady Esteri. Please come inside. The village regent has been waiting for you." The guards bow and step aside.
+  """, indent=4)
   loading_effect()
 
-  delay_print(
-    "You enter a warm, brightly lit room with ancient scripts pierced onto paintings on the walls. In the middle of the room reclines an aging woman draped with beaded necklaces and a thick woolen coat."
-  )
-  delay_print(
-    "'Please, sit down. We have much to discuss, young one.' \n 'I possess information about your mother, Amaliyah.' Village Regent Avivaki meets your eyes with a solemn expression."
-  )
-  delay_print(
-    "Eager to gain knowledge on your mother, you quickly take a seat and listen."
-  )
-  delay_print(
-    "'We have reasons to believe that your mother, Chieftess Amaliyah, may in fact be alive. Your mother was sent on a mission to find new land for the people of Elyria, and it seems that she has not returned."
-  )
-  delay_print(
-    "'However, as her descendant, the day has come for the task to be bestowed upon you. As the true future Chieftess of Elyria, and my successor, you must embark on this quest to find your mother and complete her mission.'"
-  )
-  delay_print(
-    "'Can we trust you to complete this task with honor?' Her expression is questioning."
-  )
+  delay_print("""
+    You enter a warm, brightly lit room with ancient scripts pierced onto paintings on the walls. In the middle of the room reclines an aging woman draped with beaded necklaces and a thick woolen coat.
+    "Please, sit down. We have much to discuss, young one.
+    "I possess information about your mother, Amaliyah." Village Regent Avivaki meets your eyees with a solmen expression.
+    Eager to gain knowledge on your mother, you quickly take a seat and listen.
+    "We have reasons to believe that your mother, Chieftess Amaliyah, may in fact be alive. Your mother was sent on a mission to find new land for the people of Elyria, and it seems that she has not returned.
+    "However, as her descendant, the day has come for the task to be bestowed upon you. As the true future Chieftess of Elyria, and my successor, you must embark on this quest to find your mother and complete her mission.
+    "Can we trust you to complete this task with honor?" Her expression is questioning.
+  """, indent=4)
 
   option = yes_no(allow_maybe=True, errMessage="You need to give her a clear answer. She's the chief!")
   if (option == 'MAYBE' or option == 'POSSIBLY'):
     delay_print(
-      "'Maybe? That is no way to answer a question from your regent!'"
+      "\"Maybe? That is no way to answer a question from your regent!\""
     )
     option = yes_no(False, "You need to decide now.")
 
   if (option == 'NO' or option == 'N'):
     delay_print(
-      "'Then maybe I have overestimated your abilities. If you do wish to change your mind, please come back later. Elyria is counting on you.'"
+      "\"Then maybe I have overestimated your abilities. If you do wish to change your mind, please come back later. Elyria is counting on you.\""
     )
     option = yes_no(
       False, "You have one last chance = change your mind. Decide quickly.")
@@ -884,234 +592,140 @@ def adventureBeg():
       )
       sys.exit()
 
-  delay_print(
-    "'That's excellent!' The village head smiles, mouth stretching upwards into a grimace of a smile. 'I knew that our people could count on you, Esteri.'"
-  )
-  delay_print(
-    "'You'll require a navigator for your journey, so I've selected one of our skilled navigators-in-training to assist you.'"
-  )
-  delay_print(
-    "The village head frowns. 'But he appears to be a bit late...'"
-  )
+  delay_print("""
+    "That's excellent!" The village head smiles, mouth stretching upwards into a grimace of a smile. "I knew that our people could count on you, Esteri.
+    "You'll require a naviagator for your journey, so I've select one of our skilled navigators-in-training to assist you."
+    The village head frowns. "But he appears to be a bit late..."
+  """, indent=4)
   delay_print()
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "The door bursts open and a young man with an unruly mop of brown hair bursts in."
-  )
-  delay_print(
-    "The new arrival wipes sweat off of his brow, glancing up at the village head with a sheepish expression."
-  )
-  delay_print(
-    "The village head glares down at him in indignation. 'You're late.'")
-  delay_print()
-  delay_print(
-    "Your eyes widen as you recognize the man as your old friend, stumbling into a chair with drunken movements."
-  )
-  delay_print(
-    "'Kosu, is that you?' You look at him with a wondrous expression."
-  )
-  delay_print()
-  delay_print(
-    "'Hey, Esteri!' Kosu grins. 'It's been a few years, hasn't it? Nice to see you!' I guess you're finally going to-'"
-  )
+  delay_print("""
+    The door bursts open and a young man with an unruly mop of brown hair bursts in.
+    The new arrival wipes sweat off of his brow, glancing up at the village head with a sheepish expression.
+    The village head glares down at him in indignation. "You're late."
+
+    Your eyes widen as you recognize the man as your old friend, stumbling into a chair with drunken movements.
+    "Kosu, is that you?" You look at him with a wondrous expression.
+
+    "Hey, Esteri!" Kosu grins. "It's been a few years, hasn't it? Nice to see you! I guess you're finally going-"
+  """, indent=4)
   time.sleep(0.25)
   option = yes_no(
     False, "You need to decide quickly...",
     "Do you interrupt Kosu in order to preserve your dignity? ").lower()
 
   if option == "y" or option == "yes":
-    delay_print(
-      "You shoot Kosu a warning glance and he quiets, remorseful. Then you turn to face the village regent."
-    )
-    delay_print(
-      "Her expression is haughty."
-    )
-    delay_print(
-      "Choose what you would like to say to the village head."
-    )
-    delay_print(
-      " 1. 'Apologies, ma'am.'"
-    )
-    delay_print(
-      " 2. 'Kosu and I are friends- you can hardly begrudge us the chance to enjoy our reunion.'"
-    )
-    delay_print(
-      "Enter the number of the answer you prefer."
-    )
-    
+    delay_print("""
+      You shoot Kosu a warning glance and he quiets, remorseful. Then you turn to face the village regent.
+      Her expression is haughty.
+      Choose what you would like to say to the village head.
+      1. "Apologies, ma'am."
+      2. "Kosu and I are friends- you can hardly begrudge us the chance to enjoy our reunion."
+      Enter the number of the answer you prefer.
+    """, indent=6)
 
     option = validate_input(['1', '2'], "Decide now! She's the chief!").lower()
     if option == "1":
-      delay_print(
-        "'You're forgiven,' the village leader says with an air of superiority. 'But don't forget your manners in the future.'"
-      )
-      delay_print(
-        "You bite your tongue to hold back further remarks."
-      )
+      delay_print("""
+        "You're forgive," the village leader says with an air of superiority. "But don't forget your manners in the future."
+        You bite your tongue to hold back further remarks.
+      """, indent=8)
     elif option == "2":
-      delay_print(
-        "The village leader sniffs in indignation. 'I am a very busy woman. Please enjoy your reunion when you are no longer in my presence.'"
-      )
-      delay_print(
-        "You bite your tongue to hold back further remarks."
-      )
+      delay_print("""
+        The village leader sniffs in indignation. "I am a very busy woman. Please enjoy your reunion when you are no longer in my presence."
+        You bite your tongue to hold back further remarks.
+      """, indent=8)
     delay_print(
       "Kosu pipes up. 'Is there anything else that we need to know before leaving?'"
     )
   else:
-    delay_print(
-      "'-get to search for your mom as you've wanted all these years,' Kosu finishes."
-    )
-    delay_print(
-      "Your cheeks flush with embarrassment. 'Yes,' you mutter, and then turn back to face the village leader."
-    )
-    delay_print(
-      "The village leader smirks pridefully. 'What adorable youthful enthusiasm.'"
-    )
-    delay_print(
-      "Kosu shrinks back. 'Is there anything else we need to know before leaving?' he asks quietly."
-    )
-  delay_print(
-    "The village regent folds her hands. 'The path will be dangerous,' she warns, and her face softens a little. 'You really don't have to complete this journey if you are afraid.'"
-  )
-  delay_print(
-    "Kosu shakes his head in indignation. 'We aren't quitters,' he says, voice spiking with an undertone of determination. 'Esteri and I will be fine.'"
-  )
-  delay_print(
-    "You stare at the regent for a second longer, but her stoic face doesn't shift."
-  )
-  delay_print(
-    "'Kosu's right,' you finally assent, voice commanding. 'We will be fine.'")
+    delay_print("""
+      "-get to search for your mom as you've wanted all these years," Kosu finishes.
+      Your cheeks flush with embarrassment. "Yes," you mutter, and then turn back to face the village leader.
+      The village leader smriks pridefully. "What adorable youthful enthusiasm."
+      Kosu shrinks back. "Is there anything else we need to know before leaving?" he asks quietly.
+    """, indent=6)
+  delay_print("""
+    The village regent folds her hands. "The path will be dangerous," she warns, and her face softens a little. "You really don't have to complete this journey if you are afraid."
+    Kosu shakes his head in indignation. "We aren't quitters,", he says, voice spiking with an undertone of determination. "Esteri and I will be fine."
+    You stare at the regent for a second longer, but her stoic face doesn't shift.
+    "Kosu's right," you finally assent, voice commanding. "We will be fine."
+  """, indent=4)
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "Regent Aviveki smiles. 'Wonderful,' she says. 'I'll instruct you on where to go.'"
-  )
-  delay_print(
-    "Taking a map from beside her chair, she rolls it out on the table. 'This,' she instructs, 'is the continent of Suto Ratak. Here-' she points at a wide parcel of land- 'is Elyria.'"
-  )
-  delay_print(
-    "She runs her finger along the waxed paper to a large brown spot on the map, split into four quadrants. 'This is Rakunto Ke'koate'nan. It's the largest city in Suto Ratak. It's also your target destination.'"
-  )
-  delay_print(
-    "She moves her finger to a spot on the map closer to your village. 'Here is a small village known as Ai'ko Le'po Koate'nan. An old friend of your mother's resides here. You will begin by traveling to this village, in the hopes that your mother's friend can offer you advice or assistance.'"
-  )
-  delay_print(
-    "She pulls a letter out of her desk and sets it in front of you. 'Deliver this letter to an old woman by the name of Kurigalu. She should be willing to help you find your mother. At the very least, she'll find you someone who can aid you on your journey.'"
-  )
-  delay_print()
-  delay_print(
-    "The regent stands up, leaving the letter on the desk in front of you. She meets your eyes."
-  )
-  delay_print(
-    "'Your mother was a friend of mine,' she murmurs, more to herself than you. 'I hope that you can bring her back.'"
-  )
-  delay_print(
-    "She turns, and you watch her retreating back, unable to wipe the sight of Regent Aviveki's regretful, resigned expression from your mind."
-  )
-  delay_print(
-    "Any annoyance you felt towards her during your encounter fades."
-  )
-  delay_print(
-    "Kosu reaches out and picks up the letter. He hands it to you. 'I believe this belongs to you.'"
-  )
-  delay_print(
-    "You take the letter and place it in your bag."
-  )
-  inventory.append(["Letter for Kurigalu", "An important letter from the regent."])
+  delay_print("""
+    Regent Aviveki smiles. "Wonderful," she says. "I'll instruct you on where to go."
+    Taking a map from beside her chair, she rolls it out on the table. "This," she instructs, "is the continent of Suto Ratak. Here-" she points at a wide parcel of land- "is Elyria."
+    She runs her finger along the waxed paper to a large brown spot on the map, split into four quadrants. "This is Rakunto Ke'koate'nan. It's the largest city in Suto Ratak. It's also your target destination."
+    She moves her finger to a spot on the map closer to your village. "Here is a small village known as Ai'ko Le'po Koate'nan. An old friend of your mother's resides here. You will begin by traveling to this village, in the hopes that your mother's friend can offer you advice or assistance."
+    She pulls a letter out of her desk and sets it in front of you. "Deliver this letter to an old woman by the name of Kurigalu. She should be willing to help you find your mother. At the very least, she'll find you someone who can aid you on your journey. You will also be given given 100 nagara scrip to begin your journey."
+
+    The regent stands up, leaving the letter on the desk in front of you. She meets your eyes.
+    "Your mother was a friend of mine," she murmurs, more to herself than you. "I hope that you can bring her back."
+    She turns, and you watch her retreating back, unable to wipe the sight of Regent Aviveki's regretful, resigned expression from your mind.
+    Any annoyance you felt towards her during your encounter fades.
+    Kosu reaches out and picks up the letter. He handsit to you. "I believe this belongs to you."
+    You take the letter and place it in your bag.
+  """, indent=4)
+  add_item("Letter for Kurigalu", "An important letter from the regent.")
+  inventory["Money"] = 100
   time.sleep(1)
   tutorial()
   inventorymenu()
   settings()
-  delay_print(
-    "'We should go,' you tell Kosu, voice quavering slightly with a near-undetectable hint of fear."
-  )
-  delay_print(
-    "He nods. 'If we don't leave within the hour, we won't make it to Ai'ko Le'po before nightfall.'"
-  )
-  delay_print(
-    "You rest your hand on the doorknob. Your mind wanders for a second.")
+  delay_print("""
+    "We should go," you tell Kosu, voice quavering slightly with a near-undetectable hint of fear.
+    He nods. "If we don't leave within the hour, we won't make it to Ai'ko Le'po before nightfall."
+    You rest your hand on the doorknob. Your mind wanders for a second.
+  """, indent=4)
   time.sleep(0.25)
   delay_print(
     "You wonder how your mother felt when she was setting out on her journey.")
   time.sleep(1)
   clearConsole()
-  delay_print(
-    GREY_ITALIC +
-    "Mother kneels down, caressing your cheek. 'I'll be back soon, Esi,' she whispers, smiling at you."
-  )
-  delay_print(
-    "'Are you scared, Mommy?' You look up at her, cheeks wet with tears.")
-  delay_print(
-    "Mother wrings her hands. She stares up at the ceiling, watching the warm light from the lanterns flicker. 'No,' she finally says, a tremor in her voice. 'Dai'ra, Esi. I will be strong for Elyria.'"
-  )
-  delay_print(
-    "'Yes mommy, I know you are never scared of anything'"
-  )
-  delay_print(
-    "She stands up. 'There's nothing wrong with having fears, Esi,' she says, touching your cheek. 'Real bravery is when you're scared, but push through anyway.'She smiles, but her eyes are sad.'Can you promise to be brave for me?' You nod, looking up at her."
-  )
-  delay_print(
-    "'Goodbye, Mommy,' you whisper, wrapping your arms around her leg. 'Come back soon, okay?'"
-  )
-  delay_print(
-    "She looks down at you as if drinking in your appearance one last time. 'I will, Esi. I promise.'"
-  )
+  delay_print(GREY_ITALIC + """
+    Mother kneels down, caressing your cheek. "I'll be back soon, Esi," she whispers, smiling at you.
+    "Are you scared, Mommy?" You look up at her, cheeks wet with tears.
+    Mother wrings her hands. She stares up at the ceiling, watching the warm light from the lanterns flicker. "No," she finally says, a tremor in her voice. "Dai'ra, Esi. I will be strong for Elyria."
+    "Yes mommy, I know you are never scared of anything."
+    She stands up. "There's nothing wrong with having fears, Esi," she says, touching your cheek. "Real bravery is when you're scared, but push through anyway." She smiles, but her eyes are sad. "Can you promise to be brave for me?" You nod, looking up at her.
+    "Goodbye, Mommy," you whisper, wrapping your arms around her leg. "Come back soon, okay?"
+    She looks down at you as if drinking in your appearance one last time. "I will, Esi. I promise."
+  """, indent=4)
   time.sleep(0.5)
-  delay_print()
-  delay_print(
-    "Amaliyah walked to the door. Hand shaking, she placed her hand on the knob... and glanced back one last time, meeting Esteri's eyes and mustering a smile."
-  )
+  delay_print("""
+
+    Amaliyah walked to the door. Hand shaking, she placed her hand on the knob... and glanced back one last time, meeting Esteri's eyes and mustering a smile.
+  """, indent=4)
   time.sleep(0.5)
   clearConsole()
   delay_print("She opened the door." + RESET)
   time.sleep(1)
   clearConsole()
-  delay_print(
-    "You step out into the blinding sunshine, holding a hand up to shield your eyes."
-  )
-  delay_print(
-    "Light reflects off the snow surrounding you, casting your village in a slight eerie glow."
-  )
-  delay_print(
-    "'Ai'ko Le'po is to the southeast,' Kosu observes, holding up the map.")
-  delay_print(
-    "You look at him, somewhat solemn. 'You know she was right, Kosu? We could die on this mission.'"
-  )
-  delay_print(
-    "Kosu grins at you. 'We won't die,' he says, unwavering. 'After all, we're the best team in all of Elyria.'"
-  )
-  delay_print(
-    "You raise your eyebrows. 'Is that so?'"
-  )
-  delay_print(
-    "The two of you laugh and banter as you amble down the rocky foothill, traveling the same path that your mother had followed so many years earlier."
-  )
+  delay_print("""
+    You step out into the blinding sunshine, holding a hand up to shield your eyes.
+    Light reflects off the snow surrounding you, casting your village in a slight eerie glow.
+    "Ai'ko Le'po is to the southeast," Kosu observes, holding up the map.
+    You look at him, somewhat solemn. "You know she was right, Kosu? We could die on this mission."
+    Kosu grins at you. "We don't die," he says, unwavering. "After all, we're the best team in all of Elyria."
+    You raise your eyebrows. "Is that so?"
+    The two of you laugh and banter as you amble down the rocky foothill, traveling the same path that your mother had followed so many years earlier.
+  """, indent=4)
   time.sleep(0.25)
-  os.system('clear')
+  clearConsole()
   loading_effect()
   time.sleep(0.25)
-  delay_print("You slog along, grouchy, with branches snapping under your feet.")
-  delay_print(
-    "'Are we almost there?' you ask Kosu, with an expression of consternation. 'The woods don't seem to end anytime soon.'"
-  )
-  delay_print(
-    "Kosu studies his map. 'Yeah,' he assures you. 'We'll arrive in the village any minute now.'"
-  )
-  delay_print(
-    "Seconds later, the two of you break through the edge of the forest.")
-  delay_print(
-    "The trees have been cleared unevenly from a patch of roughly packed land, lined with small huts that creak under the weight of the sky."
-  )
-  delay_print(
-    "'See?' Kosu points out. 'I was right.'"
-  )
-  delay_print(
-    "You ignore him and step forward. 'Something doesn't seem right.'"
-  )
-  delay_print("'Let's go look,' Kosu says.")
+  delay_print("""
+    You slog along, grouchy, with branches snapping under your feet.
+    "Are we almost there?" you ask Kosu, with an expression of consternation. "The woods don't seem to end anytimesoon."
+    Kosu studies his map. "Yeah," he assures you. "We'll arrive in the village any minute now."
+    Seconds later, the two of you break through the edge of the forest.
+    The trees have been cleared unevenly from a patch of roughly packed land, lined with small huts that creak under the weight of the sky.
+    "See?" Kosu points out. "I was right."
+    You ignore him and step forward. "Something doesn't seem right."
+    "Let's go look," Kosu says.
+  """, indent=4)
 
-welcome()
+adventureBeg()
 village_1()
-

@@ -1,4 +1,8 @@
-##Class Added By Bharadwaj Duggaraju. Contact me if there is a bug
+# Class Added By Bharadwaj Duggaraju. Contact me if there is a bug
+import sys
+sys.path.append("../")
+from util.console.input import *
+from util.inventory import allItems
 
 class Shop:
     def __init__(self, name, items, itemsSold):
@@ -6,6 +10,9 @@ class Shop:
         self.itemsSold = itemsSold  #Llist of Dicts,
         self.items = items  #List of Dicts, [{"item": {"price": "$22", "quantity": 122}}]
 
+        for item in items:
+          allItems[item["name"]] = item
+ 
     def buy(self, name, item, quantity, playermoney):
         if (name == self.name):
             ind = 0
@@ -42,12 +49,15 @@ class Shop:
             return "You cannot access this store"
 
     def getInfo(self):
+        print(allItems)
         print("------ Welcome to the " + self.name + " Store ------")
         print("Here are the items available:")
         counter = 1
         for i in self.items:
             print(str(counter) + ". " + i["name"] + ": $" + str(i["price"]))
 
+          
+        itemToBuy = int(input("Which item do you want to buy (type the number)? "))
 
 shopItems = [{"name": "scarf", "price": 33, "quantity": 2200}]
 shopStats = [{
