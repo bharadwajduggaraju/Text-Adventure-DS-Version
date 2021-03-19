@@ -2,7 +2,7 @@ import os, sys, time
 from util.colors import ColorToColor, RESET
 
 class Output:
-  long = 0.025
+  long = 0.050
   punc_delays = {',': 3, '(': 4, ')': 4, ';': 4, ':': 5, '.': 5, '?': 5, '!': 5}
   punc_pause = True
   def settings(name, value=None):

@@ -53,6 +53,7 @@ def addEngEntry(OiPhrase, EngText):
     EngToOi[firstWord][EngText] = OiPhrase
   except KeyError: #If EngToOi[firstWord] hasn't been made
     EngToOi[firstWord] = {EngText: OiPhrase}
+printDict = False
 
 def makeEngToOi():
   #Creates a new dictionary with reversed keys and values
@@ -84,6 +85,8 @@ def get_lang():
     elif (lang == "e") or (lang == "en") or (lang == "eng"):
       lang = "english"
   return lang
+
+fromOi = False
 
 def translate_text(text):
   #Loops through text, identifying each word and then translating
@@ -122,9 +125,9 @@ def translate_text(text):
       newWord = newWord.title()
     newText += newWord + extraChars + character
   return newText
-
+'''
 madeEngToOi = False
-exit = False
+exit = True
 while not exit:
   #Language selection
   lang = get_lang()
@@ -151,3 +154,4 @@ while not exit:
   newText = newText[:-1] #Removes the last character
 
   print(newText)
+'''

@@ -4,20 +4,23 @@ from entities.character import Character
 from entities.enemies import Enemy
 
 #Effect format:
-#exampleEffect = Effect(name, damage, duration, wounds, op_phys, op_ment, op_delay)
-fire = Effect("Burning", 3, 3, True)
-electro = Effect("Electrocuted", 10, 1, True)
-intox = Effect("Intoxicated", 0, 30, False, 0, 1)
-weak = Effect("Weakened", 0, 30, False, 1)
-rally = Effect("Rallying", 0, 5, False, -1, -1)
-flinch = Effect("Flinching", 0, 1, False, 1)
+#exampleEffect = Effect(name, damage, duration, wounds, op_reducts, op_delay)
+#efc: bad abbreviation of effect
+fire_efc = Effect("Burning", 3, 3, True)
+electro_efc = Effect("Electrocuted", 10, 1, True)
+intox_efc = Effect("Intoxicated", 0, 30, False, [0]*3+[1]*6)
+weak_efc = Effect("Weakened", 0, 30, False, [1]*3)
+rally_efc = Effect("Rallying", 0, 5, False, [-1]*9)
+flinch_efc = Effect("Flinching", 0, 1, False, [1]*3)
+taunt_efc = Effect("Taunted", 0, 4, False, [0]*3+[-3]*6)
 effects = { #May or may not be helpful, depending on use.
-  "Fire": fire,
-  "Electrocution": electro,
-  "Intoxication": intox,
-  "Weakness": weak,
-  "Flinching": flinch,
-  "Rally": rally
+  "Fire": fire_efc,
+  "Electrocution": electro_efc,
+  "Intoxication": intox_efc,
+  "Weakness": weak_efc,
+  "Flinching": flinch_efc,
+  "Rally": rally_efc,
+  "Taunt": taunt_efc,
 }
 #Rally = [rally] #Was included, probably unnecessary
 
@@ -27,7 +30,8 @@ damage = Move("Damaging Spell", "MagicalAffinity", 2, "MagicalControl", 2, "Magi
 element = Move("Elemental Spell", "MagicalAffinity", 1, "MagicalControl", 1, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 1, effects, "MagicalAffinity", 3, "MagicalAffinity", 0)
 area = Move("Area Spell", "MagicalAffinity", 1, "MagicalControl", 2, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 1, effects, "MagicalAffinity", 1, "MagicalAffinity", 0)
 heal = Move("Healing Spell", "MagicalAffinity", -2, "MagicalControl", 0, "MagicalControl", 1, "PhysicalGrace", 0, "MagicalConcentration", 3, effects, "MagicalAffinity", 0, "MagicalAffinity", 0, 1)
-rally = Move("Rallying Cry", "MagicalAffinity", 0, "MagicalControl", 0, "MagicalControl", 0, "PhysicalGrace", 0, "SocialPresence", 4, [rally], "SocialHeart", 1, "SocialHeart", 1)
+rally = Move("Rallying Cry", "MagicalAffinity", 0, "MagicalControl", 0, "MagicalControl", 0, "PhysicalGrace", 0, "SocialPresence", 4, [rally_efc], "SocialHeart", 1, "SocialHeart", 1)
+taunt = Move("Taunt", "MagicalAffinity", 0, "MagicalControl", 0, "MagicalControl", 0, "PhysicalGrace", 0, "SocialPresence", 4, [taunt_efc], "SocialHeart", 1, "SocialHeart", 1)
 attack = Move("Physical Attack", "PhysicalSkill", 1, "PhysicalSkill", 1, "MagicalControl", 0, "PhysicalGrace", 2, "PhysicalGrace", 2, effects, "SocialHeart", 0, "PhysicalGrace", 0)
 spells = {
   "Damage": damage,
@@ -38,19 +42,23 @@ spells = {
   "Attack": attack,
 }
 
+#Each point in a physical skill increases HP by 2, party members start with 5HP
 #Example = Character(name, HP, MaxHP, SP, MaxSP, MP, MaxMP, SPresence, SHeart, SStability, PGrace, PSkill, PPoise, MAffinity, MControl, MConcentration, InventoryList, TraumaList, EffectsList, TagsList, Move, Move2, Move3, op_maxDeaths, op_deaths)
-Esteri = Character("Esteri", 11, 11, 16, 16, 3, 3, 3, 3, 1, 5, 4, 3, 0, 0, 1, [], [], [], [], attack, rally, area)
-Cressida = Character("Cressida", 9, 9, 6, 6, 15, 15, 4, 3, 3, 0, 1, 3, 2, 3, 3, [], [], [], [], heal, damage, rally)
-Kosu = Character("Kosu", 14, 14, 13, 13, 3, 3, 4, 5, 3, 3, 4, 1, 0, 0, 0, [], [], [], [], attack, rally, element)
-Ai = Character("Ai", 11, 11, 5, 5, 14, 14, 1, 4, 0, 0, 1, 0, 4, 5, 5, [], ['grief'], [], [], damage, element, area)
+Esteri = Character("Esteri", 29, 29, 19, 19, 7, 7, 3, 3, 1, 5, 4, 3, 0, 0, 1, [], [], [], [], attack, rally, area) #Esteri max: 29+19+7 = 55
+Cressida = Character("Cressida", 13, 13, 25, 25, 21, 21, 4, 3, 3, 0, 1, 3, 2, 3, 3, [], [], [], [], heal, damage, rally) #Cressida max: 13+25+21 = 59
+Kosu = Character("Kosu", 21, 21, 29, 29, 5, 5, 4, 5, 3, 3, 4, 1, 0, 0, 0, [], [], [], [], attack, rally, element) #Kosu max: 21+29+5 = 55
+Ai = Character("Ai", 7, 7, 15, 15, 33, 33, 1, 4, 0, 0, 1, 0, 4, 5, 5, [], ["grief"], [], [], damage, element, area) #Ai max: 7+15+33= 55
 #We had determined that Ai starts with grief
-Amaliyah = Character("Amaliyah", 11, 11, 16, 16, 3, 3, 3, 3, 1, 5, 4, 3, 4, 0, 1, [], [], [], [], attack, element, heal)
+Amaliyah = Character("Amaliyah", 29, 29, 19, 19, 10, 10, 3, 3, 1, 5, 4, 3, 4, 0, 1, [], [], [], [], attack, element, heal)
+PartyDronae = Character("Dronae", 20, 20, 10, 10, 0, 0, 2, 4, 1, 3, 1, 1, 1, 1, 1, [], [], [], [], heal, heal, attack)
+
 characters = {
   "Esteri": Esteri,
   "Cressida": Cressida,
   "Kosugade": Kosu,
   "Ai": Ai,
   "Amaliyah": Amaliyah,
+  "Friendly Dronae": PartyDronae,
 }
 
 #Example = Enemy(name, maxHP, HP, TimeGiven, AC, damage, op_effects)
@@ -94,4 +102,5 @@ enemies = {
   "bandit elite": BanditElite,
   "bandit stalwart": BanditStalwart,
   "bandit assassin": BanditAssassin,
+  "dronae": Dronae
 }

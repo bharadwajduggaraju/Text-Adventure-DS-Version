@@ -11,26 +11,28 @@ from util.variables import inventory
 from util.console.output import loading_effect
 
 #Input with Error Message
-def validate_input(accepted_list, errMessage, prompt="", validate=True):
-  user_input = getInput(prompt).upper()
+def validate_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True):
+  for i in range(len(accepted_list)):
+    accepted_list[i] = accepted_list[i].upper()
+  user_input = getInput(prompt, print_with_delay).upper()
   validate = validate and accepted_list != []
   while (user_input not in accepted_list) and validate:
     delay_print(str(errMessage))
-    user_input = getInput(prompt).upper()
+    user_input = getInput(prompt, print_with_delay).upper()
   return user_input
 
-def validate_int_input(accepted_list, errMessage, prompt=""):
+def validate_int_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True):
   options = []
   for option in accepted_list:
     options.append(str(option))
-  answer = validate_input(options, errMessage, prompt)
+  answer = validate_input(options, errMessage, prompt, print_with_delay, validate)
   return int(answer)
 
-def yes_no(allow_maybe, errMessage, prompt=""):
+def yes_no(allow_maybe, errMessage, prompt="", print_with_delay=False, validate=True):
   options = ["YES", "Y", "N", "NO"]
   if allow_maybe:
     options += ["MAYBE", "POSSIBLY"]
-  answer = validate_input(options, errMessage, prompt)
+  answer = validate_input(options, errMessage, prompt, print_with_delay, validate)
   if answer == "YES":
     answer = "Y"
   elif answer == "NO":
@@ -38,11 +40,15 @@ def yes_no(allow_maybe, errMessage, prompt=""):
   return answer
 
 #Formerly functionCall()
-def getInput(prompt=""):
-  userAnswer = input(prompt)
+def getInput(prompt="", print_with_delay=False):
+  outFunc = delay_print if print_with_delay else print
+
+  outFunc(prompt)
+  userAnswer = input()
   while userAnswer.lower() == "menu":
     menu()
-    userAnswer = input(prompt) #So that, after using the menu, the user can reenter an answer to the prompt or reenter the menu
+    outFunc(prompt)
+    userAnswer = input() #So that, after using the menu, the user can reenter an answer to the prompt or reenter the menu
   return userAnswer
 
 #Game Settings

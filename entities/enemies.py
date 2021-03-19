@@ -1,5 +1,3 @@
-import random
-
 class Enemy:
   def __init__(self, name, maxHP, HP, timeGiven, AC, damage, effects=[]):
     self.Name = name
@@ -12,11 +10,16 @@ class Enemy:
 
   def turn(self, party):
     self.applyEffects()
-    num = random.randint(0, len(party) - 1)
-    character = party[num]
+    target = None
+    max_presence = -1
+    for character in party:
+      presence = character.SocialPresence
+      if presence > max_presence:
+        max_presence = presence
+        target = character
 
-    print(self.Name + " dealt " + str(self.Damage) + "HP damage to " + character.Name)
-    character.dealDamage(self.Damage)
+    print(self.Name + " dealt " + str(self.Damage) + "HP damage to " + target.Name)
+    target.dealDamage(self.Damage)
   
   def dealDamage(self, damage):
     self.HP -= damage

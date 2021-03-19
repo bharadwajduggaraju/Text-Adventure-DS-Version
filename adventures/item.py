@@ -1,14 +1,16 @@
 class Item:
-  def __init__(self, name, description, price, damageHP=0):
+  def __init__(self, name, description, price=0, damageHP=0):
     self.Name = name
     self.Description = description 
-    self.Price = price 
+    self.Price = price
     self.DamageHP = damageHP
 
   def toString(self):
+    string_value = ""
     if (self.Price != 0):
-      return "(" + self.Price + ")" + " " + self.Name + " - " + self.Description
-    return self.Name + " - " + self.Description
+      string_value += "(" + self.Price + ") "
+    string_value += self.Name + " - " + self.Description
+    return string_value
   
-  def dealDamage(self, person):
+  def use(self, person):
     person.dealDamage(self.damageHP)

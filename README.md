@@ -6,15 +6,18 @@ A game for the Legend of the Cauliflower.
 
 Special thanks to all the hard working people who made this project possible!
 
-### Samiya Sailer - Project Leader
+### Director:
+* Samiya Sailer **-** Project Overview Director
 
 ### Coding:
 
-* Joseph Eng **-** Code Head
-* Eesha Jain **-** Code Head
-* Bharadwaj Duggaraju **-** Coder
-* Vedaant Bal **-** Coder
-* Abhay Bhat **-** Coder
+| Person | Job |
+| -------- | -------- |
+| Joseph Eng | Code Head |
+| Eesha Jain | Code Head |
+| Bharadwaj Duggaraju | Coder  |
+| Vedaant Bal | Coder |
+| Abhay Bhat | Coder |
 
 ### Writing/Wordbuilding:
 
@@ -32,7 +35,7 @@ Special thanks to all the hard working people who made this project possible!
 * Gabriel Lawton **-** Composition Assistant, Theme Creator, & Pianist
 * Drithi Pasupuleti **-** Singer
 * Maanasa Ramadugu **-** Violinist
-* Samiya Sailer **-** Flautists
+* Samiya Sailer **-** Flautist
 * Nicholas Volfbeyn **-** Cellist
 * Joseph Eng **-** Violinist
 * Caden Ko **-** Violinist
@@ -40,7 +43,7 @@ Special thanks to all the hard working people who made this project possible!
 
 ### Art:
 
-* Hiraeth Wang Fiske **-** Enemy Designer
+* Hiraeth Wang Fiske **-** Head Artist and Enemy Designer
 * Elise Xu **-** Conceptual Artist
 * Caden Ko **-** Conceptual Artist
 * Angelina Lawton **-** Conceptual Artist
@@ -48,7 +51,6 @@ Special thanks to all the hard working people who made this project possible!
 * Athena Shanklin **-** Conceptual Artist
 * Richard Yang **-** Conceptual Artist
 * Maanasa Ramadugu **-** Conceptual Artist
-* Hiraeth Wang Fiske **-** Conceptual Artist
 * Eesha Jain **-** Minor Artist
 
 

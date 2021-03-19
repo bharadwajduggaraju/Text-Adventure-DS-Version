@@ -1,1 +1,1 @@
-run="clear; python main.py"
+run="python main.py"

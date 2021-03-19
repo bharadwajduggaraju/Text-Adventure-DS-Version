@@ -1,22 +1,27 @@
 import util.colors as col
 from util.console.output import delay_print, clearConsole
-from util.console.input import validate_input
+from util.console.input import validate_input, validate_int_input
 from util.instances import enemies
 from util.variables import party, locations
 from fighting.timer import clearTimers, resetTimer, TimeOut, Timer
+
+def battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
+  battle = Battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message)
+  battle_result = battle.begin()
+  return battle_result
 
 class Battle:
   def __init__(self, battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
     self.battleParty = battle_party.copy()
     self.enemyTeam = enemy_team
-    self.location = location
+    self.location = location.title()
     self.intro = intro
-    self.primaryEnemyName = primary_enemy_name
+    self.primaryEnemyName = primary_enemy_name.lower()
     self.loseMessage = lose_message
 
   def isFinished(self, retreated):
     for ally in list(self.battleParty):
-      if ally.HP <= 0:
+      if ally.HP <= 0 and ally.Adrenaline <= 0:
         ally.HP = ally.MaxHP
         self.battleParty.remove(ally)
         if ally.die():
@@ -92,10 +97,8 @@ class Battle:
     if timerMode == "on":
       print("Time: 10\n")
     
-    print("Your moves:\n 1. " + str(actor.Move.Name) + "\n 2. " + str(actor.Move2.Name) + "\n 3. " + str(actor.Move3.Name) + "\n 4. Retreat from battle\n")
-    prompt = "Enter 1, 2, 3, or 4: "
-    answer = validate_input(["1", "2", "3", "4"], "Invalid input.", prompt)
-    answer = int(answer)
+    print("Your moves:\n 1. " + str(actor.Move.Name) + "\n 2. " + str(actor.Move2.Name) + "\n 3. " + str(actor.Move3.Name) + "\n 4. Use item")
+    answer = validate_int_input(range(1, 6), "Invalid input.", "Enter 1, 2, 3, or 4: ")
     
     if 1 <= answer <= 3:
       resetTimer(timeEnd)
@@ -108,6 +111,8 @@ class Battle:
       move.use(actor, self.battleParty, self.enemyTeam)
       resetTimer(timeEnd)
     elif answer == 4:
+      pass
+    elif answer == 5:
       delay_print("You have retreated!")
       return True
     return False

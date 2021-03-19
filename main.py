@@ -7,16 +7,44 @@ import pygame
 from replit import audio
 
 from fighting.battle import Battle
-
 from adventures.shop import Shop
 from util.colors import *
 from util.variables import *
-from util.variables import inventory, add_party_member, add_item
+from util.variables import party_money, add_party_member, add_item
 from util.instances import *
 from util.console.output import delay_print, loading_effect, clearConsole
 from util.console.input import validate_input, validate_int_input, yes_no, tutorial, inventorymenu, settings, battle_tutorial
+from adventures.trade import *
+from adventures.trade import Trade
 
 add_party_member(Amaliyah)
+
+STARTING_MONEY = 100
+
+#Shop
+
+shopItems = [{"name": "scarf", "price": 33, "quantity": 2200}]
+shopStats = [{
+  "name": "scarf",
+  "totalMoney": 0,
+  "unitsSold": 0,
+  "discount": False
+}]
+
+WinterShop = Shop("Arctic Circle", shopItems, shopStats)
+
+WinterShop.getInfo(STARTING_MONEY)
+
+#Trade
+
+# tradeItems = [{"name": "Scarf", "itemsAccepted": ["boot", "shoe", "helmet"]}]
+
+# #Inventory, make dynamic later
+# playerInventory = ["boot", "shoe", "helmet", "sock"]
+
+# Winter_Trading_Post = Trade("Winter", tradeItems)
+
+# Winter_Trading_Post.beginTrade(playerInventory)
 
 #Random Encounters
 possibility = 5
@@ -40,13 +68,7 @@ def finley():
 def otis(string):
   print(DARK_RED + string + RESET)
 
-
 #Villages
-
-vStoreInventory = [{"name": "Simple Boot", }]
-vStoreStats = []   
-VillageStore = Shop("Village", vStoreInventory, vStoreStats)
-
 minu_visits = 0
 stole_something = False
 minu_mad = False
@@ -305,7 +327,11 @@ def village_1():
           time.sleep(1)
           clearConsole()
           village_1()
-    pass
+    elif quest_completion == True:
+          clearConsole()
+          print(DARK_RED + "APOTHECARY" + DARK_RED)
+          time.sleep(0.25)
+          delay_print("The door squeaks open.")
   elif snowball == 8:
     #Church
     pass
@@ -525,9 +551,10 @@ def welcome():
 #MUSIC
 #source = audio.play_file('files/sound/EsteriTheme.mp3')
 #source.volume += 0.01
-clearConsole()
+#clearConsole()
 
 def adventureBeg():
+  global party_money
   delay_print("""
     The voice of the chaplain rings out in sonorous tones across the hall. "Esteri. Today, you are come of age, and eligible to ascend the throne. As it has been for the many centuries..."
     The chaplain drones on as you kneel on the flagstones, watching the play of candlelight on the polished rock. Slowly, the chaplain's voice drones to a close.
@@ -669,7 +696,7 @@ def adventureBeg():
     You take the letter and place it in your bag.
   """, indent=4)
   add_item("Letter for Kurigalu", "An important letter from the regent.")
-  inventory["Money"] = 100
+  party_money = 100
   time.sleep(1)
   tutorial()
   inventorymenu()
@@ -692,10 +719,10 @@ def adventureBeg():
     She stands up. "There's nothing wrong with having fears, Esi," she says, touching your cheek. "Real bravery is when you're scared, but push through anyway." She smiles, but her eyes are sad. "Can you promise to be brave for me?" You nod, looking up at her.
     "Goodbye, Mommy," you whisper, wrapping your arms around her leg. "Come back soon, okay?"
     She looks down at you as if drinking in your appearance one last time. "I will, Esi. I promise."
+    
   """, indent=4)
   time.sleep(0.5)
   delay_print("""
-
     Amaliyah walked to the door. Hand shaking, she placed her hand on the knob... and glanced back one last time, meeting Esteri's eyes and mustering a smile.
   """, indent=4)
   time.sleep(0.5)
@@ -727,5 +754,101 @@ def adventureBeg():
     "Let's go look," Kosu says.
   """, indent=4)
 
-adventureBeg()
-village_1()
+delay_print("You are lying on a cold rock.")
+delay_print("You shove one arm out frantically, then retract it rapidly as you start sliding forward.")
+delay_print("The surface is as smooth and chilly as ice, yet as black as obsidian. It refuses to give you grip.")
+delay_print("Vision swimming, you struggle to stand up, pushing yourself even farther forward.")
+delay_print("At last, you succeed.")
+delay_print("The cave around you sparkles with tens of thousands of tiny pinpricks of light.")
+delay_print("It's a surreal image to behold, but it produces a considerable strain on your eyes.")
+delay_print("You only have a second to register when you see the dark silhouette that stands in front of you, buzzing with the same odd sound.")
+cave_battle_1 = Battle([Esteri], [Dronae.copy()], "cave", "Suddenly, it leaps out at you!", "dronae")
+cave_battle_1.begin()
+time.sleep(1)
+clearConsole()
+delay_print("You stumble away from the monster's carcass, disoriented.")
+delay_print("Esteri…")
+delay_print("A low rumble echoes through the cave.")
+delay_print("Esteri… you have not proven your worth…")
+delay_print("You spin around, scrabbling to direct your rotation.")
+delay_print("Before you can run, though, the walls reform around you. There are two openings in front of you, but they are guarded by a short, dragon-like figure.")
+delay_print("The Dronae… will test you.")
+delay_print("The short monster- the Dronae- buzzes.")
+delay_print("If you can answer their questions correctly, you shall reach the end of the tunnel with no issue.")
+delay_print("You stare down the Dronae.")
+delay_print("But if you answer wrong… you will never be able to make it.")
+delay_print("The wall lights glow brighter, as if to taunt you.")
+delay_print("Oh, and one last warning: I'd suggest that you locate your friend soon- or he may be gone forever.")
+delay_print("A low ringing hums through your ears, then a whistle of air as the voice floats away.")
+time.sleep(1)
+clearConsole()
+delay_print("'Well,' the Dronae buzzes, 'you're the type to bow to your superiors, aren't you?'")
+dronae_question_1 = validate_input(["y", "yes", "n", "no"], "Invalid input").lower()
+if dronae_question_1 == "y" or dronae_question_1 == "yes":
+	delay_print("'Good,' the Dronae buzzes. 'You may pass… via the left, in recognition of your deference.'")
+	delay_print("Will you heed its instruction, or will you choose the other path?")
+	delay_print(" 1. Left")
+	delay_print(" 2. Right")
+	dronae_path_1 = validate_input(["1", "2"], "The Dronae is beginning to look agonized… You'd better heed its instruction…").lower()
+	if dronae_path_1 == "1":
+		delay_print("The Dronae looks satisfied. You turn and walk down the path to the left.")
+	if dronae_path_1 == "2":
+		cave_battle_2 = Battle([Esteri], [Dronae.copy()], "cave", "The Dronae jumps at you in fury!", "dronae")
+if dronae_question_1 == "n" or dronae_question_1 == "no":
+    cave_battle_2 = Battle([Esteri], [Dronae.copy()], "cave", "'Wrong answer!' The Dronae leaps at you, claws outstretched.", "dronae")
+    cave_battle_2.begin()
+    delay_print("The Dronae lies on the ground, bleeding. 'Continue…' it coughs, suddenly appearing pitiful due to the blood that saturates its muzzle. 'You have proven yourself worthy.'")
+    delay_print("It fades, dissolving into the air with transience.")
+    delay_print("Which way will you go?")
+    delay_print(" 1. Left")
+    delay_print(" 2. Right")
+    dronae_path_1 = validate_input(["1", "2"], "You'd better choose quickly… Kosu is in danger…").lower()
+if dronae_path_1 == "1":
+    loading_effect()
+    clearConsole()
+    delay_print("You stumble into another lighted cavern. This one is lined with fluorescent mushrooms like the ones you saw above. The floor is woven with roots.")
+    delay_print("'Esteri!' Kosu's voice rings off the walls.")
+    delay_print("Your eyes adjust, and you gasp.")
+    delay_print("Your friend is ensnared in a tangle of vines, wrapping around him in an intricate pattern and constricting quickly.")
+    delay_print("This time, two Dronae stand guard before him.")
+    cave_battle_3 = Battle([Esteri, Kosu], [Dronae.copy(), Dronae.copy()], "cave", "These ones don't even make a noise before they launches themselves at you.", "dronae")
+    cave_battle_3.begin()
+    if dronae_path_1 == "2":
+      loading_effect()
+      clearConsole()
+      delay_print("You stumble through the darkness, trying to feel for a wall.")
+      delay_print("Your stomach fills with painful regret as you realize that you should have gone in the other direction.")
+      delay_print("You can see nothing around you but endless black, swallowing the air and suffocating you.")
+      delay_print("You trudge forward one more step and then trip, heavy with exhaustion.")
+      delay_print("A Dronae looms above you. 'I'm not very happy, you know,' it buzzes. 'You dissolved my friends before the Turning Ceremony.'")
+      delay_print("What will you say?")
+      delay_print(" 1. What's the Turning Ceremony?")
+      delay_print(" 2. Explain what's going on!")
+      validate_input(["1", "2"], "Answer now! The Dronae looks agitated…").lower()
+      time.sleep(1)
+      clearConsole()
+      delay_print("The Dronae groans. 'Of course I can't tell you that, impertinent child.'")
+      delay_print("It looks over you. 'But…' It turns away, looking slightly embarrassed. 'Maybe I can heal you.'")
+      delay_print("It climbs onto your stomach, and begins to mutter a few incantations.")
+      delay_print("The Dronae's paws glow. You suddenly feel replenished.")
+      Esteri.dealDamage(-100)
+      delay_print("It scampers off your stomach and glares up at you as you sit up slowly, stretching your arms with new vigorousness.") 
+      delay_print("You stare at it as it scratches the floor, looking more and more agonized.")
+      delay_print("What will you say?")
+      delay_print(" 1. What are you doing?")
+      delay_print(" 2. Can I go now?")
+      validate_input(["1", "2"], "The Dronae keeps scratching.").lower()
+      delay_print("The Dronae looks up at you with surprising ferocity. 'You know, I think I might want to help you,' it says.")
+      delay_print("You flinch, taken aback.")
+      delay_print("'You see, I am a very helpful Dronae,' it says, puffing up its chest. 'If you keep me alive, I can help you in fights.'")
+      delay_print("You burst out laughing and smile.")
+      delay_print("What will you say?")
+      delay_print(" 1. Yeah, you can come!")
+      delay_print(" 2. No… I would rather go on my own.")
+      dronae_add_to_team = validate_input(["1", "2"], "The Dronae scrapes your arm affectionately, waiting for an answer.").lower()
+      if dronae_add_to_team == "1":
+        delay_print("The Dronae sighs in relief. 'I won't let you down!'")
+        cave_battle_3 = Battle([Esteri, Dronae], [Dronae.copy(), Dronae.copy()], "cave", "These ones don't even make a noise before they launch themselves at you.", "dronae")
+        cave_battle_3.begin()
+      if dronae_add_to_team == "2":
+        pass
