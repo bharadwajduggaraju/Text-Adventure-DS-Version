@@ -144,8 +144,8 @@ def tutorial():
   global timerMode
   delay_print(RESET + PURPLE_BOLD + "~~~~TUTORIAL~~~~" + RESET + LIGHT_PURPLE)
   delay_print("""
-    When you are posed with a yes or no question and want to answer, you may type either 'yes'/'y' or 'no'/'n'. It is not case sensitive.
-    When posed a question, you may type 'menu' to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented.
+    When you are posed with a yes or no question and want to answer, you may type either \"yes\"/\"y\" or \"no\"/\"n\". It is not case sensitive.
+    When posed a question, you may type \"menu\" to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented.
   """ + RESET, indent=4)
   time.sleep(1)
   clearConsole()
@@ -168,7 +168,7 @@ def battle_tutorial():
     Input #2 - Type in the enemy # that you want to attack (the corresponding number for each enemy is printed at the beginning with the HP)
     If you have your timer on, you have to do this all in the time limit given.
     Good luck!
-  """)
+  """, indent=4)
 
 #An ironic function for testing functions
 def test_functions():

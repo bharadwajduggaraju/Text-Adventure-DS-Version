@@ -31,35 +31,38 @@ Special thanks to all the hard working people who made this project possible!
 | Athena Shanklin | Oi'nan developer |
 
 ### Music:
-
-* Angelina Lawton **-** Music Head & Pianist
-* Athena Shanklin **-** Composition, Theme Creator, & Guitarist
-* Gabriel Lawton **-** Composition Assistant, Theme Creator, & Pianist
-* Drithi Pasupuleti **-** Singer
-* Maanasa Ramadugu **-** Violinist
-* Samiya Sailer **-** Flautist
-* Nicholas Volfbeyn **-** Cellist
-* Joseph Eng **-** Violinist
-* Caden Ko **-** Violinist
-* Madeline Zhang **-** Bassoonist
+| Person | Job |
+| -------- | -------- |
+| Angelina Lawton | Music Head & Pianist | 
+| Athena Shanklin | Composition, Theme Creator, & Guitarist | 
+| Gabriel Lawton | Composition Assistant, Theme Creator, & Pianist | 
+| Drithi Pasupuleti | Singer | 
+| Maanasa Ramadugu | Violinist | 
+| Samiya Sailer | Flautist | 
+| Nicholas Volfbeyn | Cellist | 
+| Joseph Eng | Violinist | 
+| Caden Ko | Violinist | 
+| Madeline Zhang | Bassoonist | 
 
 ### Art:
-
-* Hiraeth Wang Fiske **-** Head Artist and Enemy Designer
-* Elise Xu **-** Conceptual Artist
-* Caden Ko **-** Conceptual Artist
-* Angelina Lawton **-** Conceptual Artist
-* Madeline Zhang **-** Conceptual Artist
-* Athena Shanklin **-** Conceptual Artist
-* Richard Yang **-** Conceptual Artist
-* Maanasa Ramadugu **-** Conceptual Artist
-* Eesha Jain **-** Minor Artist
+| Person | Job |
+| -------- | -------- |
+| Hiraeth Wang Fiske | Head Artist and Enemy Designer | 
+| Elise Xu | Conceptual Artist | 
+| Caden Ko | Conceptual Artist | 
+| Angelina Lawton | Conceptual Artist | 
+| Madeline Zhang | Conceptual Artist | 
+| Athena Shanklin | Conceptual Artist | 
+| Richard Yang | Conceptual Artist | 
+| Maanasa Ramadugu | Conceptual Artist | 
+| Eesha Jain | Graphic Designer | 
 
 
 ### SFX/Voiceovers
-
-* Drithi Pasupuleti **-** Esteri
-* Hiraeth Wang Fiske **-** Cressida, Children, & Kirin
-* Athena Shanklin **-**Ai, People of old age, & Children
-* Joseph Eng **-** Kosu
-* Samiya Sailer **-** Aliyah / Amaliyah
+| Person | Job |
+| -------- | -------- |
+| Drithi Pasupuleti | Esteri | 
+| Hiraeth Wang Fiske **-** Cressida, Children, & Kirin | 
+| Athena Shanklin **-**Ai, People of old age, & Children | 
+| Joseph Eng **-** Kosu | 
+| Samiya Sailer **-** Aliyah / Amaliyah | 
