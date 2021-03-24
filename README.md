@@ -62,7 +62,7 @@ Special thanks to all the hard working people who made this project possible!
 | Person | Job |
 | -------- | -------- |
 | Drithi Pasupuleti | Esteri | 
-| Hiraeth Wang Fiske **-** Cressida, Children, & Kirin | 
-| Athena Shanklin **-**Ai, People of old age, & Children | 
-| Joseph Eng **-** Kosu | 
-| Samiya Sailer **-** Aliyah / Amaliyah | 
+| Hiraeth Wang Fiske | Cressida, Children, & Kirin | 
+| Athena Shanklin | Ai, People of old age, & Children | 
+| Joseph Eng | Kosu | 
+| Samiya Sailer | Aliyah / Amaliyah | 
