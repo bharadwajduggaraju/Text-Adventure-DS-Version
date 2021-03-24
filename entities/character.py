@@ -6,6 +6,7 @@ class Character:
   def __init__(self, name, HP, MaxHP, SP, MaxSP, MP, MaxMP, SocialPresence, SocialHeart, SocialStability, PhysicalGrace, PhysicalSkill, PhysicalPoise, MagicalAffinity, MagicalControl, MagicalConcentration, Inventory, Trauma, Effects, Tags, Move, Move2, Move3, maxDeaths=3, deaths=0):
     self.Name = name
     self.Adrenaline = 0 #Bonus HP which lasts only for one battle
+    self.MaxAdrenaline = 255 #Placeholder
     self.HP = HP
     self.MaxHP = MaxHP
     self.SP = SP
@@ -32,28 +33,9 @@ class Character:
       "MagicalConcentration": MagicalConcentration
         #affects wound penalties and accuracy
     }
-    self.SocialPresence = SocialPresence
-      #impacts combat targeting and social
-    self.SocialHeart = SocialHeart
-      #impacts relationships
-    self.SocialStability = SocialStability
-      #impacts wound penalties, reduces trauma
-    self.PhysicalGrace = PhysicalGrace
-      #impacts accuracy and combos
-    self.PhysicalSkill = PhysicalSkill
-      #impacts armor and wound penalties
-    self.PhysicalPoise = PhysicalPoise
-      #impacts crits and damage
-    self.MagicalAffinity = MagicalAffinity
-      #impacts spell damage or healing and # of enemies hit
-    self.MagicalControl = MagicalControl
-      #affects spell crits and penalties of a spell failure
-    self.MagicalConcentration = MagicalConcentration
-      #affects wound penalties and accuracy
     self.DmgReductPercent = 0
     self.Inventory = Inventory
     self.Trauma = Trauma
-      #Maybe includes permanent effects? See old comment in main.py
     self.Effects = Effects
     self.Move = Move
     self.Move2 = Move2
@@ -73,6 +55,7 @@ class Character:
   #Applies a character's effects on them. Returns a dictionary with the new stats.
   def applyEffects(self):
     newStats = self.PermStats.copy()
+    newStatsKeys = newStats.keys()
 
     i = 0
     while i < len(self.Effects):
@@ -82,9 +65,8 @@ class Character:
         del self.Effects[i] #If the effect is removed, a new effect will now be at the same index- Should not increment i
       else:
         self.HP -= effect.Damage
-        keys = newStats.keys()
         for j in range(9):
-          newStats[keys[j]] -= effect.Reducts[j]
+          newStats[newStatsKeys[j]] -= effect.Reducts[j]
         i += 1
 
     return newStats
@@ -94,6 +76,10 @@ class Character:
       self.HP = 0
     elif self.HP > self.MaxHP:
       self.HP = self.MaxHP
+    if self.Adrenaline < 0:
+      self.Adrenaline = 0
+    elif self.Adrenaline > self.MaxAdrenaline:
+      self.Adrenaline = self.MaxAdrenaline
     #die check will take place in battleFinished()
 
   def dealDamage(self, damage):
@@ -110,11 +96,22 @@ class Character:
         self.Adrenaline = 0
       self.HP = 0
     #The die check will take place in battleFinished()
+  def heal(self, amount, HP_type=0):
+    """type: 0-Adrenaline, 1-HP"""
+    if HP_type == 0:
+      self.Adrenaline += amount
+    elif HP_type == 1:
+      self.HP += amount
+    else:
+      raise ValueError("Unexpected value for HP_type: " + str(HP_type))
+    self.checkHP()
   
   def setHP(self, health):
     self.HP = health
     self.checkHP()
 
+  def isDead(self):
+    return self.HP <= 0 and self.Adrenaline <= 0
   def die(self):
     self.Deaths += 1
     if self.Deaths > self.MaxDeaths:

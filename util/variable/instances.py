@@ -8,11 +8,11 @@ from entities.enemies import Enemy
 #efc: bad abbreviation of effect
 fire_efc = Effect("Burning", 3, 3, True)
 electro_efc = Effect("Electrocuted", 10, 1, True)
-intox_efc = Effect("Intoxicated", 0, 30, False, [0]*3+[1]*6)
-weak_efc = Effect("Weakened", 0, 30, False, [1]*3)
-rally_efc = Effect("Rallying", 0, 5, False, [-1]*9)
-flinch_efc = Effect("Flinching", 0, 1, False, [1]*3)
-taunt_efc = Effect("Taunted", 0, 4, False, [0]*3+[-3]*6)
+intox_efc = Effect("Intoxicated", 0, 30, False, [0,0,0,1,1,1,1,1,1])
+weak_efc = Effect("Weakened", 0, 30, False, [1,1,1,0,0,0,0,0,0])
+rally_efc = Effect("Rallying", 0, 5, False, [-1,-1,-1,-1,-1,-1,-1,-1,-1])
+flinch_efc = Effect("Flinching", 0, 1, False, [1,1,1,0,0,0,0,0,0])
+taunt_efc = Effect("Taunted", 0, 4, False, [0,0,0,-3,-3,-3,-3,-3,-3])
 effects = { #May or may not be helpful, depending on use.
   "Fire": fire_efc,
   "Electrocution": electro_efc,
@@ -48,7 +48,7 @@ Esteri = Character("Esteri", 29, 29, 19, 19, 7, 7, 3, 3, 1, 5, 4, 3, 0, 0, 1, []
 Cressida = Character("Cressida", 13, 13, 25, 25, 21, 21, 4, 3, 3, 0, 1, 3, 2, 3, 3, [], [], [], [], heal, damage, rally) #Cressida max: 13+25+21 = 59
 Kosu = Character("Kosu", 21, 21, 29, 29, 5, 5, 4, 5, 3, 3, 4, 1, 0, 0, 0, [], [], [], [], attack, rally, element) #Kosu max: 21+29+5 = 55
 Ai = Character("Ai", 7, 7, 15, 15, 33, 33, 1, 4, 0, 0, 1, 0, 4, 5, 5, [], ["grief"], [], [], damage, element, area) #Ai max: 7+15+33= 55
-#We had determined that Ai starts with grief
+#Ai starts with grief
 Amaliyah = Character("Amaliyah", 29, 29, 19, 19, 10, 10, 3, 3, 1, 5, 4, 3, 4, 0, 1, [], [], [], [], attack, element, heal)
 PartyDronae = Character("Dronae", 20, 20, 10, 10, 0, 0, 2, 4, 1, 3, 1, 1, 1, 1, 1, [], [], [], [], heal, heal, attack)
 

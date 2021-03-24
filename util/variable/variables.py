@@ -1,4 +1,4 @@
-from adventures.item import Item
+from money.item import Item
 #Instances in util/instances.py, trauma in entities/traum.py
 
 #Sample location
@@ -16,7 +16,7 @@ locations = {
 
 party = []
 party_money = 0
-inventory = [["Money", 0]]
+inventory = []
 
 def add_party_member(party_member):
   party.append(party_member)

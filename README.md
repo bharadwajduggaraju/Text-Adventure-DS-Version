@@ -21,12 +21,14 @@ Special thanks to all the hard working people who made this project possible!
 
 ### Writing/Wordbuilding:
 
-* Samiya Sailer **-** Writing Head
-* Caden Ko **-** Worldbuilding Head
-* Maanasa Ramadugu **-** Side Quest Writer
-* Nicholas Volfbeyn **-** Side Quest Developer
-* Madeline Zhang **-** Side Character Developer
-* Athena Shanklin **-** Oi'nan developer
+| Person | Job |
+| -------- | -------- |
+| Samiya Sailer | Writing Head |
+| Caden Ko | Worldbuilding Head |
+| Maanasa Ramadugu | Side Quest Writer |
+| Nicholas Volfbeyn | Side Quest Developer |
+| Madeline Zhang | Side Character Developer |
+| Athena Shanklin | Oi'nan developer |
 
 ### Music:
 

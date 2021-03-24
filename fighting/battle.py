@@ -1,8 +1,8 @@
 import util.colors as col
 from util.console.output import delay_print, clearConsole
 from util.console.input import validate_input, validate_int_input
-from util.instances import enemies
-from util.variables import party, locations
+from util.variable.instances import enemies
+from util.variable.variables import party, locations
 from fighting.timer import clearTimers, resetTimer, TimeOut, Timer
 
 def battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
@@ -38,7 +38,9 @@ class Battle:
   
   def begin(self): #If you have better name suggestions, go ahead and change this (and the calls in main.py)
     delay_print(str(self.intro))
-    validate_input([], "", "Are you ready to start the battle? ", validate=False)
+    result = validate_input([], "", "Are you ready to start the battle? ", validate=False).lower()
+    if result == "shaymin":
+      return
     #Prompt may be changed
     delay_print("Ready or not, time to begin...")
     clearConsole()

@@ -1,8 +1,67 @@
 import time, sys
 from util.colors import *
-from util.variables import inventory, add_item
+from util.variable.variables import inventory, add_item
 from util.console.output import delay_print, clearConsole, loading_effect
 from util.console.input import yes_no, validate_input
+
+def amaliyahIntro():
+  delay_print("""
+    Amaliyah scampered through the trees, ducking and doging low-handing branches and sliding over the slick leaves scattered on the ground.
+    The air was musty with the smell of petrichor as rain dibbled down around her, wetting the soil and leading it to convalesce into a muddy slush.
+
+    Breath ragged, she tore down the badly marked forest path.
+    Her footsteps pounded with urgency.
+    In the distance, howls rang through the air- the distinct call of a pack of Kirin that had caught the smell of fresh meat.
+    Her chest seized as she thought of the bloodthirsty expressions etched on each of their psychopathic wolfish faces, foreboding masks of doom.
+  """, end="", indent=4)
+  time.sleep(1)
+  clearConsole()
+  delay_print("""
+    Amaliyah gripped her sword tightly in one sweaty hand and her shield in the other.
+    Her eyes widened instinctively with fear as she rounded the corner and saw the Clearing of the Kirin awaiting her arrival.
+    Feet smashing leaves into pulp as she fled across the packed dirt, she wildly attempted to escape from the circular gap in the trees.
+  """, end="", indent=4)
+  time.sleep(1)
+  delay_print("""
+    But the Kirin were not so easily tricked.
+    A magical barrier shot up, twinkling with light and blocking her path.
+    She knelt on the ground, catching her breath.
+    The clearing was still, with the exception of a few stray leaves that twirled through the air and gently came to a rest on the grass.
+    Trees waved about in a leisurely fashion, flaunting the autumn leaves dangling from their branches and burning with the colors of flame.
+  """, end="", indent=4)
+  time.sleep(1)
+  clearConsole()
+  delay_print("""
+    Strained now, Amaliyah forced herself to stand up, drawing her sword from its scabbard with a steely hiss.
+    Assuming a confident fighting stance, she whipped her blade behind her suddenly as a rustle sounded in the grass.
+    Nothing.
+    Amaliyah gripped the hilt of her sword harder, nerves taut.
+    Jarring howls pierced through the still air.
+  """, end="", indent=4)
+  delay_print()
+  time.sleep(1)
+
+#   #Comments
+#   '''
+#   delay_print(WHITE + "You are facing a pack of fifteen kirin." + WHITE)
+#   delay_print("You must defeat them without letting the timer run out after every move.")
+#   delay_print("But be careful! They will fight back after every attack you make, so you have to choose your moves carefully.")
+#   delay_print("You will choose between four attack options and the option to dodge the next attack. You may also access your inventory.")
+#   delay_print("Dodging is useful when you need more time to think or want to learn what your opponent's attacks are.")
+#   delay_print("But otherwise, you should select from your move menu or utilize an item from your inventory.")
+#   delay_print("You'll learn more about your inventory later. For now, let's fight the Kirin using one of your four attacks.")
+#   '''
+
+#   #delay_print("Your four attacks are:")
+#   #delay_print("1. Sword Slash")
+#   #delay_print("2. Earthbreaking Stone Spires")
+#   #delay_print("3. Divine Sword Triple ")
+#   #delay_print("4. Basic Self-Healing")
+#   ##NOTE: please don't have divine sword triple or earthbreaking stone spires
+#   #Change ^ above in the Amaliyah character
+
+#   time.sleep(3)
+#   clearConsole()
 
 def adventureBeg():
   delay_print("""

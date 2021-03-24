@@ -5,17 +5,27 @@ from util.colors import * #Variables
 from util.colors import RESET
 from util.console.output import Output
 from fighting.timer import Timer
-from util.variables import inventory
+from util.variable.variables import inventory
 
 #Imported for testing:
 from util.console.output import loading_effect
+
+def get_float_input(prompt="", print_with_delay=False):
+  no_answer = True
+  while no_answer:
+    try:
+      answer = float(getInput(prompt, print_with_delay))
+      no_answer = False
+    except ValueError:
+      no_answer = True
+  return answer
 
 #Input with Error Message
 def validate_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True):
   for i in range(len(accepted_list)):
     accepted_list[i] = accepted_list[i].upper()
-  user_input = getInput(prompt, print_with_delay).upper()
   validate = validate and accepted_list != []
+  user_input = getInput(prompt, print_with_delay).upper()
   while (user_input not in accepted_list) and validate:
     delay_print(str(errMessage))
     user_input = getInput(prompt, print_with_delay).upper()
@@ -39,15 +49,15 @@ def yes_no(allow_maybe, errMessage, prompt="", print_with_delay=False, validate=
     answer = "N"
   return answer
 
-#Formerly functionCall()
 def getInput(prompt="", print_with_delay=False):
   outFunc = delay_print if print_with_delay else print
 
-  outFunc(prompt)
+  prompt_end = "" if prompt=="" else "\n"
+  outFunc(prompt, end=prompt_end)
   userAnswer = input()
   while userAnswer.lower() == "menu":
     menu()
-    outFunc(prompt)
+    outFunc(prompt, end=prompt_end)
     userAnswer = input() #So that, after using the menu, the user can reenter an answer to the prompt or reenter the menu
   return userAnswer
 
@@ -66,11 +76,11 @@ def settings():
 
   if modify == "1":
     delay_print("Type a number from 1 to 10 to act as your text scroll speed.")
-    textSpeed = float(input())
+    textSpeed = get_float_input()
     while (textSpeed < 1 or textSpeed > 10):
       delay_print("That value is not between 1 and 10.")
       delay_print("Please enter a new value between 1 and 10 as your text scroll speed.")
-      textSpeed = float(input())
+      textSpeed = get_float_input()
       print("\n")
       time.sleep(1)
     delay_print("Text scroll speed is now set to " + str(textSpeed) + ".")
@@ -104,7 +114,8 @@ def inventorymenu(clear=True):
 
   for i in range(len(inventory)):
     delay_print(
-      str(i + 1) + ": " + inventory[i][0] + " - " + inventory[i][1])
+      str(i + 1) + ": " + inventory[i].toString()
+    )
 
   if not inventory:
     delay_print(RED_ITALIC + "None")
@@ -135,7 +146,7 @@ def tutorial():
   delay_print("""
     When you are posed with a yes or no question and want to answer, you may type either 'yes'/'y' or 'no'/'n'. It is not case sensitive.
     When posed a question, you may type 'menu' to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented.
-  """ + RESET)
+  """ + RESET, indent=4)
   time.sleep(1)
   clearConsole()
   #This is just the omnipresent tutorial, the original tutorial is going to be in a fight. Samiya will explain to the player how to access the omnipresent tutorial in the original tutorial.

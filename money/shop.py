@@ -4,7 +4,7 @@ sys.path.append("../")
 from util.console.input import *
 from util.console.input import validate_int_input
 from util.console.output import delay_print, clearConsole
-from util.inventory import allItems
+from util.variable.inventory import allItems
 from util.colors import *
 
 

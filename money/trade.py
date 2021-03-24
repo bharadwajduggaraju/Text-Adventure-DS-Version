@@ -8,10 +8,16 @@ class Trade :
       self.name = name  #String
       self.items = items  #List of Dicts, [{"name": "scarf", "itemsAccepted": []}]
 
-    def trade(self, item_wanted, item_given):
-      status_dict = {"status": ""}
+    def trade(self, item_wanted, item_given, current_player_inventory):
+      status_dict = {"status": "", "player_inventory": current_player_inventory}
       if item_wanted not in self.items:
         status_dict["status"] = "Item not found"
+        return status_dict
+      else:
+        self.items.remove(item_wanted);
+        current_player_inventory.remove(item_given)
+        status_dict["status"] = "Succesfully Traded"
+        status_dict["player_inventory"] = current_player_inventory
         return status_dict
 
         
@@ -34,26 +40,16 @@ class Trade :
           acceptedInventoryIndices.append(counter)
         delay_print(str(counter) + ". " + item)
         counter += 1
-      UserTradeProp = validate_int_input(acceptedInventoryIndices, "Invalid input.", "Which item do you want to trade away? (Enter the number) ")
+      UserTradeProp = validate_int_input(acceptedInventoryIndices, "That item is not accepted.", "Which item do you want to trade? (Enter the number) ")
 
       itemGiven = playerInventory[UserTradeProp-1]
 
-      self.trade(tradedItem, itemGiven)
+      attempted_trade = self.trade(tradedItem, itemGiven, playerInventory)
 
-    
-
-      
-
-
-
-    
-
-      
-    
-
-
-
-    
-
-
-
+      if(attempted_trade["status"] == "Item not found"):
+        delay_print(RED+"Failed To Find Item")
+        return attempted_trade["player_inventory"]
+      else:
+        delay_print(GREEN+"--Succesfully Traded---")
+        clearConsole()
+        return attempted_trade["player_inventory"]

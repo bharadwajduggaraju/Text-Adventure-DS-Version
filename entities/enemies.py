@@ -29,15 +29,15 @@ class Enemy:
       self.HP = self.MaxHP
     #The die check will take place in battleFinished()
   
-  def setHP(self, damage):
-    self.HP = damage
+  def setHP(self, newHP):
+    self.HP = newHP
   
   #Makes a copy for individual enemies
   def copy(self):
     copy = Enemy(self.Name, self.MaxHP, self.HP, self.TimeGiven, self.AC, self.Damage)
     return copy
 
-  #Effects variables: Name, Damage, Duration, isWounds, PhysReduct, MentReduct
+  #Effects fields: Name, Damage, Duration, isWounds, Reducts, TimeReduct
   def applyEffects(self):
     i = 0
     while i < len(self.Effects):

@@ -42,7 +42,10 @@ class Move:
       if isCrit:
         moveAmount *= 2
 
-      target.dealDamage(moveAmount)
+      if isAttack:
+        target.heal(-1*moveAmount)
+      else:
+        target.dealDamage(moveAmount)
       if target.HP <= 0:
         print(target.Name + " killed!")
       elif target.HP-moveAmount > target.MaxHP:
