@@ -1,6 +1,5 @@
 #For translating to and from Oi'nan
-#Dictionary moved to OiToEng.py
-from dictionary import OiToEng
+from translation.dictionary import OiToEng
 
 #Converts a string form of a list to a list
 def listSplit(listStr):

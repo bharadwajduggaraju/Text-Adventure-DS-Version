@@ -3,7 +3,7 @@ from util.console.output import delay_print, clearConsole
 from util.console.input import validate_input, validate_int_input
 from util.variable.instances import enemies
 from util.variable.variables import party, locations
-from fighting.timer import clearTimers, resetTimer, TimeOut, Timer
+from combat.timer import clearTimers, resetTimer, TimeOut, Timer
 
 def battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
   battle = Battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message)

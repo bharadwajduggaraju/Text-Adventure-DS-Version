@@ -40,8 +40,8 @@ Special thanks to all the hard working people who made this project possible!
 | Maanasa Ramadugu | Violinist | 
 | Samiya Sailer | Flautist | 
 | Nicholas Volfbeyn | Cellist | 
-| Joseph Eng | Violinist | 
-| Caden Ko | Violinist | 
+| Joseph Eng | Violist | 
+| Caden Ko | Violist | 
 | Madeline Zhang | Bassoonist | 
 
 ### Art:

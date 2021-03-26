@@ -23,13 +23,13 @@ class Trade :
         
     def beginTrade(self, playerInventory):
       clearConsole()
-      delay_print(GREEN + "------ Welcome to the " + self.name + " Trading Post ------" + GREEN)
-      delay_print("Here are the items available to trade for:")
+      delay_print(GREEN + "------ " + self.name + " ------" + GREEN)
+      delay_print("Items Available:")
       counter = 1
       for i in self.items:
           delay_print(str(counter) + ". " + i["name"])
           counter += 1
-      itemIndex = validate_int_input(range(1, counter), "Invalid input.", "Which item do you want to trade for? (Enter the number) ") - 1
+      itemIndex = validate_int_input(range(1, counter), "Invalid input.", "Which item do you want to purchase? (Enter the number) ") - 1
       tradedItem = self.items[itemIndex]
 
       delay_print("Your Inventory:")
@@ -40,7 +40,7 @@ class Trade :
           acceptedInventoryIndices.append(counter)
         delay_print(str(counter) + ". " + item)
         counter += 1
-      UserTradeProp = validate_int_input(acceptedInventoryIndices, "That item is not accepted.", "Which item do you want to trade? (Enter the number) ")
+      UserTradeProp = validate_int_input(acceptedInventoryIndices, "That item is not accepted.", "Which item do you want to sell? (Enter the number) ")
 
       itemGiven = playerInventory[UserTradeProp-1]
 

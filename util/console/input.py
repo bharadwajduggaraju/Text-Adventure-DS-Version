@@ -4,11 +4,11 @@ from util.console.output import delay_print, clearConsole
 from util.colors import * #Variables
 from util.colors import RESET
 from util.console.output import Output
-from fighting.timer import Timer
+from combat.timer import Timer
 from util.variable.variables import inventory
 
 #Imported for testing:
-from util.console.output import loading_effect
+#[currently none]
 
 def get_float_input(prompt="", print_with_delay=False):
   no_answer = True
@@ -173,32 +173,14 @@ def battle_tutorial():
 #An ironic function for testing functions
 def test_functions():
   function = input("Function: ")
-  if function == "delay_print":
-    global punc_delays
-    yarn = input("Text to print: ")  #yarn: Pun on string
-    speed = input("Scroll speed: ")
-    while True:
-      punc = input("Enter punctuation: ")
-      delay = input("Enter delay: ")
-      if punc == "" or delay == "":
-        break
-      punc_delays[punc] = float(delay)
-    print(punc_delays)
-    if speed == "":
-      delay_print(yarn)
-    else:
-      delay_print(yarn, float(speed))
-  elif function == "loading_effect":
-    clearConsole()
-    loading_effect()
-  elif function == "getItemFromInventory":
+  if function == "getItemFromInventory":
     item = getItemFromInventory()
     if item != None:
       print(item[0] + ": " + item[1])
       inventory.append(item)
       time.sleep(1)
-  elif function == "village_1":
-    village_1()
+  # elif function == "village_1":
+  #   village_1()
 
 #Call-menu
 def menu():

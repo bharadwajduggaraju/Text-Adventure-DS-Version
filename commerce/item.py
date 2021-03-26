@@ -1,8 +1,9 @@
 class Item:
-  def __init__(self, name, description, price=0, damageHP=0):
+  def __init__(self, name, description, quantity, price=0, damageHP=0):
     self.Name = name
     self.Description = description 
     self.Price = price
+    self.Quantity = quantity
     self.DamageHP = damageHP
 
   def toString(self):

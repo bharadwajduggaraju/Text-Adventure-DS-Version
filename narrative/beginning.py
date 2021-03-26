@@ -1,6 +1,6 @@
 import time, sys
 from util.colors import *
-from util.variable.variables import inventory, add_item
+from util.variable.variables import inventory, add_item, set_money
 from util.console.output import delay_print, clearConsole, loading_effect
 from util.console.input import yes_no, validate_input
 
@@ -205,7 +205,7 @@ def adventureBeg():
     You take the letter and place it in your bag.
   """, indent=4)
   add_item("Letter for Kurigalu", "An important letter from the regent.")
-  inventory["Money"] = 100
+  set_money(100)
   time.sleep(1)
   #tutorial()
   #inventorymenu()

@@ -1,7 +1,8 @@
-from fighting.effects import Effect
-from fighting.moveList import Move
+from combat.effects import Effect
+from combat.moveList import Move
 from entities.character import Character
 from entities.enemies import Enemy
+from commerce.item import Item
 
 #Effect format:
 #exampleEffect = Effect(name, damage, duration, wounds, op_reducts, op_delay)
@@ -104,3 +105,6 @@ enemies = {
   "bandit assassin": BanditAssassin,
   "dronae": Dronae
 }
+
+#ITEMS: name, description, quatity, price=0, damageHP=0
+letterForKurigalu = Item("Letter for Kurigalu", "An important letter from the regent.", 1)

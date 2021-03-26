@@ -6,18 +6,18 @@ import random
 import pygame
 from replit import audio
 
-from fighting.battle import Battle
-from money.shop import Shop
+from combat.battle import Battle
+from commerce.shop import Shop
 from util.colors import *
 from util.variable.variables import *
 from util.variable.variables import party_money, add_party_member, add_item
 from util.variable.instances import *
 from util.console.output import delay_print, loading_effect, clearConsole
 from util.console.input import validate_input, validate_int_input, yes_no, tutorial, inventorymenu, settings, battle_tutorial
-from money.trade import *
-from money.trade import Trade
+from commerce.trade import *
+from commerce.trade import Trade
 
-from story.beginning import adventureBeg, amaliyahIntro
+from narrative.beginning import adventureBeg, amaliyahIntro
 
 add_party_member(Amaliyah)
 
@@ -25,17 +25,17 @@ STARTING_MONEY = 100
 
 # Shop
 
-# shopItems = [{"name": "scarf", "price": 33, "quantity": 2200}]
-# shopStats = [{
-#   "name": "scarf",
-#   "totalMoney": 0,
-#   "unitsSold": 0,
-#   "discount": False
-# }]
+shopItems = [{"name": "scarf", "price": 33, "quantity": 2200}]
+shopStats = [{
+  "name": "scarf",
+  "totalMoney": 0,
+  "unitsSold": 0,
+  "discount": False
+}]
 
-# WinterShop = Shop("Arctic Circle", shopItems, shopStats)
+WinterShop = Shop("Arctic Circle", shopItems, shopStats)
 
-# WinterShop.getInfo(STARTING_MONEY)
+WinterShop.getInfo(STARTING_MONEY)
 
 # Trade
 
@@ -44,7 +44,7 @@ tradeItems = [{"name": "Scarf", "itemsAccepted": ["boot", "shoe", "helmet"]}]
 #Inventory, make dynamic later
 playerInventory = ["boot", "shoe", "helmet", "sock"]
 
-Winter_Trading_Post = Trade("Winter", tradeItems)
+Winter_Trading_Post = Trade("Winter Trading Post", tradeItems)
 
 Winter_Trading_Post.beginTrade(playerInventory)
 

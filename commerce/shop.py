@@ -7,7 +7,6 @@ from util.console.output import delay_print, clearConsole
 from util.variable.inventory import allItems
 from util.colors import *
 
-
 class Shop:
     def __init__(self, name, items, itemsSold):
         self.name = name  #String
