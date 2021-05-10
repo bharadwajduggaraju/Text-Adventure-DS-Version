@@ -1,7 +1,8 @@
-from util.colors import RESET, RED_BOLD
 import signal
 import time
 from multiprocessing import Process
+
+from util.colors import RESET, RED_BOLD
 
 class Timer:
   timerMode = "on"

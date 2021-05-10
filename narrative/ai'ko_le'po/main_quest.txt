@@ -1,0 +1,695 @@
+[SETTINGS] {
+  [PREFIX] {
+    ALMQ
+  }
+}
+
+[VARIABLES] {
+  CAVE_PATH(INT): 0
+}
+
+#This is just a comment for the organization
+[__COMMENT__] {
+  main {
+    #Beginning
+    kosuRun {
+      kosuRun1;
+      kosuRun2
+    }
+    clearing_entrance #Clearing
+    clearing_spin { #Transition
+      pickupRock_F;
+      pickupRock_T
+    }
+    #Cave
+    cave_entrance {
+      deferenceTestF {
+        deferenceTestF_Path1;
+        deferenceTestF_Path2
+      };
+      deferenceTestT {
+        deferenceTestT_Path1;
+        deferenceTestT_Path2
+      }
+    }
+    cave_path {
+      cave_path1 {
+        KosuFree {
+          KosuFree_intro
+          KosuFree_escape
+        }
+        cave_path1_SentinelWarning {
+          KosuAnkleCheck1;
+          KosuAnkleCheck2
+        }
+        KosuComeResponse
+        cave_path1_door
+      };
+      cave_path2 {
+        cave_path2_intro
+        turningCeremonyQuestion
+        friendlyDronae
+        KosuFree {
+          KosuFree_intro
+          KosuFree_escape
+        }
+        cave_path2_exit
+      }
+    }
+    Sentinel_intro
+    Sentinel_exit
+  }
+}
+
+#Empty node for places where nodes are required.
+[NODE] {
+  [NAME] {
+    null
+  }
+}
+[NODE] {
+  [NAME] {
+    err
+  }
+  [VALUE] {
+    Unexpected value for a variable!
+  }
+}
+
+#Beginning
+[NODE] {
+  [NAME] {
+    kosuRun1
+  }
+  [VALUE] {
+    Kosu grins. "You can't even catch up!"
+    He dodges through the trees and swerves out of sight.
+    Now regretting your rash decision, you chase after him, stumbling over tree roots and trampling the packed dirt.
+    The path turns into a clearing ahead of you, and you dash towards the gap in the trees, hoping that Kosu is okay.
+    As you turn the corner, Kosu comes into view. He hasn't moved.
+    "What'd you find?" you demand.
+    Kosu holds up his hand. "Shhhh..." he whispers. "Look."
+  }
+}
+[NODE] {
+  [NAME] {
+    kosuRun2
+  }
+  [VALUE] {
+    Kosu halts and looks back at you with mild annoyance.
+    "You can trust me, too," he complains.
+    You jog up to him. "This is a team mission," you decree without meeting his eyes. "It will remain a team mission."
+    The two of you slowly amble along the path, a slight wedge of discomfort separating you.
+    {TIME:1}
+    After a few minutes, the path turns sharply. The two of you turn to your left and gawk at the sight that unfolds before you.
+  }
+}
+[NODE] {
+  [NAME] {
+    kosuRun
+  }
+  [VALUE] {
+    "C'mon, Esteri, let's go!" Kosu bounds down the forest path, bouncing gleefully.
+    His eyes glimmer in the dim light, and for a second you feel a rush of affection for your friend.
+    His innocent expression is full of boundless joy.
+    What do you want to say?
+     1. I won't let you get ahead of me!
+     2. Slowdown, Kosu. The path could get dangerous ahead.
+  }
+  [CHILDREN] {
+    kosuRun1: 1,
+    kosuRun2: 2
+  }
+  [ERR_MESSAGE] {
+    You'd better say something! He's getting away!
+  }
+}
+
+[NODE] {
+  [NAME] {
+    clearing_entrance
+  }
+  [VALUE] {
+    {TIME:0.5}{CLEAR}
+    The clearing is full of glowing mushrooms, shimmering in every color imaginable.
+    Pixies flutter about, glimmering faintly and sprinkling light across the leaf-strewn earth.
+    Vines creep up the trees, leading into the branches and climbing into darkness.
+    What will you say?
+     1. This place is beautiful!
+     2. Look at the light!
+  }
+  [CHILDREN] {
+    null: 1,#Do nothing
+    null: 2
+  }
+}
+
+[NODE] {
+  [NAME] {
+    pickupRockF
+  }
+  [VALUE] {
+    {CLEAR}
+    Kosu goes towards the rock and picks it up.
+    As soon as he does, an outcropping of statlacties shoots upwards, forming the shape of a lion's muzzle.
+  }
+}
+[NODE] {
+  [NAME] {
+    pickupRockT
+  }
+  [VALUE] {
+    {CLEAR}
+    As soon as you lift the rock, an outcropping of stalactites shoots upwards, forming the shape of a lion's muzzle.
+  }
+}
+[NODE] {
+  [NAME] {
+    clearing_spin
+  }
+  [VALUE] {
+    Kosu turns to face you, eyes unsettled. "You don't hear it?"
+    The two of you fall into a dead silence. Your ears strain.
+    A soft buzzing flows out of the silence, steady and rhythmic as the volume climbs.
+    Kosu grabs your arm frantically. "Something is really wrong with this place!"
+    You drag him towards the entrance to the clearing, but you can no longer find it; in fact, the trees seem to be spinning around you, rotating at an immeasurable speed.
+    Only one thing in the clearing remains immobile; a small rock, situated in the dead center.
+  }
+  #Pickup rock
+  [PROMPT] {
+    Do you want to pick up the rock?
+  }
+  [CHILDREN] {
+    pickupRockT: Y,
+    pickupRockT: YES,
+    pickupRockF: N,
+    pickupRockF: NO
+  }
+}
+
+#deferenceTestF
+[NODE] {
+  [NAME] {
+    deferenceTestF_Path1
+  }
+  [VALUE] {
+    {CHANGE:CAVE_PATH:=1}
+  }
+}
+[NODE] {
+  [NAME] {
+    deferenceTestF_Path2
+  }
+  [VALUE] {
+    {CHANGE:CAVE_PATH:=2}
+  }
+}
+[NODE] {
+  [NAME] {
+    deferenceTestF
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri; Dronae; cave; "Wrong answer!" The Dronae leaps at you, claws outstretched.; dronae}
+    The Dronae lies on the ground, bleeding. "Continue..." it coughs, suddenly appearing pitiful due to the blood that saturates its muzzle. "You have proven yourself worthy."
+    It fades, dissolving into the air with transience.
+    Which way will you go?
+     1. Left
+     2. Right
+  }
+  [CHILDREN] {
+    deferenceTestF_Path1: 1,
+    deferenceTestF_Path2: 2
+  }
+  [ERR_MESSAGE] {
+    You'd better choose quickly... Kosu is in danger...
+  }
+}
+
+#deferenceTestT
+[NODE] {
+  [NAME] {
+    deferenceTestT_Path1
+  }
+  [VALUE] {
+    The Dronae looks satisfied. You turn and walk down the path to the left.
+    {CHANGE:CAVE_PATH:=1}
+  }
+}
+[NODE] {
+  [NAME] {
+    deferenceTestT_Path2
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri; Dronae; cave; The Dronae jumps at you in fury!; dronae}
+    The Dronae lies on the ground, bleeding. "Continue..." it coughs, suddenly appearing pitiful due to the blood that saturates its muzzle. "You have proven yourself worthy."
+    It fades, dissolving into the air with transience.
+    {CHANGE:CAVE_PATH:=2}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    deferenceTestT
+  }
+  [VALUE] {
+    "Good," the Dronae buzzes. "You may pass... via the left, in recognition of your deference."
+    Will you heed its instruction, or will you choose the other path?
+     1. Left
+     2. Right
+  }
+  [CHILDREN] {
+    deferenceTestT_Path1: 1,
+    deferenceTestT_Path2: 2
+  }
+  [ERR_MESSAGE] {
+    The Dronae is beginning to look agonized... You'd better heed its instruction...
+  }
+}
+
+[NODE] {
+  [NAME] {
+    cave_entrance
+  }
+  [VALUE] {
+    The lion's gaping maw beckons, tunneling down into the pitch-black underground.
+    Kosu shoves past you. "I'll go first," he yells over the din. Before you can react, he jumps into the hole.
+    After one more second of hesitation, you leap after him into the abyss.
+    {TIME:1}{CLEAR}
+    One second passes as you shoot downwards...
+    {TIME:1}
+    ... then another.
+    {TIME:1}
+    You hear the wind whistling through your ears, and ever-so-suddenly, your eyes register the ground rushing up to meet you.
+    There is no Kosu- only hard, spiky rock.
+    {TIME:1}
+    You inhale and exhale, terror spiking your adrenaline, and then attempt to grab a stalactite.
+    {TIME:1}
+    After a brief pause, you start to scream. Agony rings in your ears as you curse your mother, your village, and Kosu for bringing this awful fate upon you.
+    {TIME:1}
+    A gust of warm air washes over you, and suddenly you feel your body being carried backwards.
+    {TIME:1}
+    Your light-headedness takes over as you try frantically to hold onto consciousness, but the effort is futile...
+    {TIME:1}
+    As you shoot over a dark lake, dimly registering the tiny arms that now grip your shirt, you pass out.
+    {TIME:1}{CLEAR}
+    {LOADING_EFFECT}
+    You are lying on a cold rock.
+    You shove one arm out frantically, then retract it rapidly as you start sliding forward.
+    The surface is as smooth and chilly as ice, yet as black as obsidian. It refuses to give you grip.
+    Vision swimming, you struggle to stand up, pushing yourself even farther forward.
+    At last, you succeed.
+    The cave around you sparkles with tens of thousands of tiny pinpricks of light.
+    It's a surreal image to behold, but it produces a considerable strain on your eyes.
+    You only have a second to register when you see the dark silhouette that stands in front of you, buzzing with the same odd sound.
+    {TIME:1}{CLEAR}
+    {BATTLE:Esteri;Dronae;cave;Suddenly, it leaps out at you!;dronae}
+    {TIME:1}{CLEAR}
+    You stumble away from the monster's carcass, disoriented.
+    {COLOR:WHITE_ITALIC}
+    Esteri...
+    {COLOR:WHITE}
+    A low rumble echoes through the cave.
+    {COLOR:WHITE_ITALIC}
+    Esteri... you have not proven your worth...
+    {COLOR:WHITE}
+    You spin around, scrabbling to direct your rotation.
+    Before you can run, though, the walls reform around you. There are two openings in front of you, but they are guarded by a short, dragon-like figure.
+    {COLOR:WHITE_ITALIC}
+    The Dronae... will test you.
+    {COLOR:WHITE}
+    The short monster- the Dronae- buzzes.
+    {COLOR:WHITE_ITALIC}
+    If you can answer their questions correctly, you shall reach the end of the tunnel with no issue.
+    {COLOR:WHITE}
+    You stare down the Dronae.
+    {COLOR:WHITE_ITALIC}
+    But if you answer wrong... you will never be able to make it.
+    {COLOR:WHITE}
+    The wall lights glow brighter, as if to taunt you.
+    {COLOR:WHITE_ITALIC}
+    Oh, and one last warning: I'd suggest that you locate your friend soon- or he may be gone forever.
+    {COLOR:WHITE}
+    A low ringing hums through your ears, then a whistle of air as the voice floats away.
+    {TIME:1}{CLEAR}
+    #deferenceTest
+    "Well," the Dronae buzzes, "you're the type to bow to your superiors, aren't you?"
+  }
+  [PROMPT] {
+    What do you say?
+  }
+  [CHILDREN] {
+    deferenceTestT: Y,
+    deferenceTestT: YES,
+    deferenceTestF: N,
+    deferenceTestF: NO,
+  }
+}
+
+#cave_path
+#KosuFree
+[NODE] {
+  [NAME] {
+    KosuFree_intro
+  }
+  [VALUE] {
+    {LOADING_EFFECT}
+    {CLEAR}
+    You stumble into another lighted cavern. This one is lined with fluorescent mushrooms like the ones you saw above. The floor is woven with roots.
+    "Esteri!" Kosu's voice rings off the walls.
+    Your eyes adjust, and you gasp.
+    Your friend is ensnared in a tangle of vines, wrapping around him in an intricate pattern and constricting quickly.
+    Yet again, a Dronae stands guard in front of the structure.
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri; Dronae; cave; This one doesn't even make a noise before it launches itself at you.; dronae}
+    When the Dronae fades this time, the vines disappear. Kosu drops to the ground with a light thud.
+    You rush over to him.
+    What will you say?
+     1. Are you okay?
+     2. Let's go!
+  }
+  [CHILDREN] {
+    null: 1,#Resume main flow
+    null: 2
+  }
+  [ERR_MESSAGE] {
+    Kosu looks up at you impatiently.
+  }
+}
+[NODE] {
+  [NAME] {
+    KosuFree_escape
+  }
+  [VALUE] {
+    Kosu gets up slowly and dusts himself off. "Yeah," he says, forcing a smile. "Let's go!"
+    Without waiting for further comment, you grab his wrist and pull him towards the exit to the cavern.
+    But you are stopped by another pair of Dronae, which jump in front of you, buzzing with impertinent fury.
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri, Kosu; Dronae, Dronae; cave; They swipe a claw at your face in synchrony!; dronae}
+    When the Dronae fall, a voice echoes through the cavern.
+    {TIME:1}{CLEAR}
+    {COLOR:WHITE_ITALIC}
+    Esteri...
+    {COLOR:WHITE}
+    Kosu turns frantically, searching for its source. "What is that?!"
+    {COLOR:WHITE_ITALIC}
+    You have not yet won...
+    {COLOR:WHITE}
+    You begin to furiously walk towards the exit. Kosu follows you.
+    {COLOR:WHITE_ITALIC}
+    I look forward to seeing you...
+    {COLOR:WHITE}
+    You freeze.
+    The voice fades away with a low whine.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    KosuFree
+  }
+  [VALUE] {
+    {ENTER:KosuFree_intro}
+    {ENTER:KosuFree_escape}
+  }
+}
+
+#cave_path1
+[NODE] {
+  [NAME] {
+    KosuAnkleCheck1
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    Kosu grins at you. "Of course!"
+  }
+}
+[NODE] {
+  [NAME] {
+    KosuAnkleCheck2
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+  }
+}
+[NODE] {
+  [NAME] {
+    cave_path1_SentinelWarning
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    Now Kosu grabs your arm and begins to tug you along.
+    "I don't know what that was, but we don't have time to worry about it," he whispers, then winces. You notice that he's limping.
+    You wrap your arm around Kosu's shoulders to help support him, and the two of you slowly stumble through the door.
+    {TIME:1}{CLEAR}
+    {LOADING_EFFECT}
+    Your hand instinctively swings up to shield your eyes as you step into the brightest room you've ever seen in your life.
+    Light pours off the ceiling and the walls.
+    It washes over you, and you suddenly feel energized.
+    {CHARACTER:Esteri:HP:=MAX}{CHARACTER:Kosu:HP:=MAX}
+    Kosu wiggles his ankle. "It feels normal again!"
+    {TIME:1}{CLEAR}
+    You look over at him, suddenly guilty.
+    #KosuAnkleCheck
+    What will you say?
+     1. Are you sure that you want to be doing this?
+     2. I'm worried. I don't want to put you in danger.
+  }
+  [CHILDREN] {
+    KosuAnkleCheck1: 1,
+    KosuAnkleCheck2: 2
+  }
+  [ERR_MESSAGE] {
+    Kosu watches you, waiting for a comment.
+  }
+}
+[NODE] {
+  [NAME] {
+    KosuComeResponse
+  }
+  [VALUE] {
+    He looks upwards wistfully. "I have to come. You're like a sister to me, Esteri. I can't let you get hurt."
+    You laugh and stand up, brushing yourself off.
+    What will you say?
+     1. All right, enough nobleness. Let's go!
+     2. Thank you, Kosu. I'm going to do my best to protect you, too.
+  }
+  [CHILDREN] {
+    null: 1,#Return to main flow
+    null: 2
+  }
+  [ERR_MESSAGE] {
+    Kosu watches you, waiting for a comment.
+  }
+}
+[NODE] {
+  [NAME] {
+    cave_path1_door
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    Kosu climbs onto his feet. "Let's go!"
+    As he says that, a door opens in front of you, a single dark blotch in the center of the room.
+    Are you ready to step through it?
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    You'd better go...
+  }
+}
+[NODE] { #General node
+  [NAME] {
+    cave_path1
+  }
+  [VALUE] {
+    {ENTER:KosuFree}
+    {ENTER:cave_path1_SentinelWarning}
+    {ENTER:KosuComeResponse}
+    {ENTER:cave_path1_door}
+  }
+}
+
+#cave_path2
+[NODE] {
+  [NAME] {
+    cave_path2_intro
+  }
+  [VALUE] {
+    {LOADING_EFFECT}
+    {CLEAR}
+    You stumble through the darkness, trying to feel for a wall.
+    Your stomach fills with painful regret as you realize that you should have gone in the other direction.
+    You can see nothing around you but endless black, swallowing the air and suffocating you.
+    You trudge forward one more step and then trip, heavy with exhaustion.
+  }
+}
+[NODE] {
+  [NAME] {
+    turningCeremonyQuestion
+  }
+  [VALUE] {
+    A Dronae looms above you. "I'm not very happy, you know," it buzzes. "You dissolved my friends before the Turning Ceremony."
+    What will you say?
+     1. What's the Turning Ceremony?
+     2. Explain what's going on!
+  }
+  [CHILDREN] {
+    null: 1,#Resume main flow
+    null: 2
+  }
+  [ERR_MESSAGE] {
+    Answer now! The Dronae looks agitated...
+  }
+}
+[NODE] {
+  [NAME] {
+    friendlyDronae
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    The Dronae groans. "Of course I can't tell you that, impertinent child."
+    It looks over you. "But..." It turns away, looking slightly fearful. "Maybe I can heal you."
+    It climbs onto your stomach, and begins to mutter a few incantations.
+    The Dronae's paws glow. You suddenly feel replenished.
+    {CHARACTER:Esteri:HP:=MAX}
+    {TIME:1}{CLEAR}
+    It scampers off your stomach and glares up at you as you sit up slowly, stretching your arms with new vigorousness.
+    "The Sentinel is not very nice," the Dronae admits with trepidation. "It keeps us safe, but I resent it for controlling us."
+    It turns to stare you in the eye. "You seem to be a noble child... so I trust you to defeat the Sentinel and bring long-due revenge upon it."
+    Now it smiles at you, mouth curling up into an eerie shape. "But first, I would like you to send me to my family. Please prove that you were worthy of my favor!"
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri; Dronae; cave; The Dronae launches itself at your chest!; dronae}
+    You watch as the Dronae's remains fade in the wind, feeling faintly guilty.
+    But your trepidation fades as you remember your mission and fill with resolve.
+    Before you, mushrooms begin to sprout furiously in luminescent clumps, forming a path.
+    Would you like to continue down the path?
+  }
+  [PROMPT] {
+    Would you like to continue down the path?
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    You'd better go!
+  }
+}
+[NODE] {
+  [NAME] {
+    cave_path2_exit
+  }
+  [VALUE] {
+    You feel a light breeze rushing over you, and suddenly feel re-energized.
+    {CHARACTER:Esteri:HP:=MAX}
+    {TIME:1}{CLEAR}
+    Now Kosu grabs your arm and begins to tug you along.
+    "I don't know what that was, but we don't have time to worry about it," he whispers, then winces. You notice that he's limping.
+    You wrap your arm around Kosu's shoulders to help support him, and the two of you slowly stumble to the door.
+    Are you ready to exit?
+  }
+  [PROMPT] {
+    Are you ready to exit?
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    You'd better go...
+  }
+}
+
+[NODE] { #General node
+  [NAME] {
+    cave_path2
+  }
+  [VALUE] {
+    {ENTER:cave_path2_intro}
+    {ENTER:turningCeremonyQuestion}
+    {ENTER:friendlyDronae}
+    {ENTER:KosuFree}
+    {ENTER:cave_path2_exit}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    cave_path
+  }
+  [CHILDREN] {
+    err,#CAVE_PATH should not be 0
+    cave_path1,
+    cave_path2
+  }
+  [CHOICE] {
+    CAVE_PATH
+  }
+}
+
+#Sentinel
+[NODE] {
+  [NAME] {
+    Sentinel_intro
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    {LOADING_EFFECT}
+    You step into a dark cavern, akin to the first one.
+    The ceiling twinkles like the night sky, spangled with stars.
+    Kosu gasps in awe. "It's beautiful!"
+    {TIME:1}
+    A thundering footstep rings through the space.
+    Beside you, Kosu flinches.
+    {COLOR:WHITE_ITALIC}
+    Now...
+    {COLOR:WHITE}
+    You ready your spear. Beside you, Kosu tenses.
+    {COLOR:WHITE_ITALIC}
+    ...the ceremony will begin!
+    {COLOR:RESET}
+    {TIME:1}{CLEAR}
+    {BATTLE: Esteri,Kosu; Sentinel; cave; A massive claw swings out at your face!; sentinel}
+    {TIME:1}{CLEAR}
+    The Sentinel falls, crashing down onto the ground forcefully and then dissolving with a final groan.
+    A door appears in front of you.
+  }
+  [PROMPT] {
+    Will you enter the door?
+  }
+  [CHILDREN] {
+    null: Y,#Return to outer node
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    You'd better go in!
+  }
+}
+[NODE] {
+  [NAME] {
+    Sentinel_exit
+  }
+  [VALUE] {
+    You got the people and like got out and sh*t and now you're going to go back to the village.
+    {TIME:1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    main
+  }
+  [VALUE] {
+    {ENTER:kosuRun} #Beginning
+    {ENTER:clearing_entrance} #Clearing
+    {ENTER:clearing_spin}
+    {ENTER:cave_entrance} #Cave
+    {ENTER:cave_path}
+    {ENTER:Sentinel_intro} #Sentinel
+    {ENTER:Sentinel_exit}
+  }
+}

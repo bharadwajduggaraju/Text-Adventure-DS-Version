@@ -1,4 +1,4 @@
-# Class Added By Bharadwaj Duggaraju. Contact me if there is a bug
+# Class Added By Bharadwaj . Contact me if there is a bug
 from util.colors import * 
 from util.console.input import validate_int_input
 from util.console.output import delay_print, clearConsole

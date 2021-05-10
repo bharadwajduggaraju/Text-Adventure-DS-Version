@@ -1,0 +1,5 @@
+To Save:
+1. Location Variables
+2. Stats
+3. Inventory
+4. Tags

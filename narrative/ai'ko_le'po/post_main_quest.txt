@@ -1,0 +1,133 @@
+[SETTINGS] {
+  [PREFIX] {
+    ALMQ2
+  }
+}
+
+[VARIABLES] {
+  VISITED_SOMEONE (BOOL): FALSE,
+  VISITED_RELIA   (BOOL): FALSE,
+}
+
+[DECLARE_NODES] {
+  intersection
+}
+
+[__COMMENT__] {
+  main {
+    intro
+    intersection {
+      intersection_visitedSomeoneF {
+        townhall {
+          townhall_Karadi {
+            townhall_survey;
+            townhall_leave {intersection};
+          };
+          townhall_survey;
+          townhall_leave;
+        };
+        servantquarters {
+          servantquarters_EsteriIntro
+          servantquarters_servantintro
+        };
+        jeejee {
+          jeejee_visitedReliaF {
+            jeejee_unpleasant {
+              jeejee_questAccept {
+                jeejee_questAcceptF;
+                jeejee_questAcceptT
+              }
+            };
+            jeejee_deprecate {
+              jeejee_questAccept {}
+            };
+            jeejee_information;
+          }
+          jeejee_visitedReliaT {
+            jeejee_unpleasant;
+            jeejee_deprecate;
+          }
+        }
+      };
+      intersection_visitedSomeoneT {
+        townhall;
+        servantquarters;
+        jeejee;
+        relia {
+          relia_sourceQ
+          relia_ready
+          relia_test {
+            relia_test_1
+            relia_test_2
+            relia_test_3 {
+              null; null; null;
+              relia_test_3_4; #"This is another question, isn't it"
+            }
+          }
+          relia_ancestor
+          relia_AikoLepoCulture
+          relia_jeejee {
+            relia_jeejee_intro
+            relia_jeejee_explanation
+            relia_jeejee_questAccept {
+              relia_jeejee_questAcceptF;
+              relia_jeejee_questAcceptT;
+            }
+          }
+        };
+      }
+    }
+  }
+}
+
+[NODE] {
+  [NAME] {
+    null
+  }
+}
+
+[NODE] {
+  [NAME] {
+    intro
+  }
+  [VALUE] {
+    You enter Ai'ko Le'po, taking note of the curiously decorated people and houses. It's almost as if you're walking through a plume of colors and sounds of all kinds. Kosu stares in wonder, his mouth agape.
+    "It's so... much," he says, after sniffing the air. "Wait, wait, I think I see-" Kosu bounds off towards something in the village you don't see.
+    You look around, noting a large building with a sign reading, "Town Hall", and another large- if shabbier- building with a sign reading, "Servant's Quarters." A fountain stands at the center of the square, and a dark-skinned woman in a pale yellow dress dances around it.
+    You turn to see another dark-haired citizen, though this time an old man, sitting on a chair outside a shop.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townhall_survey
+  }
+  [VALUE] {
+    As you walk forward, people begin to speak in hushed voices, excited looks on their faces as the occasional brave person will shout, "our savior!", or, "thank you!".
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townhall
+  }
+}
+
+
+[NODE] {
+  [NAME] {
+    intersection_visitedSomeoneF
+  }
+}
+
+[NODE] {
+  [NAME] {
+    intersection_visitedSomeoneF
+  }
+}
+
+[NODE] {
+  [NAME] {
+    intersection
+  }
+}

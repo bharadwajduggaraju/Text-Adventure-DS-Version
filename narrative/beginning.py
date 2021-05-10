@@ -40,6 +40,7 @@ def amaliyahIntro():
   """, end="", indent=4)
   delay_print()
   time.sleep(1)
+  clearConsole()
 
 #   #Comments
 #   '''
@@ -72,7 +73,7 @@ def adventureBeg():
     A servant approaches, carrying a small bowl and a missive.
     "Lady Esteri, this missive from Regent Avivaki. She requests your presence."
     You nod, scanning the parchment. "I will be there."
-    The servant shakes her head. "I was also told to relay a second message, from Kosugadde. Er..." The servant shrugs. "He says, 'But first, you should eat your breakfast!'"
+    The servant nods and smiles. "The regent will be happy to see you."
     A few minutes later, you strap your spear to your back, don your breastplate over your tunic, adjust your hair to look mildly presentable, push a bag over your shoulders, and quickly walk out of your chambers. The regent is waiting for you!
   """, end="", indent=4)
   time.sleep(1)
@@ -101,12 +102,24 @@ def adventureBeg():
 
   delay_print("""
     You enter a warm, brightly lit room with ancient scripts pierced onto paintings on the walls. In the middle of the room reclines an aging woman draped with beaded necklaces and a thick woolen coat.
-    "Please, sit down. We have much to discuss, young one.
-    "I possess information about your mother, Amaliyah." Village Regent Avivaki meets your eyees with a solmen expression.
-    Eager to gain knowledge on your mother, you quickly take a seat and listen.
-    "We have reasons to believe that your mother, Chieftess Amaliyah, may in fact be alive. Your mother was sent on a mission to find new land for the people of Elyria, and it seems that she has not returned.
-    "However, as her descendant, the day has come for the task to be bestowed upon you. As the true future Chieftess of Elyria, and my successor, you must embark on this quest to find your mother and complete her mission.
-    "Can we trust you to complete this task with honor?" Her expression is questioning.
+    "Please, sit down. We have much to discuss, young one." Village Regent Aviveki meets your eyes with a solmen expression.
+    Will you sit?""", indent=4)
+  sit_with_regent_aviveki = validate_input(["yes", "y", "n", "no"], "You had better decide!").lower()
+  if sit_with_regent_aviveki == "yes" or sit_with_regent_aviveki == "y":
+    delay_print("Eager to gain knowledge on your mother, you quickly take a seat and listen.")
+  elif sit_with_regent_aviveki == "no" or sit_with_regent_aviveki == "n":
+    delay_print(""" 
+    "I don't want to sit down," you say, crossing your arms. 
+    Aviveki frowns. "I do not request cooperation," she says, voice taking on an edge. "Sit down, please."
+    You sit. 
+    """, indent=4)
+  time.sleep(1)
+  delay_print("""  
+    Aviveki stares at you, gaze cold. "We have reasons to believe that your mother, Chieftess Amaliyah, may in fact be alive."
+    Your heart rate speeds up. Years ago, when you were young, your mother had been sent on a quest to find new land for the people of Elyria. A few years into her quest, she disappeared and never returned. The village leaders seemed convinced that she was dead- Aviveki had been in power for ten years- but you didn't agree. 
+    "As her descendant, the day has come for you to finally take on the responsibility of searching for her." Aviveki's mouth turns down a little as she says this, slightly derisive. 
+    Silently, you pump your fist under the table, full of confidence. Finding your mother had been your goal for years. You leaned forwards a little in anticipation.
+    "As the true future Chieftess of Elyria, and my successor, you must embark on this quest to find your mother and complete her mission. Can we trust you to complete this task with honor?" Aviveki's expression was borderline disinterested.
   """, indent=4)
 
   option = yes_no(allow_maybe=True, errMessage="You need to give her a clear answer. She's the chief!")
@@ -129,23 +142,37 @@ def adventureBeg():
       sys.exit()
 
   delay_print("""
-    "That's excellent!" The village head smiles, mouth stretching upwards into a grimace of a smile. "I knew that our people could count on you, Esteri.
+    "Wonderful." The village head tries to smile, mouth stretching upwards into a sort of grimace. "I knew that our people could count on you, Esteri."
+    "Of course." You smile internally with pride. 
     "You'll require a naviagator for your journey, so I've select one of our skilled navigators-in-training to assist you."
-    The village head frowns. "But he appears to be a bit late..."
+    Aviveki frowns. "But he appears to be a bit late..."
   """, indent=4)
   delay_print()
-  time.sleep(1)
+  time.sleep(2)
   clearConsole()
   delay_print("""
     The door bursts open and a young man with an unruly mop of brown hair bursts in.
     The new arrival wipes sweat off of his brow, glancing up at the village head with a sheepish expression.
     The village head glares down at him in indignation. "You're late."
 
-    Your eyes widen as you recognize the man as your old friend, stumbling into a chair with drunken movements.
-    "Kosu, is that you?" You look at him with a wondrous expression.
-
-    "Hey, Esteri!" Kosu grins. "It's been a few years, hasn't it? Nice to see you! I guess you're finally going-"
+    Your eyes widen as you recognize the boy.
+    Will you greet him?
   """, indent=4)
+  kosu_is_here_yay = validate_input(["yes", "no", "y", "n"], "You have to decide fast! It's getting awkward!").lower()
+  if kosu_is_here_yay == "yes" or kosu_is_here_yay == "y":
+    delay_print("""
+      "Kosu!" You jump out of your chair, grinning, and hug your best friend. "How are you? How did your trip to the Southern Villages go?"
+      "Hey, Esteri!" Kosu grins. "It's been a few months, hasn't it? Nice to see you! I'm doing great. The trip went well. I assume you are too, seeing as you're finally going-"
+    """, indent=4)
+  if kosu_is_here_yay == "no" or kosu_is_here_yay == "n":
+    delay_print("""
+      You force yourself to study the table, unwilling to jeopardize your chance to search for your mother by tarnishing Aviveki's trust. 
+      The boy, unwilling to take a hint, taps your shoulder. "Hey, Esteri! How are you? It's been a few months since I last saw you!"
+      You make eye contact with Aviveki for a second- she appears disdainful- and look up at Kosu, suddenly guilty for trying to ignore your best friend. "Hi, Kosu!" You stand up and give him a hug. "I'm doing great. How was your trip to the Southern Villages?"
+      Kosu smiles. "The trip went great."
+      Aviveki clears her throat and you look back at her, remembering her presence. 
+      "Thank you, Regent Aviveki!" Kosu says, grinning widely. "Esteri is thrilled to-"
+    """, indent=6)
   time.sleep(0.25)
   option = yes_no(
     False, "You need to decide quickly...",
@@ -154,26 +181,25 @@ def adventureBeg():
   if option == "y" or option == "yes":
     delay_print("""
       You shoot Kosu a warning glance and he quiets, remorseful. Then you turn to face the village regent.
-      Her expression is haughty.
-      Choose what you would like to say to the village head.
-      1. "Apologies, ma'am."
-      2. "Kosu and I are friends- you can hardly begrudge us the chance to enjoy our reunion."
-      Enter the number of the answer you prefer.
+      Her expression is haughty. "You're wasting time."
+      Do you apologize?
     """, indent=6)
 
-    option = validate_input(['1', '2'], "Decide now! She's the chief!").lower()
-    if option == "1":
+    option = validate_input(["yes", "no", "y", "n"], "Decide now! She's the chief!").lower()
+    if option == "yes" or option == "y":
       delay_print("""
-        "You're forgive," the village leader says with an air of superiority. "But don't forget your manners in the future."
+        "I apologize, Regent Aviveki," you say, and awkwardly curtsy, simmering internally with fury. Kosu bows his head, sheepish.
+        "You're forgiven," the village leader says with an air of superiority. "But don't forget your manners in the future."
         You bite your tongue to hold back further remarks.
       """, indent=8)
     elif option == "2":
       delay_print("""
+        "Kosu and I deserve to enjoy our reunion," you say, glaring. 
         The village leader sniffs in indignation. "I am a very busy woman. Please enjoy your reunion when you are no longer in my presence."
         You bite your tongue to hold back further remarks.
       """, indent=8)
     delay_print(
-      "Kosu pipes up. 'Is there anything else that we need to know before leaving?'"
+      "Kosu speaks up, a twinge of guilt in his voice. 'Is there anything else that we need to know before leaving?'"
     )
   else:
     delay_print("""
@@ -184,25 +210,34 @@ def adventureBeg():
     """, indent=6)
   delay_print("""
     The village regent folds her hands. "The path will be dangerous," she warns, and her face softens a little. "You really don't have to complete this journey if you are afraid."
-    Kosu shakes his head in indignation. "We aren't quitters,", he says, voice spiking with an undertone of determination. "Esteri and I will be fine."
-    You stare at the regent for a second longer, but her stoic face doesn't shift.
-    "Kosu's right," you finally assent, voice commanding. "We will be fine."
+    Kosu shakes his head in indignation. "We aren't quitters," he says, voice spiking with an undertone of determination. "Esteri and I will be fine."
+    Will you agree with him?
   """, indent=4)
+  option_whee_yay_cookie_snowballcake = validate_input(["yes", "y", "no", "n"], "You have to decide! The village regent looks impatient!").lower()
+  if option_whee_yay_cookie_snowballcake == "yes" or option_whee_yay_cookie_snowballcake == "y":
+    delay_print("""
+      "Kosu's right," you say, grinning with confidence. Adrenaline courses through your veins. "We'll be fine."
+    """)
+  if option_whee_yay_cookie_snowballcake == "no" or option_whee_yay_cookie_snowballcake == "n":
+    delay_print("""
+      You nod noncommitally. In reality you are confident in your abilities to carry out the task before you; but Aviveki already seems to believe that you are naive, and you don't wish to cement her opinion.
+      """, indent=6)
   time.sleep(1)
   clearConsole()
   delay_print("""
-    Regent Aviveki smiles. "Wonderful," she says. "I'll instruct you on where to go."
-    Taking a map from beside her chair, she rolls it out on the table. "This," she instructs, "is the continent of Suto Ratak. Here-" she points at a wide parcel of land- "is Elyria."
-    She runs her finger along the waxed paper to a large brown spot on the map, split into four quadrants. "This is Rakunto Ke'koate'nan. It's the largest city in Suto Ratak. It's also your target destination."
-    She moves her finger to a spot on the map closer to your village. "Here is a small village known as Ai'ko Le'po Koate'nan. An old friend of your mother's resides here. You will begin by traveling to this village, in the hopes that your mother's friend can offer you advice or assistance."
-    She pulls a letter out of her desk and sets it in front of you. "Deliver this letter to an old woman by the name of Kurigalu. She should be willing to help you find your mother. At the very least, she'll find you someone who can aid you on your journey. You will also be given given 100 nagara scrip to begin your journey."
+    Regent Aviveki smiles, eyes still cold. "Wonderful," she says. "I'll instruct you on where to go."
+    Taking a map from beside her chair, she rolls it out on the table. "Here-" she points at a wide parcel of land- "is Elyria. This is our home."
+    She moves her finger to a small spot on the map near your domain. "Here is a small village known as Ai'ko Le'po Koate'nan. An old friend of your mother's resides here. You will begin by traveling to this village, in the hopes that your mother's friend can offer you advice or assistance."
 
-    The regent stands up, leaving the letter on the desk in front of you. She meets your eyes.
+    She pulls a letter out of her desk and sets it in front of you. "Deliver this letter to an old woman by the name of Kurigalu. She should be willing to help you find your mother. At the very least, she'll find you someone who can aid you on your journey. You will also be given given 100 nagara scrip to begin your journey."
+    She tosses a pouch of coins onto the desk.
+
+    The regent stands up, leaving the letter and money on the desk in front of you. She meets your eyes.
     "Your mother was a friend of mine," she murmurs, more to herself than you. "I hope that you can bring her back."
     She turns, and you watch her retreating back, unable to wipe the sight of Regent Aviveki's regretful, resigned expression from your mind.
     Any annoyance you felt towards her during your encounter fades.
-    Kosu reaches out and picks up the letter. He handsit to you. "I believe this belongs to you."
-    You take the letter and place it in your bag.
+    Kosu reaches out and picks up the letter. He hands it to you. "I believe this belongs to you."
+    You take the letter and place it in your bag along with the coins.
   """, indent=4)
   add_item("Letter for Kurigalu", "An important letter from the regent.")
   set_money(100)
@@ -211,11 +246,11 @@ def adventureBeg():
   #inventorymenu()
   #settings()
   delay_print("""
-    "We should go," you tell Kosu, voice quavering slightly with a near-undetectable hint of fear.
+    "We should go," you tell Kosu.
     He nods. "If we don't leave within the hour, we won't make it to Ai'ko Le'po before nightfall."
-    You rest your hand on the doorknob. Your mind wanders for a second.
+    The two of you amble to the exit, and you rest your hand on the doorknob. Your mind wanders for a second.
   """, indent=4)
-  time.sleep(0.25)
+  time.sleep(1)
   delay_print(
     "You wonder how your mother felt when she was setting out on her journey.")
   time.sleep(1)
@@ -224,8 +259,8 @@ def adventureBeg():
     Mother kneels down, caressing your cheek. "I'll be back soon, Esi," she whispers, smiling at you.
     "Are you scared, Mommy?" You look up at her, cheeks wet with tears.
     Mother wrings her hands. She stares up at the ceiling, watching the warm light from the lanterns flicker. "No," she finally says, a tremor in her voice. "Dai'ra, Esi. I will be strong for Elyria."
-    "Yes mommy, I know you are never scared of anything."
-    She stands up. "There's nothing wrong with having fears, Esi," she says, touching your cheek. "Real bravery is when you're scared, but push through anyway." She smiles, but her eyes are sad. "Can you promise to be brave for me?" You nod, looking up at her.
+    "Yes, mommy, I know you are never scared of anything." You wipe your eyes furiously, determined to look brave like your mother.
+    She stands up. "There's nothing wrong with having fears, Esi," she says, touching your cheek. "Real bravery is when you're scared, but push through anyway." She smiles, but her eyes are sad. "Can you promise to be brave for me?" You nod, looking up at her with resolution in your eyes.
     "Goodbye, Mommy," you whisper, wrapping your arms around her leg. "Come back soon, okay?"
     She looks down at you as if drinking in your appearance one last time. "I will, Esi. I promise."
     
@@ -243,9 +278,9 @@ def adventureBeg():
     You step out into the blinding sunshine, holding a hand up to shield your eyes.
     Light reflects off the snow surrounding you, casting your village in a slight eerie glow.
     "Ai'ko Le'po is to the southeast," Kosu observes, holding up the map.
-    You look at him, somewhat solemn. "You know she was right, Kosu? We could die on this mission."
-    Kosu grins at you. "We don't die," he says, unwavering. "After all, we're the best team in all of Elyria."
-    You raise your eyebrows. "Is that so?"
+    You look at him, somewhat solemn. "You know she was right, Kosu? We could die on this mission." For the first time, your confidence wavers a little.
+    Kosu grins at you. "We don't die," he says reassuringly, seeming to sense your fears. "After all, we're the best team in all of Elyria."
+    You raise your eyebrows. "Is that so?" You swallow your misgivings and smile. You've been preparing for this journey for your entire life; you're ready.
     The two of you laugh and banter as you amble down the rocky foothill, traveling the same path that your mother had followed so many years earlier.
   """, indent=4)
   time.sleep(0.25)
@@ -253,12 +288,24 @@ def adventureBeg():
   loading_effect()
   time.sleep(0.25)
   delay_print("""
-    You slog along, grouchy, with branches snapping under your feet.
-    "Are we almost there?" you ask Kosu, with an expression of consternation. "The woods don't seem to end anytimesoon."
-    Kosu studies his map. "Yeah," he assures you. "We'll arrive in the village any minute now."
+    You slog along, grouchy, with branches snapping under your feet. Fog hangs thickly in the air around you.
+    Do you express impatience?
+  """, indent=4)
+  fog_forest_complainer_oof = validate_input(["yes", "y", "no", "n"], "You continue to trudge through the forest.").lower()
+  if fog_forest_complainer_oof == "yes" or fog_forest_complainer_oof == "y":
+    delay_print("""
+      "Are we almost there?" you ask Kosu with an expression of consternation. "The woods don't seem to end anytime soon."
+      Kosu studies his map. "Yeah," he assures you. "We'll arrive in the village any minute now."
+    """, indent=6)
+  if fog_forest_complainer_oof == "no" or fog_forest_complainer_oof == "n":
+    delay_print("""
+      You bite your tongue, deciding to hold back any complaint after you glance at Kosu, who's laser-focused on his map. He stumbles over a root and you grab his arm.
+      "Thanks," he says, grinning at you.
+    """, indent=6)
+  delay_print("""
     Seconds later, the two of you break through the edge of the forest.
     The trees have been cleared unevenly from a patch of roughly packed land, lined with small huts that creak under the weight of the sky.
-    "See?" Kosu points out. "I was right."
-    You ignore him and step forward. "Something doesn't seem right."
-    "Let's go look," Kosu says.
+    "Here we are!" Kosu grins. "Let's go look for Kurigalu."
+    The two of you stroll slowly through the town. It's silent: oddly so. 
+    "There's no one here," Kosu observes. He looks nervous.
   """, indent=4)

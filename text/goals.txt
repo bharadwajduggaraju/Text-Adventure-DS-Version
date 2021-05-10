@@ -1,0 +1,13 @@
+Each print statement has a line between them when presented in the console (automatically), make sure to make it so that only happens with user input.
+
+Make certain attributes optional, or even better, make configurable by user
+
+Make mistakes by user more user friendly and viable
+
+Make input less text-specific so that more varied inputs are accepted
+
+Make language less code-like
+
+Process user text to make later processing more efficient (such as remove space)
+
+Make adding to key data less static (such as making adding to characters and adding to attacks part of the same code block/function)

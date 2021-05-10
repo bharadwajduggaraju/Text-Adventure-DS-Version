@@ -2,30 +2,33 @@ import os, sys, time
 from util.colors import ColorToColor, RESET
 
 class Output:
-  long = 0.050
-  punc_delays = {',': 3, '(': 4, ')': 4, ';': 4, ':': 5, '.': 5, '?': 5, '!': 5}
+  long = 0.030
+  punc_delays = {',': 3.0, '(': 4.0, ')': 4.0, ';': 4.0, ':': 5.0, '.': 5.0, '?': 5.0, '!': 5.0}
   punc_pause = True
   def settings(name, value=None):
     """value=None indicates get"""
     is_set = value != None
     if name == "long":
       if is_set:
-        if type(value) == type(Output.long):
-          Output.long = value
-        else:
-          raise TypeError
+        Output.long = float(value) #Error from float() works fine
       return Output.long
     elif name == "punc_delays":
       if is_set:
-        if type(value) == type([]):
-          key = value[0]
-          result = value[1]
-          if type(key) == type(' ') and type(result) == type(0):
-            Output.punc_delays[key] = result
-          else:
-            raise TypeError
-        else:
-          raise TypeError
+        val_iter = iter(value) #The error raised by iter() works fine
+        enough_values = True
+        try:
+          key = next(val_iter)
+        except StopIteration:
+          enough_values = False
+        if type(key) != type(' '):
+          raise TypeError("Expected string as first value")
+        try:
+          result = float(next(val_iter)) #Type should be int, error from float() works fine
+        except StopIteration:
+          enough_values = False
+        if not enough_values:
+          raise ValueError("Expected at least 2 values")
+        Output.punc_delays[key] = result
       return Output.punc_delays[key]
     elif name == "punc_pause":
       if is_set:
@@ -63,9 +66,11 @@ def get_printable_len_from_end(s):
   return printable_len
   
 #Text Scrolling Function
-def delay_print(s="", speed=None, end='\n', color="WHITE", reset_color=True, indent=0, line_delay=0.5):
+def delay_print(s="", speed=None, end='\n', color="WHITE", reset_color=True, indent=None, line_delay=0.5):
   timer = Output.long if (speed == None) else speed
-  base_delay = 0.1 / (100.0 * timer)  #Makes greater timer values correspond to greater speeds- Helpful for the user setting the scroll speed
+  base_delay = 0.1 / (100.0 * timer) #Makes greater timer values correspond to greater speeds- Helpful for the user setting the scroll speed
+  multiline = indent != None
+  indent = 0 if not multiline else indent
 
   print(ColorToColor[color], end="")
 
@@ -79,11 +84,11 @@ def delay_print(s="", speed=None, end='\n', color="WHITE", reset_color=True, ind
     i += 1
   print(s[:i], end="")
 
-  if s[i] == '\n':
+  if i < s_length and s[i] == '\n':
     i += indent + 1 #Skip starting and indent charcters after that
   is_num = False #Technically unnecessary- Doesn't need to carry information between iterations
   while i < s_length:
-    if s[i:printable_len].isspace():
+    if multiline and s[i:printable_len].isspace():
       break
     c = s[i]
     try:
@@ -114,15 +119,27 @@ def delay_print(s="", speed=None, end='\n', color="WHITE", reset_color=True, ind
     print(RESET, end="")
   print(s[printable_len:], end="")
 
-  time.sleep(0.5)
+  time.sleep(line_delay)
 
 #Loading Effect()
 def loading_effect():
-  loading_speed = 0.0015 * Output.punc_delays['.']
-  #Because of how delay_print calculates the delay, multiplying long by punc_delays['.'] divides the time delay by punc_delays['.']
-
   clearConsole()
+  time.sleep(0.5)
   for i in range(3):
-    time.sleep(0.5)
-    delay_print("...", speed=loading_speed, end="")
+    for j in range(3): #Outputs '...'
+      sys.stdout.write('.')
+      sys.stdout.flush()
+      time.sleep(0.5)
     clearConsole()
+    time.sleep(0.5)
+
+def test_loading_effect1():
+  for i in range(3):
+    os.system("clear")
+    sys.stdout.write("Loading")
+    for j in range(3):
+      sys.stdout.write(".")
+      sys.stdout.flush()
+      time.sleep(0.5)
+  os.system("clear")
+  time.sleep(0.5)

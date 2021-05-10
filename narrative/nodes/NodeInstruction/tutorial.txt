@@ -1,0 +1,169 @@
+#All text after a hashtag is ignored
+
+#Don't forget the brackets!
+[SETTINGS] {
+  [PREFIX] { #Prefix for referencing nodes in imports
+    tutorial
+  }
+}
+
+[IMPORT] { #Import nodes from other files. Imported nodes are referenced with the prefix of the imported file.
+  narrative/nodes/example.txt
+}
+
+[NODE] {
+  [NAME] {
+    null
+  }
+}
+
+[NODE] { #Create a node
+  [NAME] { #Name of the node- This is how other nodes access this one
+    node_tutorial
+  }
+  [VALUE] { #This is what the player sees
+    This is the node tutorial node. To make a node, type "NODE" in square brackets, followed by curly braces. Inside the node, you can place various words in square brackets, followed by curly braces, to specify certain attributes of the node.
+    For example, text inside a "NAME" section specifies the node's name, which is how other nodes access it. Nodes also have VALUE, PROMPT, CHILDREN, and ERR_MESSAGE groups. The text you're reading right now is from a VALUE group. PROMPT, CHILDREN, and ERR_MESSAGE groups are for player input. You might ask the player a question using the PROMPT block and choose between different nodes in CHILDREN, as well as specifying an ERR_MESSAGE if the user doesn't enter one of the options.
+    To see the full list of different "groups" (blocks of text inside curly braces which are preceded by a word in square brackets), see the structure part of the tutorial.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    group_list
+  }
+  [VALUE] {
+    Here's a list of the groups, subgroups, and their effects.
+    __COMMENT__, _COMMENT_, and COMMENT: Makes a large comment
+    SETTINGS: Settings for the file
+      PREFIX: The prefix placed before node names in the file when it is imported
+    IMPORT: Imports nodes from other files, imported nodes are accessed by prefix.node_name (prefix is the value in SETTINGS.PREFIX of the imported file)
+    VARIABLES: Creates variables, which can communicate and store information between nodes. Each variable has the syntax NAME(TYPE):VALUE.
+    NODE: The most common group, makes a node
+      NAME: The name of the node
+      VALUE: The text for the node to process when traversed
+      PROMPT: The prompt when determining which child to traverse
+      CHILDREN: A list of child node names, all of which must have been made earlier. Each child must be separated by commas, and if a colon is placed after the child name (but before the comma), a user input of that value will cause the corresponding node to be traversed.
+      CHOICE: A name of the variable to determine which child to traverse. Should not be used with colons specifying user inputs. Note that, in the case of booleans, a value of False will cause the first child to be traversed.
+      ERR_MESSAGE: An error message for the program to display if the user enters an invalid input.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    group_list_check
+  }
+  [PROMPT] {
+    Would you like to see a list of the available groups and their effects?
+  }
+  [CHILDREN] {
+    group_list : Y,
+    group_list : YES,
+    null       : N, #Return to main flow
+    null       : NO
+  }
+  [ERR_MESSAGE] {
+    Please enter "y", "yes", "n", or "no".
+  }
+}
+
+[NODE] {
+  [NAME] {
+    structure
+  }
+  [VALUE] {
+    There are several different types of groups (text enclosed inside braces which are preceded by a type in brackets).
+    {ENTER: group_list_check}
+    A "wide" tree is recommended over a "deep" tree- That is, it is recommended to have a general node with ENTER statements for the various sections instead of having each section enter the next at the end.
+    There must be at least one node for every time the user is prompted for input, regardless of the effects of the input on traversal. This is because (currently) the only way to get user input is through the PROMPT, CHILDREN, and ERR_MESSAGE subgroups of NODE groups. If the user input is discarded, it is recommended to use a null node- a node which does nothing- as the child for the results, and to have the question node be entered through a general node which subsequently enters the next subsection.
+    Kurigalu's house in narrative/village_1.txt is a good example of this technique. When the user input leads to different nodes, the different nodes are listed as children, but when the user input will lead to the same result regardless, the children are null and kurigaluhouse_questCompleteT enters the next section.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    instruction_sequences_list
+  }
+  [VALUE] {
+    Here's a list of the instruction sequences (outside of braces):
+    COLOR: color_name
+      Changes color to color_name.
+    TIME: delay
+      Delays for delay number of seconds. Float (non-whole number) values are supported.
+    CLEAR
+      Clears the screen.
+    LOADING_EFFECT
+      Runs loading_effect.
+    ADD_ITEM: item_name; description; price; damage_amt
+      Adds an item named item_name with the given details. Note the semicolons.
+    CHANGE: bool_var_name: op_bool_str
+      Sets the value of bool_var_name to the op_bool_str. If op_bool_str is not given, the value is set to True.
+    CHANGE: int_var_name: '='new_value
+      Sets the value of int_var_name to new_value. An equals sign must be the first character in the section after trimming.
+    CHANGE: int_var_name: increment
+      Increases the value of int_var_name by increment. Negative values are supported.
+    CHARACTER: character_name: HP: '+'heal_amt
+      Heals character_name by heal_amt.
+    CHARACTER: character_name: HP: '-'damage_amt
+      Damages character_name by damage_amt. (There are differences between healing a positive amount an damaging a negative amount.)
+    CHARACTER: character_name: HP: '='new_value
+      Sets character_name's HP to new_value. A value of MAX in new_value will be replaced with the character's max HP.
+    BATTLE: battle_party_names; enemy_party_names; location_name; intro; primary_enemy_name; op_lose_message
+      Creates and begins a battle using the given info. Note the semicolons and the optional lose message.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    instruction_sequences
+  }
+  [VALUE] {
+    So, you want to learn about instruction sequences? Good! Otherwise I've written this node for nothing.
+    Anyways, instruction sequences are inside braces.
+    For example, to specify a color, you write "COLOR:color_name" in braces, where color_name is the name of a color in the ColorToColor dictionary in util/colors.py.
+    If you're looking in the text file, here's an example:
+    {COLOR: GREEN}
+    This is some green text! Time to change it back.
+    {COLOR: WHITE}
+
+    Some notes in general about instruction sequences:
+     1. Whitespace (spaces, newlines, etc.) at the beginning or end of a section in an instruction sequence is removed.
+     2. In the unlikely event you have a single character in a section (see comment for example), nothing will happen. #For example, "{CMND: }"
+     3. If you want the section in the instruction to start or end with whitespace (The only reason I can think of is the text for battles), include an exclamation mark on the outside of the whitespace.
+     4. Finally, if you want a literal exclamation mark with whitespace on the inside, double the exclamation mark.
+  }
+  [PROMPT] {
+    Do you want to see the list of instructions?
+  }
+  [CHILDREN] {
+    instruction_sequences_list: Y,
+    instruction_sequences_list: YES,
+    #Spaces don't matter
+    null                      : N, #Enters null, which does nothing.
+    null                      : NO
+  }
+}
+
+[NODE] {
+  [NAME] {
+    main
+  }
+  [VALUE] {
+    {CLEAR}
+  }
+  [PROMPT] {
+    Which part of the tutorial do you want to see?
+     1. Node creation
+     2. Structure
+     3. Instruction sequences
+     4. Examples
+     5. None
+  }
+  [CHILDREN] {
+    node_tutorial         : 1,
+    structure             : 2,
+    instruction_sequences : 3,
+    examples.main         : 4,
+    null                  : 5
+  }
+}

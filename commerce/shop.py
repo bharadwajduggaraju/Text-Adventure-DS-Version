@@ -75,8 +75,7 @@ class Shop:
         purchaseSuccessful = False
         while not purchaseSuccessful:
           itemsToBuy = validate_int_input(
-              range(1,
-                    len(self.items) + 1), "Invalid input. ",
+              range(1, len(self.items) + 1), "Invalid input. ",
               "Which item do you want to buy (type the number)? ")
           itemCount = self.items[itemsToBuy - 1]["quantity"]
           quantityDisplay = ("" if itemCount > 1 else

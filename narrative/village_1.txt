@@ -1,0 +1,1143 @@
+[SETTINGS] {
+  [PREFIX] {
+    village_1
+  }
+}
+
+[IMPORT] {
+  narrative/ai'ko_le'po/main_quest.txt
+}
+
+[VARIABLES] {
+  QUEST_COMPLETE(BOOL): FALSE,
+  MINU_VISITS(INT): 0,
+  STOLE_SOMETHING(BOOL): FALSE,
+  MINU_MAD(BOOL): FALSE,
+  SQUARE_VISITS(INT): 0,
+  BALLIYA_COAT(BOOL): FALSE,
+  BALLIYA_QUEST(INT): 0,
+  BALLIYA_QUEST_COMPLETE(BOOL): FALSE
+}
+
+[NODE] {
+  [NAME] {
+    null
+  }
+  [VALUE] {
+    {EXIT_NODE}
+  }
+}
+
+#Noble house
+[NODE] {
+  [NAME] {
+    noblehouse_questCompleteF
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    The door is locked!
+    {TIME:1}{CLEAR}
+  }
+}
+[NODE] {
+  [NAME] {
+    noblehouse_questCompleteT
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    The knocker thumps hollowly against the door.
+    You hear frantic footsteps scuttling in your direction.
+    The door creaks open, revealing a stout old butler in a tuxedo.
+    "Stay out of this house!" he whines. "The master is not expecting visitors!"
+    You were shoved out of the house!
+    {TIME:1}{CLEAR}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    noblehouse
+  }
+  [VALUE] {
+    {COLOR:DARK_RED}
+    NOBLE HOUSE
+    {COLOR:RESET}{TIME:0.25}
+  }
+  [CHILDREN] {
+    noblehouse_questCompleteF,
+    noblehouse_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+#Beginning of carpenter's house section
+[NODE] {
+  [NAME] {
+    ch_carpenter_breakfastF
+  }
+  [VALUE] {
+    "That's all right," the carpenter says, slightly disappointed. "Don't forget to come back another time!"
+    {TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_carpenter_breakfastT
+  }
+  [VALUE] {
+    "Wonderful!" He grins and proffers a bowl of steaming hot rice.
+    You munch on the food you were offered. It's delicious!
+    {CHARACTER:Esteri:HP:=MAX}{TIME:1}
+    {ENTER:carpenterhouse}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_carpenter
+  }
+  [VALUE] {
+    The carpenter glances up at you with a bit of confusion. His eyes crinkle kindly when he recognizes you.
+    "Hello, hero!" he says, standing frantically and bowing. "I greatly appreciate your help. Thank you for saving my wife, my daughter, and I!"
+    He looks down at his daughter for a second, expression soft and proud. "I would never forgive myself if I let her be hurt."
+    {TIME:0.25}
+    You're hit by a pang of jealously.
+    {TIME:0.25}
+    He looks back at you, slightly disoriented. "Where was I? Ah, yes. We're eating breakfast right now. All we have is rice, but it may be able to help you replenish your energy. Would you like to eat some?
+  }
+  [CHILDREN] {
+    ch_carpenter_breakfastT: YES,
+    ch_carpenter_breakfastT: Y,
+    ch_carpenter_breakfastF: NO,
+    ch_carpenter_breakfastF: N
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_carpenterwife
+  }
+  [VALUE] {
+    The carpenter's wife gnaws on rice. She seems distracted.
+    "Mmmmm... such good rice..."
+    {TIME:1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_takeAmulet1
+  }
+  [VALUE] {
+    You sneak the stone into your bag. No one notices.
+    {ADD_ITEM:Minu's Amulet:An amulet containing the power to harm others.}
+    You decide to sneak out of the carpenter's house before anyone can catch you.
+    {CHANGE:STOLE_SOMETHING:TRUE}{CHANGE:MINU_VISITS:1}{TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_takeAmulet2
+  }
+  [VALUE] {
+    You rescind your hand and smile stiffly.
+    {TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_minuSecret1_carpenterDisappointed1
+  }
+  [VALUE] {
+    "Thank you!" Minu's face brightens. "That makes me feel a lot more confident."
+    She looks down for a second. "It's been a while since I'd had a good friend..."
+    {TIME:0.5}
+    The moment of silence passes, and Minu smiles awkwardly.
+    {TIME:0.5}
+    She holds out her palm. In it is a small purple stone, pusling with blue light.
+    She grins. "I'd like you to have this as thanks."
+    You take the amulet and slip it into your bag.
+    {ADD_ITEM:Minu's Amulet:An amulet containing a mysterious healing power.}{CHANGE:MINU_VISITS:1}{TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuSecret1_carpenterDisappointed2
+  }
+  [VALUE] {
+    "Oh..." Minu looks concerned. "I suppose you're right. Thank you for your time, Esteri."
+    She turns away, looking disheartened.
+    You notice a stone next to her plate, bright red and pulsing with fiery orange streaks.
+    Do you take it?
+     1. Yes
+     2. No
+  }
+  [CHILDREN] {
+    ch_minu_takeAmulet1: 1,
+    ch_minu_takeAmulet2: 2
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_minuSecret1
+  }
+  [VALUE] {
+    She furtively flicks her gaze to her father.
+    "I'm afraid that my dad is disappointed that I'm not a carpenter," she confesses.
+    She looks sheepish. "I wish I could be a good carpenter, I really do. But I enjoy taking care of animals more."
+    She looks down at her lap. "Do you think he's mad at me?"
+    What will you say?
+     1. I'm sure he loves you a lot. He isn't angry.
+     2. I think he is... he seems angry.
+  }
+  [CHILDREN] {
+    ch_minu_minuSecret1_carpenterDisappointed1: 1,
+    ch_minu_minuSecret1_carpenterDisappointed2: 2
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuSecret2
+  }
+  [VALUE] {
+    Minu smiles softly. "That's all right. Maybe you can come back another time to hear my secret!"
+    {TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_minuVisits0_EsteriDescription1
+  }
+  [VALUE] {
+    "Nice to meet you, Esteri!"
+    The girl bows slightly. "My name is Minu."
+    Her expression becomes one of trepidation. "Can I trust you with a secret?"
+    Choose your response.
+     1. Sure!
+     2. No way.
+  }
+  [CHILDREN] {
+    ch_minu_minuSecret1: 1,
+    ch_minu_minuSecret2: 2
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuVisits0_EsteriDescription2
+  }
+  [VALUE] {
+    "Well, that was rude!" She looks slightly offended.
+    {CHANGE:MINU_MAD:TRUE}{TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuVisits0_EsteriDescription3
+  }
+  [VALUE] {
+    "Oh... maybe I picked the wrong person. Sorry!" She looks slightly uncomfortable.
+    {TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_minuVisits0
+  }
+  [VALUE] {
+    The carpenter's daughter looks downcast. She picks at her rice.
+    She glances up at you.
+    "Oh, you're the village hero!" she says, recognizing you immediately.
+    She kneads her hands. "What's your name?"
+    What will you say?
+     1. I'm Esteri! I'm the heir to the chiefdom of Elyria!
+     2. You don't deserve to know.
+     3. Who's the village hero?
+  }
+  [CHILDREN] {
+    ch_minu_minuVisits0_EsteriDescription1: 1,
+    ch_minu_minuVisits0_EsteriDescription2: 2,
+    ch_minu_minuVisits0_EsteriDescription3: 3
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuVisits1
+  }
+  [VALUE] {
+    "This rice is delicious!"
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu_minuMadF
+  }
+  [CHILDREN] {
+    ch_minu_minuVisits0,
+    ch_minu_minuVisits1
+  }
+  [CHOICE] {
+    MINU_VISITS
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_minu_minuMadT
+  }
+  [VALUE] {
+    You shouldn't go over to her! She's angry!
+    {TIME:1}{CLEAR}
+    {ENTER:carpenterhouse}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_minu
+  }
+  [CHILDREN] {
+    ch_minu_minuMadF,
+    ch_minu_minuMadT
+  }
+  [CHOICE] {
+    MINU_MAD
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_none
+  }
+  [VALUE] {
+    {TIME:0.5}{CLEAR}
+    {ENTER:village1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_questCompleteF
+  }
+  [VALUE] {
+    The door is locked!
+    {TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_questCompleteT
+  }
+  [VALUE] {
+    {TIME:0.25}{COLOR:WHITE}
+    Who would you like to talk to?
+     1. Carpenter
+     2. Carpenter's Wife
+     3. Carpenter's Daughter
+     4. Exit House
+  }
+  [CHILDREN] {
+    ch_carpenter     : 1,
+    ch_carpenterwife : 2,
+    ch_minu          : 3,
+    ch_none          : 4
+  }
+}
+
+[NODE] {
+  [NAME] {
+    ch_stoleSomethingF
+  }
+  [VALUE] {
+    {CLEAR}{COLOR:DARK_RED}
+    CARPENTER'S HOUSE
+    {TIME:0.25}{COLOR:RESET}
+  }
+  [CHILDREN] {
+    ch_questCompleteF,
+    ch_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+[NODE] {
+  [NAME] {
+    ch_stoleSomethingT
+  }
+  [VALUE] {
+    You can't enter! They might find out that you stole Minu's amulet!
+    {TIME:1.0}{CLEAR}
+    {ENTER:village1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    carpenterhouse
+  }
+  [CHILDREN] {
+    ch_stoleSomethingF,
+    ch_stoleSomethingT
+  }
+  [CHOICE] {
+    STOLE_SOMETHING
+  }
+}
+
+#Cobbler's house
+[NODE] {
+  [NAME] {
+    cobblerhouse
+  }
+  [VALUE] {
+    (Entering a store unavailable)
+  }
+}
+
+#Tailor's house
+[NODE] {
+  [NAME] {
+    tailorhouse_questCompleteF
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    The door is locked!
+    {TIME:1}{CLEAR}
+  }
+}
+[NODE] {
+  [NAME] {
+    tailorhouse_questCompleteT
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    You fiddle with the doorknob and the door squeaks open, scuffing the dirt floor.
+    The inside of the house is filthy. Do you still want to go in?
+  }
+}
+
+[NODE] {
+  [NAME] {
+    tailorhouse
+  }
+  [VALUE] {
+    {CLEAR}{COLOR:DARK_RED}
+    TAILOR'S HOUSE
+    {COLOR:RESET}{TIME:0.25}
+  }
+  [CHILDREN] {
+    tailorhouse_questCompleteF,
+    tailorhouse_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+#Kurigalu's house
+[NODE] {
+  [NAME] {
+    kurigaluhouse_letter
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    Kurigalu pores over the letter. "Interesting..." she mumbles.
+    She looks up after a few seconds of incoherent mumbling. "Aviveki sent you?"
+    No longer able to contain himself, Kosu nods. "Yes."
+    Kurigalu frowns. "Aviveki and I are not on the best of terms."
+    You wonder what she's talking about.
+    Behind you, Kosu shifts nervously on his feet. "We don't necessarily like her much either," he lies, lacking conviction.
+    "But we don't have much of a choice. We'd like to find Chief Amaliyah and restore her to her position."
+    {TIME:1}{CLEAR}
+    Kurigalu folds the letter into a small square and drops it into the fire.
+    She gives you a long, hard look, and sighs with exhaustion.
+    "I'm an old lady," she tells you. "I no longer have as much energy as I did years ago. I can't offer you much help myself."
+    "On the other hand," she continues, "Amaliyah was one of my best students..."
+    She meets your eyes. "And you seem to take after your mother."
+    {TIME:1}{CLEAR}
+    She pulls out a piece of aged charcoal and a sheet of pulpy wood paper.
+    After spending a few seconds scribbling frantically in Oi'nan, she folds the letter and hands it to you.
+    "Here," she tells you. "Take this letter to Nagara and find a man named Hukosu. He may be able to help you."
+    You nod.
+    Kosu clears his throat. "Do we have to go to Nagara?"
+    He sounds uncharacteristically scared.
+    Kurigalu looks up at him, expressio suddenly sharp. "Yes," she says slowly. "You must go to Nagara."
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse_AmaliyahDeath
+  }
+  [VALUE] {
+    Kurigalu inclines her head. "Mmm."
+    Will you give Kurigalu the letter?
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    You'd better give the letter to her!
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse_EsteriIntroDone
+  }
+  [VALUE] {
+    Kurigalu inclines her head. "I heard that Amaliyah died years ago."
+    What will you say?
+     1. We're not sure. I'm hoping to find her.
+     2. I don't think she died. That's why I'm looking for her.
+  }
+  [CHILDREN] {
+    null: 1,#Return back to kurigaluhouse_questCompleteT
+    null: 2
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse_EsteriIntro1
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    "Ah, yes," Kurigalu says, nodding her head in affirmation. "You're Amaliyah's daughter. Esteri, correct?"
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    Don't lie!
+  }
+}
+[NODE] {
+  [NAME] {
+    kurigaluhouse_EsteriIntro2
+  }
+  [VALUE] {
+    {TIME:1}{CLEAR}
+    "Ah, yes," Kurigalu says, nodding her head in affirmation. "You're Amaliyah's daughter, correct?"
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES
+  }
+  [ERR_MESSAGE] {
+    Don't lie!
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse_intro
+  }
+  [VALUE] {
+    You nudge the door open to reveal a cozy room.
+    The floors, made of wood coated in faded stain, are soft and splintered after decades of wear.
+    The room is in a peculiar octagonal shape, contrary to the rectangular design of many of the other cottages.
+    In the center, by a smoldering chimney, an old lady sits in a hard wooden chair.
+    {TIME:1}{CLEAR}
+    She looks up at you, eyes crinkling in a smile. "Hello, ahalan. I am Kurigalu, the matriarch of the village. What brings you here?"
+    What will you say?
+     1. I'm looking for my mother, Amaliyah. She went missing years ago.
+     2. I'm Esteri of Elyria, and I am looking for information regarding the whereabouts of my mother.
+  }
+  [CHILDREN] {
+    kurigaluhouse_EsteriIntro1: 1,
+    kurigaluhouse_EsteriIntro2: 2
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse_questCompleteF
+  }
+  [VALUE] {
+    The door is locked!
+    {TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    kurigaluhouse_questCompleteT
+  }
+  [VALUE] {
+    {ENTER: kurigaluhouse_intro}
+    {ENTER: kurigaluhouse_EsteriIntroDone}
+    {ENTER: kurigaluhouse_AmaliyahDeath}
+    {ENTER: kurigaluhouse_letter}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    kurigaluhouse
+  }
+  [VALUE] {
+    {CLEAR}{COLOR:DARK_RED}
+    KURIGALU'S HOUSE
+    {COLOR:RESET}{TIME:0.25}
+  }
+  [CHILDREN] {
+    kurigaluhouse_questCompleteF,
+    kurigaluhouse_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+[NODE] {
+  [NAME] {
+    apothecary_questCompleteF
+  }
+  [VALUE] {
+    The door is locked!
+    {TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    apothecary_questCompleteT
+  }
+  [VALUE] {
+    The door squeaks open.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    apothecary
+  }
+  [VALUE] {
+    {CLEAR}{COLOR:DARK_RED}
+    APOTHECARY
+    {COLOR:RESET}{TIME:0.25}
+  }
+  [CHILDREN] {
+    apothecary_questCompleteF,
+    apothecary_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+#Church
+[NODE] {
+  [NAME] {
+    church
+  }
+  [VALUE] {
+    (Nothing written)
+  }
+}
+
+#Townsquare
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits1_getCoatF
+  }
+  [VALUE] {
+    {CHANGE:BALLIYA_COAT:FALSE}
+    "Okay, then. See you later!"
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits1_getCoatT
+  }
+  [VALUE] {
+    {CHANGE:BALLIYA_COAT:TRUE}
+    "Okay, then. See you later!"
+    {ENTER:village1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_EsteriThank1
+  }
+  [VALUE] {
+    Balliya shrugs, a little embarrassed. "My wife's good with cloth. I just sell what she makes."
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_EsteriThank2
+  }
+  [VALUE] {
+    Balliya chuckles and says, "No problem! Besides, if you like it, it's almost free advertising."
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_EsteriThank3
+  }
+  [VALUE] {
+    After pausing for a moment, Balliya says with a hint of sarcasm, "You're welcome, you know."
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_receiveCoat
+  }
+  [VALUE] {
+    {ADD_ITEM:Coat from Balliya:A lighter coat Balliya's wife made for you.}
+    What do you say?
+     1. It looks great!
+     2. Thank you!
+     3. It looks a little garish.
+  }
+  [CHILDREN] {
+    townsquare_EsteriThank1: 1,
+    townsquare_EsteriThank2: 2,
+    townsquare_EsteriThank3: 3
+  }
+  [ERR_MESSAGE] {
+    Please choose an option.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits2_getCoatF
+  }
+  [VALUE] {
+    He nods. "Yep!"
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits2_getCoatT
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    He nods. "Yep! Also, here's the coat my wife made for you. Hope you like it!"
+    {ENTER:townsquare_receiveCoat}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits2_checkCoat
+  }
+  [CHILDREN] {
+    townsquare_squareVisits2_getCoatF,
+    townsquare_squareVisits2_getCoatT
+  }
+  [CHOICE] {
+    BALLIYA_COAT
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuestAccept1
+  }
+  [VALUE] {
+    Balliya nods, relieved. "Thank you!"
+    {CHANGE:BALLIYA_QUEST:1}
+    Kosu shrugs. "I guess we're going to the forest. I wonder what lives there besides rats?"
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuestAccept2
+  }
+  [VALUE] {
+    After a moment, Balliya nods. "Sure! I'd feel a lot safer with you and Kosu."
+    {CHANGE:BALLIYA_QUEST:2}
+    Kosu asks, "By the way, do you have any recommendations for map material? I'm starting to run low."
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuestAccept3
+  }
+  [VALUE] {
+    Balliya shrugs. "Thanks, I guess."
+    {CHANGE:BALLIYA_QUEST:3}
+    Slightly tired, Kosu gives a small yawn before apologizing, "Sorry about that. I stayed up late last night organizing what I learned from the elders."
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest
+  }
+  [VALUE] {
+    What do you say?
+     1. I can go kill them for you.
+     2. How about we go together?
+     3. Good luck!
+  }
+  [CHILDREN] {
+    townsquare_BalliyaQuestAccept1: 1,
+    townsquare_BalliyaQuestAccept2: 2,
+    townsquare_BalliyaQuestAccept3: 3
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest1_BalliyaQuestCompleteF
+  }
+  [VALUE] {
+    You turn and see Balliya waving. "Good luck with the rats!"
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest1_BalliyaQuestCompleteT
+  }
+  [VALUE] {
+    Balliya waves. "Thanks for killing those rats for me! Here's a scarf as thanks."
+    {ADD_ITEM:A scarf:It looks warm}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest2_BalliyaQuestCompleteF
+  }
+  [VALUE] {
+    Balliya walks up to you and says, "Let me know when you're ready to fight the rats."
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest2_BalliyaQuestCompleteT
+  }
+  [VALUE] {
+    You see a woman walking towards you. She says, "I thought it was dangerous for Balliya to go with you... He looks like he'll recover, though. And at least my bandages aren't getting chewed! Thanks!"
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest3_BalliyaQuestCompleteF
+  }
+  [VALUE] {
+    Balliya walks up to you. "Well, I was able to hire someone to kill the rats. It was pretty expensive, though..."
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest3_BalliyaQuestCompleteT
+  }
+  [VALUE] {
+    {EXIT_NODE}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest1
+  }
+  [CHILDREN] {
+    townsquare_BalliyaQuest1_BalliyaQuestCompleteF,
+    townsquare_BalliyaQuest1_BalliyaQuestCompleteT
+  }
+  [CHOICE] {
+    BALLIYA_QUEST_COMPLETE
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest2
+  }
+  [CHILDREN] {
+    townsquare_BalliyaQuest2_BalliyaQuestCompleteF,
+    townsquare_BalliyaQuest2_BalliyaQuestCompleteT
+  }
+  [CHOICE] {
+    BALLIYA_QUEST_COMPLETE
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuest3
+  }
+  [CHILDREN] {
+    townsquare_BalliyaQuest3_BalliyaQuestCompleteF,
+    townsquare_BalliyaQuest3_BalliyaQuestCompleteT
+  }
+  [CHOICE] {
+    BALLIYA_QUEST_COMPLETE
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_BalliyaQuestCheck
+  }
+  [CHILDREN] {
+    null,#At this point, BalliyaQuest shouldn't be 0
+    townsquare_BalliyaQuest1,
+    townsquare_BalliyaQuest2,
+    townsquare_BalliyaQuest3
+  }
+  [CHOICE] {
+    BALLIYA_QUEST
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits0
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    The town square is a bustling place, even in overcast weather. Then again, today is market day.
+    Still, it feels vaguely like a holiday. The square is decorated with banners, and everyone seems cheerful.
+    You turn to Kosu and ask, "Is today a holiday?"
+    Kosu shrugs. "I'm not sure. They taught us more about where things are than what people do."
+    Still curious, you ask someone selling scarves, "Excuse me, is today a holiday?"
+    He smiles. "Not before," he says, "but who knows about the future?" He winks at you before returning to his hawking.
+    {CHANGE:SQUARE_VISITS:+1}
+    {ENTER:village1}{EXIT_NODE}
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits1
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    Kosu says, "I'm going to ask the locals about the surrounding area."
+    You tell him, "Okay, don't get into trouble."
+    Kosu nods. "Of course! I'll stay in the town square."
+    {TIME:0.25}
+
+    You look around slightly uncertainly.
+    "Hello!"
+    You turn towards the voice. It's the scarf seller from earlier!
+    "Excuse me, but where're you from? Your coat looks a little different," he asks.
+    Slightly surprised, you answer, "From the mountains."
+    "Hm. It looks a bit thick."
+    You shurg. "It's very comfortable."
+    He nods. "I can see that. But let me know if you want a thinner coat. My name's Balliya, by the way."
+    {CHANGE:SQUARE_VISITS:+1}
+  }
+  [PROMPT] {
+    Do you accept Balliya's offer? 
+  }
+  [CHILDREN] {
+    townsquare_squareVisits1_getCoatT: YES,
+    townsquare_squareVisits1_getCoatT: Y,
+    townsquare_squareVisits1_getCoatF: NO,
+    townsquare_squareVisits1_getCoatF: N
+  }
+  [ERR_MESSAGE] {
+    Please enter "yes", "y", "no", or "n".
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits2
+  }
+  [VALUE] {
+    {COLOR:WHITE}
+    "Hi, Esteri!"
+    You wave back. "Hello... Balliya, right?"
+    {ENTER:townsquare_squareVisits2_checkCoat}
+    You stand there for a few minutes, uncertain how to respond. Then Balliya breaks the silence.
+    "Um..." He paused, looking a little embarrassed. "My wife and I have been finding bite marks on her scarves. It looks like rats. Of course, rats bite or dig through anything for some nice Nagara'ne silk.
+    "I'd find their nest and kill them, but they live in the forest, and... Well... I'd prefer not to go into the forest."
+    {ENTER:townsquare_BalliyaQuest}
+    You notice the sun setting and say, "Well, we'd better be going now. Bye!"
+    Balliya waves. "Bye!"
+    {CHANGE:SQUARE_VISITS:+1}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_squareVisits3
+  }
+  [VALUE] {
+    {ENTER:townsquare_BalliyaQuestCheck}
+    {ENTER:village1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare_questCompletionF
+  }
+  [VALUE] {
+    The area seems barren...
+    {TIME:1}{CLEAR}
+    {ENTER:village1}
+  }
+}
+[NODE] {
+  [NAME] {
+    townsquare_questCompletionT
+  }
+  [CHILDREN] {
+    townsquare_squareVisits0,
+    townsquare_squareVisits1,
+    townsquare_squareVisits2,
+    townsquare_squareVisits3
+  }
+  [CHOICE] {
+    SQUARE_VISITS
+  }
+}
+
+[NODE] {
+  [NAME] {
+    townsquare
+  }
+  [VALUE] {
+    {CLEAR}{COLOR:DARK_RED}
+    TOWN SQUARE
+    {COLOR:RESET}{TIME:0.25}
+  }
+  [CHILDREN] {
+    townsquare_questCompletionF,
+    townsquare_questCompletionT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+[NODE] {
+  [NAME] {
+    darkforest
+  }
+  [VALUE] {
+    {ENTER: ALMQ.main}
+    {CHANGE: QUEST_COMPLETE: =TRUE}
+    {ENTER: village1}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    brightforest_questCompleteF
+  }
+  [VALUE] {
+    ...
+    How did you get here? You should only get the bright forest option if the quest is complete, but clearly you got that option even though the quest is not complete.
+  }
+}
+[NODE] {
+  [NAME] {
+    brightforest_questCompleteT
+  }
+  [VALUE] {
+    (Nothing written)
+  }
+}
+
+[NODE] {
+  [NAME] {
+    brightforest
+  }
+  [CHILDREN] {
+    brightforest_questCompleteF,
+    brightforest_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}
+
+[NODE] {
+  [NAME] {
+    village1_questCompleteF
+  }
+  [VALUE] {
+    {CLEAR}
+    Please select which location you would like to visit.
+     1. Noble House
+     2. Carpenter's House
+     3. Cobbler's House
+     4. Tailor's House
+     5. Old Lady's House
+     6. Apothecary
+     7. Church
+     8. Town Square
+     9. Dark Forest
+  }
+  [CHILDREN] {
+    noblehouse     : 1,
+    carpenterhouse : 2,
+    cobblerhouse   : 3,
+    tailorhouse    : 4,
+    kurigaluhouse  : 5,
+    apothecary     : 6,
+    church         : 7,
+    townsquare     : 8,
+    darkforest     : 9
+  }
+}
+[NODE] {
+  [NAME] {
+    village1_questCompleteT
+  }
+  [VALUE] {
+    {CLEAR}
+    Please select which location you would like to visit.
+     1. Noble House
+     2. Carpenter's House
+     3. Cobbler's House
+     4. Tailor's House
+     5. Old Lady's House
+     6. Apothecary
+     7. Church
+     8. Town Square
+     9. Dark Forest
+     10. Bright Forest Path
+  }
+  [CHILDREN] {
+    noblehouse     : 1,
+    carpenterhouse : 2,
+    cobblerhouse   : 3,
+    tailorhouse    : 4,
+    kurigaluhouse  : 5,
+    apothecary     : 6,
+    church         : 7,
+    townsquare     : 8,
+    darkforest     : 9,
+    brightforest   : 10
+  }
+}
+
+[NODE] {
+  [NAME] {
+    village1
+  }
+  [CHILDREN] {
+    village1_questCompleteF,
+    village1_questCompleteT
+  }
+  [CHOICE] {
+    QUEST_COMPLETE
+  }
+}

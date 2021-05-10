@@ -1,0 +1,143 @@
+[SETTINGS] {
+  [PREFIX] {
+    examples
+  }
+}
+
+#No import example- See tutorial for that
+
+[VARIABLES] {
+  TEST_BOOL (BOOL) : False,
+  TEST_INT  (INT)  : 0
+}
+
+#Some places require nodes, even when you don't want to do anything
+[NODE] {
+  [NAME] {
+    null
+  }
+}
+
+[NODE] {
+  [NAME] {
+    example_general
+  }
+  [VALUE] {
+    This is an example node. It's recommended to have the text file open, to see how the different parts of the text file correspond with the output.
+
+    For example, the name of the node is completely invisible to the player- The player can't see the node's name.
+    On the other hand, the VALUE section of the node {COLOR:WHITE_ITALIC}is{COLOR:WHITE} visible to the player.
+    If you have the text file open, did you notice how the COLOR instructions were replaced with the format text?
+    Anyways, the entire point of the VALUE section of the node is to be displayed to the player.
+  }
+}
+
+[NODE] {
+  [NAME] {
+    example_pause
+  }
+  [VALUE] {
+    This is an example of a node looping to itself.
+  }
+  [PROMPT] {
+    Are you ready?
+  }
+  [CHILDREN] {
+    null: Y,
+    null: YES,
+    self: N,
+    self: NO
+  }
+}
+
+[NODE] {
+  [NAME] {
+    example_target
+  }
+  [VALUE] {
+    Look! A node was jumped into!
+    Notice that the EXIT_NODE command immediately exits the node- No text after it is read.
+    The only use I can think of is for testing removing some text.
+    {EXIT_NODE}
+    You can't see me!
+  }
+}
+
+[NODE] {
+  [NAME] {
+    example_instructions
+  }
+  [VALUE] {
+    Make sure you have the source file open! You have to both see the instructions in the text file and also watch their effects in the console.
+    Here's the first major example of this node: Entering.
+    To make sure you're ready, I'll go to a node and wait until you're ready.
+    {ENTER: example_pause}
+    Alright, you should be ready. The node I'm jumping demonstrates the (mostly useless) EXIT_NODE command.
+    Here we go!
+    {ENTER: example_target}
+    Alright, you just got to see an ENTER and EXIT_NODE command in action! Now for some other commands.
+    COLOR commands are fairly easy.
+    {COLOR: GREEN}
+    For example, this text is green!
+    {COLOR: BLUE}
+    And this text is blue!
+    {COLOR: WHITE}
+    Now, colors can make things interesting, but you can also wait. Here's an example of waiting 1 second:
+    {TIME: 1}
+    And here's waiting a quarter of a second:
+    {TIME: 0.25}
+    Now, this screen is getting a little filled. So I'll demonstrate clearing the screen.
+    {CLEAR}
+    Sometimes in the story we want the loading effect. So here's how to do it:
+    {LOADING_EFFECT}
+    You can add an item like so:
+    {ADD_ITEM: Item name; The item's description; 0; 0}
+    The second to last value is the price, and the last value is the damage amount.
+    Important: Note the semicolons.
+
+    And here are examples of changing variables:
+    Booleans (True or False values):
+      {CHANGE: TEST_BOOL: FALSE}
+      Capitalization doesn't matter
+      {CHANGE: TEST_BOOL}
+      Although discouraged, if nothing is given, the new value is assumed to be True.
+    Integers (Numbers):
+      {CHANGE: TEST_INT: 2}
+      This will increase the value of TEST_INT by 2.
+      {CHANGE: TEST_INT: -1}
+      This will decrease the value by 1.
+      {CHANGE: TEST_INT: =12}
+      An equals sign before the number will set the value to the given number.
+    
+    The way to change character's HP is a bit different.
+    {CHARACTER: Esteri: HP: +1}
+    The plus sign indicates a heal. Note that, unlike integer increments, the plus sign is mandatory.
+    {CHARACTER: Esteri: HP: -1}
+    The minus sign indicates dealing damage.
+    {CHARACTER: Esteri: HP: =MAX}
+    This will set Esteri's HP to max. In HP, "MAX" will be replaced with the characters max HP. Like with integer variables, the equals sign indicates direct setting.
+
+    The final instruction is the BATTLE instruction.
+    After "BATTLE", the first group is a list of character names. Then there is the list of enemy names. The location is next, as well as the intro, and the last required value is the primary enemy name. If another value is given, then it is the lose message.
+    Like with ADD_ITEM, note the semicolons.
+    {BATTLE: Esteri, Kosu; Dronae, Dronae; cave; A battle intro; Dronae}
+  }
+}
+
+[NODE] {
+  [NAME] {
+    main
+  }
+  [VALUE] {
+    Welcome to the examples section!
+  }
+  [PROMPT] {
+    Where would you like to go?
+     1. General example
+     2. Example instructions
+  }
+  [CHILDREN] {
+    example_general      : 1,
+    example_instructions : 2
+  }
+}

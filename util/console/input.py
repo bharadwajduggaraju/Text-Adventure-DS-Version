@@ -24,7 +24,7 @@ def get_float_input(prompt="", print_with_delay=False):
 def validate_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True):
   for i in range(len(accepted_list)):
     accepted_list[i] = accepted_list[i].upper()
-  validate = validate and accepted_list != []
+  validate = validate and accepted_list != [] #Set validate False if accepted_list == []
   user_input = getInput(prompt, print_with_delay).upper()
   while (user_input not in accepted_list) and validate:
     delay_print(str(errMessage))
@@ -65,7 +65,7 @@ def getInput(prompt="", print_with_delay=False):
 def settings():
   delay_print(CYAN_BOLD + "~~~~Settings~~~~" + CYAN)
   delay_print("Here, you can modify your settings.")
-  delay_print("Here are your current settings:")
+  delay_print("These are your current settings:")
   delay_print("\t1 - Text Scrolling Speed: " + str(Output.long * 100))
   delay_print("\t2 - Punctuation Pause: " + "on" if Output.punc_pause else "off")  #Python e1 if b else e2 is equivalent to b ? e1 : e2
   delay_print("\t3 - Battle Timer: " + str(Timer.timerMode))
@@ -104,7 +104,6 @@ def settings():
     time.sleep(1)
   print(RESET, end="")  #end="" prevents the trailing \n
   clearConsole()
-
 
 #Inventory menu
 def inventorymenu(clear=True):
@@ -147,6 +146,7 @@ def tutorial():
     When you are posed with a yes or no question and want to answer, you may type either \"yes\"/\"y\" or \"no\"/\"n\". It is not case sensitive.
     When posed a question, you may type \"menu\" to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented.
   """ + RESET, indent=4)
+  yes_no(False, "You must remember how to answer correctly", "Are you ready to leave?")
   time.sleep(1)
   clearConsole()
   #This is just the omnipresent tutorial, the original tutorial is going to be in a fight. Samiya will explain to the player how to access the omnipresent tutorial in the original tutorial.
@@ -179,6 +179,15 @@ def test_functions():
       print(item[0] + ": " + item[1])
       inventory.append(item)
       time.sleep(1)
+  elif function == "validate_input":
+    entries = input("Enter valid inputs (comma separated: ").split(", ")
+    error = input("Enter error message: ")
+    prompt = input("Enter prompt: ")
+    delay_in = input("Delay print output? ").lower()
+    delay = delay_in == "y" or delay_in == "yes"
+    validate_in = input("Validate? ").lower()
+    validate = validate_in == "y" or validate_in == "yes" or validate_in == ""
+    validate_input(entries, error, prompt, delay, validate)
   # elif function == "village_1":
   #   village_1()
 

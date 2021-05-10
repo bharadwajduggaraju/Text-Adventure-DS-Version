@@ -1,0 +1,44 @@
+#Whitespace (' ', '\n', '\t', etc.):
+  #All whitespace at the beginning or end of each section (text between colons, semicolons, commas, etc. when used to separate values) is removed. This means that 'COLOR: RESET', for example, will be treated as 'COLOR:RESET'. In the unlikely event of section containing only one whitespace character, however, this will not apply.
+  #If you want to include whitespace at the beginning (or end) of a section, see Exclamation Marks.
+  #Examples:
+    #'CMND:  text  ; ' -> 'CMND:text; '
+
+#Exclamation Marks ('!'):
+  #An exclamation mark at the beginning of a section which is then followed by whitespace will be removed, but the whitespace will not. Similarly, an exclamation mark at the end which is preceded by whitespace will be removed, leaving the whitespace.
+  #Note that an exclamation mark at the end of a sentence (such as "The battle started!") will not be removed because there is no whitespace immediately before it.
+  #Also note that whitespace followed by an exclamation mark followed by more whitespace will be reduced to the last group of whitespace. (See examples)
+  #If, for whatever reason, you want an exclamation mark at the beginning followed by whitespace or an exclamation mark at the end preceded by whitespace, double the exclamation mark.
+  #Examples:
+    #'CMND: !  text!' -> 'CMND:  text!'
+    #'CMND: !! text!!' -> 'CMND:! text!'
+
+#Instructions:
+  #COLOR:
+    #COLOR:color_name (Replaces with the appropriate color)
+  #TIME:
+    #TIME:delay_in_seconds (Delays for delay_in_seconds seconds)
+  #CLEAR:
+    #CLEAR (Clears console)
+  #LOADING_EFFECT:
+    #LOADING_EFFECT (Runs loading_effect)
+  #EXIT_ALL:
+    #EXIT_ALL (Exits all nodes)
+  #EXIT_NODE:
+    #EXIT_NODE (Exits current node, use case uncertain)
+  #RETURN_TO:
+    #RETURN_TO:node_name (Exits all nodes between the current node and the node named node_name, or all nodes if node_name is not currently being traversed)
+  #ENTER:
+    #ENTER:node_name (Traverses the node named node_name)
+  #ADD_ITEM:
+    #ADD_ITEM:item_name;description;price;damageAmt (Note semicolons, adds item named item_name with other given arguments)
+  #CHANGE:
+    #CHANGE:bool_var_name:op_bool_str (Sets the boolean variable to True if op_bool_str is "TRUE" or not given)
+    #CHANGE:int_var_name:increment (Increases int_var_name by increment, negative values are allowed)
+    #CHANGE:int_var_name:=new_value (Sets int_var_name to new_value)
+  #CHARACTER:
+    #CHARACTER:character_name:HP:+heal_amt (Heals character_name by heal_amt)
+    #CHARACTER:character_name:HP:-damage_amt (Damages character_name by damage_amt. Separate options given because of differences between character healing and negative damage)
+    #CHARACTER:character_name:HP:=new_value (Sets character_name's HP to new_value)
+  #BATTLE:
+    #BATTLE:battle_party_names;enemy_party_names;location_name;intro;primary_enemy_name;op_lose_message (Note semicolons, Creates battle with info and optional op_lose_message)

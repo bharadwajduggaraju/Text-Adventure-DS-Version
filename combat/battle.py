@@ -5,13 +5,15 @@ from util.variable.instances import enemies
 from util.variable.variables import party, locations
 from combat.timer import clearTimers, resetTimer, TimeOut, Timer
 
-def battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
+def full_battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you!"):
+  """Creates and begins a Battle instance.
+  Returns the battle result"""
   battle = Battle(battle_party, enemy_team, location, intro, primary_enemy_name, lose_message)
   battle_result = battle.begin()
   return battle_result
 
 class Battle:
-  def __init__(self, battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you"):
+  def __init__(self, battle_party, enemy_team, location, intro, primary_enemy_name, lose_message="Your enemies have defeated you."):
     self.battleParty = battle_party.copy()
     self.enemyTeam = enemy_team
     self.location = location.title()
@@ -78,13 +80,13 @@ class Battle:
       if (self.isFinished(retreated) == 0):
         for enemy in list(self.enemyTeam):
           delay_print("\n" + enemy.Name + " begins their turn.")
-          enemy.turn(self.battleParty)
+          enemy.turn(self.battleParty, self.enemyTeam)
     
     var = self.isFinished(retreated)
     if (var == 1):
       delay_print("You and your team have won!")
     elif not retreated:
-      delay_print("Your enemies have defeated you.")
+      delay_print(self.loseMessage)
     #Remove any running timers after function
     clearTimers()
     return var

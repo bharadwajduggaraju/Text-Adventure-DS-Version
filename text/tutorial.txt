@@ -1,0 +1,11 @@
+STORY NAVIGATION
+Slash "end story" to end program
+Slash "clear" to clear the screen
+
+PRINT STATEMENT NAVIGATION
+Hashtags at the start of a line for a print statement
+
+CHARACTERS NAVIGATION
+"Characters" and colon to enter characters and their statistics
+
+Slash "end characters" to end character description
