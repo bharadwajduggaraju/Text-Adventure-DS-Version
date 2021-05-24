@@ -31,6 +31,7 @@ class Enemy:
     self.Effects = effects
 
   def turn(self, party, enemies):
+    """party and enemies are from the point of view of the player"""
     self.applyEffects()
     move_roll = random.randint(1, 100)
     for i in range(3):

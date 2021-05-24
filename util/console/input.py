@@ -1,7 +1,8 @@
 import time, sys #Functions for operation
 from util.console.output import delay_print, clearConsole
 
-from util.colors import * #Variables
+# from util.colors import * #Variables
+import util.colors as col
 from util.colors import RESET
 from util.console.output import Output
 from combat.timer import Timer
@@ -63,7 +64,7 @@ def getInput(prompt="", print_with_delay=False):
 
 #Game Settings
 def settings():
-  delay_print(CYAN_BOLD + "~~~~Settings~~~~" + CYAN)
+  delay_print(col.CYAN_BOLD + "~~~~Settings~~~~" + col.CYAN)
   delay_print("Here, you can modify your settings.")
   delay_print("These are your current settings:")
   delay_print("\t1 - Text Scrolling Speed: " + str(Output.long * 100))
@@ -108,7 +109,7 @@ def settings():
 #Inventory menu
 def inventorymenu(clear=True):
   clearConsole()
-  delay_print(RED_BOLD + "~~~~Inventory~~~~" + RED)
+  delay_print(col.RED_BOLD + "~~~~Inventory~~~~" + col.RED)
   delay_print("Items:")
 
   for i in range(len(inventory)):
@@ -117,7 +118,7 @@ def inventorymenu(clear=True):
     )
 
   if not inventory:
-    delay_print(RED_ITALIC + "None")
+    delay_print(col.RED_ITALIC + "None")
   print(RESET, end="")  #end="" prevents the trailing \n
 
   time.sleep(1)
@@ -141,7 +142,7 @@ def tutorial():
   clearConsole()
   global long
   global timerMode
-  delay_print(RESET + PURPLE_BOLD + "~~~~TUTORIAL~~~~" + RESET + LIGHT_PURPLE)
+  delay_print(RESET + col.PURPLE_BOLD + "~~~~TUTORIAL~~~~" + RESET + col.LIGHT_PURPLE)
   delay_print("""
     When you are posed with a yes or no question and want to answer, you may type either \"yes\"/\"y\" or \"no\"/\"n\". It is not case sensitive.
     When posed a question, you may type \"menu\" to access the menu. There, you may access the settings, inventory, and tutorial. You may also exit the game, although saving is not yet implemented.

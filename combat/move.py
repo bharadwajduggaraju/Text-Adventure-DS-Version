@@ -19,7 +19,7 @@ class Move:
     #basically this should make the enemy attack a character based on a chance of their socialHeart versus that of their companions
     # A higher social presence increases the range of numbers where the character gets targeted
   
-  def __init__(self, Name, Damage, DamageMult, CritChance, CritMult, FailChance, FailMult, ComboTime, ComboMult, Accuracy, AccMult, Effects, EffectLevel, EffectMult, Characters_Hit, HitMult, TargetType=0):
+  def __init__(self, Name, Damage, DamageMult, CritChance, CritMult, FailChance, FailMult, ComboTime, ComboMult, Accuracy, AccMult, Effects, EffectLevel, EffectMult, CharactersHit, HitMult, TargetType=0):
     self.Name = Name
     self.Damage = Damage
     self.DamageMult = DamageMult
@@ -34,7 +34,7 @@ class Move:
     self.Effects = Effects
     self.EffectLevel = EffectLevel
     self.EffectMult = EffectMult
-    self.Characters_Hit = Characters_Hit
+    self.CharactersHit = CharactersHit
     self.HitMult = HitMult
     self.TargetType = TargetType
   

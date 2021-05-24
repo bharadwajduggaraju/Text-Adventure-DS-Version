@@ -1,47 +1,21 @@
 # Legend of Cauliflower
 
+We hope you've enjoyed our game!
+
 ## Credits
 
-Special thanks to all the hard working people who made this project possible!
+Special thanks to all the hardworking people who made this project possible:
 
-### Project Overview Director:
-
-Samiya Sailer
-
-### Coding:
-
-| Person | Job |
+| Member | Job |
 | -------- | -------- |
-| Joseph Eng | Code Head |
-| Eesha Jain | Code Head |
-| Bharadwaj Duggaraju | Coder |
-| Vedaant Bal | Coder |
-| Abhay | Coder |
-
-### Writing/Wordbuilding:
-
-| Person | Job |
-| -------- | -------- |
-| Samiya Sailer | Writing Head |
-| Caden Ko | Worldbuilding Head |
-| Maanasa Ramadugu | Writer |
-| Athena Shanklin |Writer and Worldbuilder|
-
-### Music:
-| Person | Job |
-| -------- | -------- |
-| Angelina Lawton | Music Head & Pianist | 
-| Athena Shanklin | Composition Assistant and Theme Creator| 
-| Gabriel Lawton | Composition Assistant and Theme Creator | 
-| Maanasa Ramadugu | Violinist | 
-| Samiya Sailer | Flautist | 
-
-### Art:
-| Person | Job |
-| -------- | -------- |
-| Hiraeth Wang Fiske | Head Artist and Enemy Designer |
-| Caden Ko | Pixel Artist and Conceptual Artist | 
-| Athena Shanklin | Pixel Artist  and Conceptual Artist|
-| Angelina Lawton | Conceptual Artist | 
-| Richard Yang | Conceptual Artist | 
-| Maanasa Ramadugu | Conceptual Artist | 
+| Samiya Tanvi Sailer | Head Writer and Project Coordinator, Ai'ko Le'po Creator and Author |
+| Caden Ko | Head Worldbuilder and Project Coordinator |
+| Angelina Lawton | Head Composer, Pianist, and Oi'nan Developer |
+| Eesha Jain | Head Coder and Saving Specialist |
+| Joseph Eng | Head Coder and Saving Specialist |
+| Athena Shanklin | Head Oi'nan Developer and Side Quest Writer, Resident Weeb |
+| Krishna Maanasa Ramadugu | Tree Village Creator, Author and Violinist |
+| Vedaant Thuse Bal | Coding Team Member and Saving Specialist |
+| Bharadwaj Duggaraju | Coding Team Member and Saving Specialist |
+| Hiraeth Wang-Fiske | Head Character Designer and Artist |
+| Reetam Bhattacharya | Oi'nan Script Specialist |

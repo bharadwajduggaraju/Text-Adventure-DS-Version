@@ -1,6 +1,6 @@
 from util.colors import ColorToColor
 
-from narrative.nodes.node import Node
+from narrative.nodes.node import StoryNode
 from narrative.nodes.sections import generate_sections
 from narrative.nodes.hub import keywords, clean_text, remove_trailing_newline, text_to_split_section, split_section_to_text, convert_name_to_global, check_escape
 
@@ -139,7 +139,7 @@ def declare_node_from_name(instruction, start_line_num, node_dict, local_names, 
   local_name = clean_text(instruction)
   global_name = settings["Prefix"] + local_name
   try:
-    virtual_node = Node.add_virtual_node(global_name)
+    virtual_node = StoryNode.add_virtual_node(global_name)
   except:
     print("Line " + str(start_line_num))
     raise
@@ -170,7 +170,7 @@ def add_node(line_num, node_data, node_dict, local_names, settings):
   local_names.add(local_name)
   new_err = None
   try:
-    new_node = Node(global_name, children, value, choices, err_message, prompt)
+    new_node = StoryNode(global_name, children, value, choices, err_message, prompt)
   except ValueError as err:
     if err.args[0].startswith("Got duplicate"):
       new_err = ValueError("Line " + str(line_num) + ": Duplicate node name \"" + local_name + "\"")
@@ -400,14 +400,14 @@ def _priv_generate_nodes(file_name, debug=0):
   return node_dict, variables, local_names, settings["Prefix"]
 
 def generate_nodes(file_name, debug=0):
-  """Returns a dictionary of the nodes created in file_name and a dictionary of the variables created in file_name.
+  """Returns a dictionary of the nodes created in file_name and a list of the dictionaries of the variables created in file_name and imported files.
   debug- Bit 0: Header, Bit 1: Starting line num, Bit 2: Section content"""
   global _cur_reading_files
   try:
     node_dict, variables, local_names, prefix = _priv_generate_nodes(file_name, debug)
   except:
     _cur_reading_files.clear() #_cur_reading_files will only be non-empty in errors
-    Node.reset() #This should only be called if there's an error- Can't be placed in a finally clause.
+    StoryNode.reset() #This should only be called if there's an error- Can't be placed in a finally clause.
     raise
   local_node_dict = {}
   for local_name in local_names:

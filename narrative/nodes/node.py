@@ -20,7 +20,7 @@ def time_instruct(split_instruction):
 
 def get_node_from_instruct(split_instruction, num_colons_before_name):
   node_name = split_instruction[num_colons_before_name] #If 1 colon before name, want 2nd item, or index 1
-  return Node.all_nodes[node_name]
+  return StoryNode.all_nodes[node_name]
 
 def add_item_from_instruct(split_instruction):
   arguments = text_to_split_section(split_instruction[1], ";", False)
@@ -129,39 +129,39 @@ def handle_instruct(instruction, variables):
     battle_from_instruction(split_instruction)
   return instruct_status
 
-class Node:
+class StoryNode:
   _virtual_node_names = set() #Node names which aren't yet initialized.
   all_nodes = {}
   cur_node_name = ""
 
   def get_curr_node():
-    return Node.cur_node_name
+    return StoryNode.cur_node_name
 
   def reset():
-    Node.all_nodes.clear()
-    Node._virtual_node_names.clear()
+    StoryNode.all_nodes.clear()
+    StoryNode._virtual_node_names.clear()
   
   def add_virtual_node(name): #Maybe change to a better name? This is probably okay, though.
     """Makes a minimal (or virtual) node which will update once if a node is initialized with the same name. Calls on add_virtual_node() with the same name will create a new node."""
     if type(name) != type(""):
       raise TypeError("Expected str; Got " + type_name(name))
-    virtual_node = Node(name, [], "", []) #Create a minimal node
-    Node._virtual_node_names.add(name)
+    virtual_node = StoryNode(name, [], "", []) #Create a minimal node
+    StoryNode._virtual_node_names.add(name)
     return virtual_node
   
   def __new__(cls, *args, **kwargs): #Handle construction and initialization of virtual nodes.
     name = kwargs["name"] if ("name" in kwargs) else args[0]
-    if name in Node._virtual_node_names:
-      return Node.all_nodes[name] #Don't make a new Node- Use the existing node with that name
+    if name in StoryNode._virtual_node_names:
+      return StoryNode.all_nodes[name] #Don't make a new Node- Use the existing node with that name
     return object.__new__(cls) #Default case
   
   def __init__(self, name, nodes, value, choices, err_message="Enter a valid input: ", prompt=""):
     #Set self.name
-    if type(name) != type(""):
+    if not isinstance(name, str):
       raise TypeError("Expected str for name; got " + type_name(name))
-    if name in Node._virtual_node_names:
-      Node._virtual_node_names.remove(name) #Last check of Node._virtual_node_names in creation- safe to remove name
-    elif name in Node.all_nodes: #Don't check this for virtual nodes
+    if name in StoryNode._virtual_node_names:
+      StoryNode._virtual_node_names.remove(name) #Last check of StoryNode._virtual_node_names in creation- safe to remove name
+    elif name in StoryNode.all_nodes: #Don't check this for virtual nodes
       raise ValueError("Got duplicate \"" + name + "\"")
     elif name in keywords["names"]:
       raise ValueError("Illegal name: \"" + name + "\"")
@@ -169,11 +169,11 @@ class Node:
     #Set self.nodes
     self.nodes = []
     for node_entry in nodes:
-      if type(node_entry) == type(""):
+      if isinstance(node_entry, str):
         if node_entry == "__self__" or node_entry == "self":
           self.nodes.append(self)
-        elif node_entry in Node.all_nodes:
-          self.nodes.append(Node.all_nodes[node_entry])
+        elif node_entry in StoryNode.all_nodes:
+          self.nodes.append(StoryNode.all_nodes[node_entry])
         #No error in else clause because names of nodes not yet created is allowed
       elif type(node_entry) == type(self): #Is a node
         self.nodes.append(node_entry)
@@ -182,7 +182,7 @@ class Node:
     #Set self.value
     self.value = remove_trailing_newline(value)
     #Set self.choices (gets set in either branch)
-    if type(choices) == type(""): #Variable name
+    if isinstance(choices, str): #Variable name
       self.choices = choices
     elif hasattr(choices, "__iter__"): #Iterable of options for the player
       self.choices = []
@@ -195,7 +195,7 @@ class Node:
     #Set self.prompt
     self.prompt = remove_trailing_newline(prompt)
     #Update Node.all_nodes
-    Node.all_nodes[name] = self
+    StoryNode.all_nodes[name] = self
   
   def __repr__(self):
     return self.name
@@ -217,9 +217,11 @@ class Node:
     option_index = self.choices.index(user_input) #Finds the first index user_input appears at in self.choices
     return option_index
 
-  def priv_traverse(self, variables):
-    print("[ENTER: " + self.name + "]") #Testing
-    Node.cur_node_name = self.name
+  def priv_traverse(self, variables, debug=7):
+    """debug: 1s bit: print on enter, 2s bit: print on exit, 4s bit: print instruction data"""
+    if debug & 1:
+      print("[ENTER: " + self.name + "]") #Testing
+    StoryNode.cur_node_name = self.name
     status = { #Used for communication with other priv_traverse() calls
       "Return depth": 0,
       "Return target": None
@@ -232,23 +234,27 @@ class Node:
           val = ""
       elif c == '}':
         instruct_data = handle_instruct(val, variables)
-        print(instruct_data) #Testing
+        if debug & 4:
+          print(instruct_data) #Testing
         status["Return depth"] = instruct_data["Return depth"]
         status["Return target"] = instruct_data["Return node"]
         enter_targ_node = instruct_data["Target node"] #targ_node to enter
         if instruct_data["Return"] and status["Return target"] is not self: #Works for None values too
-          print("[EXIT: " + self.name + "] (Return instruction)")
+          if debug & 2:
+            print("[EXIT: " + self.name + "] (Return instruction)")
           return status
         elif enter_targ_node != None: #Target to enter
-          targ_status = enter_targ_node.priv_traverse(variables)
-          Node.cur_node_name = self.name #Returned back to self
+          targ_status = enter_targ_node.priv_traverse(variables, debug)
+          StoryNode.cur_node_name = self.name #Returned back to self
           if (targ_status["Return target"] != None) and (targ_status["Return target"] is not self):
             status["Return target"] = targ_status["Return target"] #Keep on searching for return target
-            print("[EXIT: " + self.name + "] (Returning to target)")
+            if debug & 2:
+              print("[EXIT: " + self.name + "] (Returning to target)")
             return status
           elif targ_status["Return depth"] > 0:
             status["Return depth"] = targ_status["Return depth"] - 1
-            print("[EXIT: " + self.name + "] (Returning set distance)")
+            if debug & 2:
+              print("[EXIT: " + self.name + "] (Returning set distance)")
             return status
         val = "" #Reset val
       else: #Ignore '{' and '}' in value
@@ -258,20 +264,23 @@ class Node:
     
     option_index = self.get_option_index(variables)
     if option_index == None: #No children
-      print("[EXIT: " + self.name + "] (Finished traversal, no children)")
+      if debug & 2:
+        print("[EXIT: " + self.name + "] (Finished traversal, no children)")
       return status
     targ_node = self.nodes[option_index]
     if type(targ_node) == type(""): #Allow for entering node names
-      targ_node = Node.all_nodes[targ_node]
-    targ_status = targ_node.priv_traverse(variables)
+      targ_node = StoryNode.all_nodes[targ_node]
+    targ_status = targ_node.priv_traverse(variables, debug)
     #Shouldn't need to set Node.cur_node_name to self.name because this will soon leave this node
     status["Return target"] = targ_status["Return target"]
     status["Return depth"] = targ_status["Return depth"]
-    print("[EXIT: " + self.name + "] (Finished traversal of children)")
+    if debug & 2:
+      print("[EXIT: " + self.name + "] (Finished traversal of children)")
     return status
   
-  def traverse(self, variables):
-    self.priv_traverse(variables)
-    Node.cur_node_name = "" #Reset Node.cur_node_name to indicate no node currently traversed.
+  def traverse(self, variables, debug):
+    """debug: 1s bit: print on enter, 2s bit: print on exit, 4s bit: print instruction data"""
+    self.priv_traverse(variables, debug)
+    StoryNode.cur_node_name = "" #Reset Node.cur_node_name to indicate no node currently traversed.
 
-
+Node = StoryNode #Support old name of StoryNode

@@ -26,7 +26,7 @@ class Section: #Section in file
     self.children.append(child)
 
 def generate_sections(text_or_file_name, is_file_name=True, debug=0):
-  """Returns a node whose children are the outermost sections"""
+  """Returns a section whose children are the outermost sections"""
   if is_file_name:
     with open(text_or_file_name) as reader:
       text = reader.read()
@@ -107,7 +107,8 @@ def generate_sections(text_or_file_name, is_file_name=True, debug=0):
       chars_since_newline = 0
       is_comment = False
     elif c == ' ':
-      output_list[-1] += c if (indents[-1] != None and not unmatched_header) else "" #If indents[-1] == None, then this is part of determining indent. If unmatched header, this is in space between header and body
+      #If indents[-1] == None, then this is part of determining indent. If unmatched header, this is in space between header and body
+      output_list[-1] += c if (indents[-1] != None and not unmatched_header) else ""
     elif c == '#':
       vals[-1] = vals[-1].rstrip(' ') #Remove spaces at the end before a comment
       output_list[-1] += c #Include '#' for other functions to know comments

@@ -8,11 +8,13 @@ from user.hashpassword import hash_password
 from user.config.connectdb import connectDB
 from util.variable.variables import party, party_money, inventory, locations, tags
 from util.variable.inventory import allItems
+from narrative.nodes.read_file import generate_nodes
+
 # from narrative.nodes.node import Node
 
 #Joseph added these:
-from util.variable.inventory import inventory_update_from_instance
-from util.variable.variables import variables_update_from_user
+# from util.variable.inventory import inventory_update_from_user
+# from util.variable.variables import variables_update_from_user
 #name_update_from_user() takes in an instance of user and will update the variables in the appropriate file from it
 
 USERS = connectDB() # Code Split (Get User Functions)
@@ -25,19 +27,24 @@ USERS = connectDB() # Code Split (Get User Functions)
 #   data: {...data} @as Dict: Key Values Storing User Dtat
 # }
 
+def getUserWithUsername(username):
+  return USERS.find_one({"username": username})
 
 class User:
-  def __init__(self, username, password):
+  def __init__(self, username, password, data=None):
     self.username = username
     self.password = password
-    self.data = {
-      "party":party,
-			"party_money":party_money,
-			"inventory":inventory,
-			"allItems":allItems,
-			"locations":locations,    
-			"tags":tags,
-    }
+    if data == None:
+      self.data = {
+        "party":party,
+        "party_money":party_money,
+        "inventory":inventory,
+        "allItems":allItems,
+        "locations":locations,    
+        "tags":tags,
+      }
+    else:
+      self.data = data
     self.createdat = time.asctime()
     self.createdUser = False
 		
@@ -51,7 +58,6 @@ class User:
       "data": self.data,
       "createdAt": self.createdat,
       "created": self.createdUser
-      
     }
 
   def saveData(self):
@@ -83,15 +89,20 @@ class User:
       }) #Insert the User Into the DB
       self.createdUser = True
 
-  def updateAndPersist(self,newData, addedData=False) :#@method post (update locals and persist)
+  def updateAndPersist(self,newData) :#@method post (update locals and persist)
       db_username = self.username
       db_password = self.password
       db_data = self.data
-      if(username in newData) :
+      if ("username" in newData.keys()):
         db_username = newData["username"]
+      if ("password" in newData.keys()):
+        db_password = newData["password"]
+      if("data" in newData.keys()):
+        db_data = newData["data"]
+
       USERS.replace_one(
-      {"username": self.name, "password": self.password},
-      {"username": newData["name"], "password": newData["password"], "data": newData["data"]}
+      {"username": self.username, "password": self.password},
+      {"username": db_username, "password": db_password, "data": db_data, "createat": self.createdat}
       )
 
   def deleteAccount(self): #@method delete (delete account)
@@ -106,15 +117,22 @@ class User:
 
 #Tests
 
-KOSU_HASHED_PASSWORD = hash_password("esteriismyhalfsister")
+USERS.clear()
 
-KOSU = User("Kosu", KOSU_HASHED_PASSWORD)
-KOSU.createUser() #the initial call to create to the database
-print(KOSU.getUserData()) #get the data
-KOSU.deleteAccount() #should delete (implemted with match id'Server)
+# KOSU_HASHED_PASSWORD = hash_password("esteriismyhalfsister")
 
-BHARADWAJ = User("Bharadwaj", hash_password("apassword"))
-BHARADWAJ.createUser()
+# KOSU = User("Kosu", KOSU_HASHED_PASSWORD)
+# KOSU.createUser() #the initial call to create to the database
+# print(KOSU.getUserData()) #get the data
+# KOSU.deleteAccount() #should delete (implemted with match id'Server)
+
+# BHARADWAJ = User("Bharadwaj", hash_password("apassword"))
+# BHARADWAJ.createUser()
+# BHARADWAJ.updateAndPersist({
+#   "username": "Bob"
+# })
+
+
 
 
 

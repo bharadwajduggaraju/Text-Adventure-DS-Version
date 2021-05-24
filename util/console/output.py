@@ -46,9 +46,13 @@ class Output:
       return "on" if Output.punc_pause else "off"
     else:
       raise ValueError
+  
+  def clear():
+    os.system('clear')
 
-def clearConsole():
-  os.system('clear')
+clearConsole = Output.clear #Support old name
+
+#Unfinished transfer of functions
 
 def get_printable_len_from_end(s):
   s_length = len(s)
