@@ -15,6 +15,3 @@ def connectDB():
     raise Exception("error connecting to the database")
   
   return database.Users
-
-
-  

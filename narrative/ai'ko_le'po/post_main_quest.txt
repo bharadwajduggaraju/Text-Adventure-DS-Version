@@ -9,10 +9,6 @@
   VISITED_RELIA   (BOOL): FALSE,
 }
 
-[DECLARE_NODES] {
-  intersection
-}
-
 [__COMMENT__] {
   main {
     intro
@@ -92,8 +88,8 @@
   }
   [VALUE] {
     You enter Ai'ko Le'po, taking note of the curiously decorated people and houses. It's almost as if you're walking through a plume of colors and sounds of all kinds. Kosu stares in wonder, his mouth agape.
-    "It's so... much," he says, after sniffing the air. "Wait, wait, I think I see-" Kosu bounds off towards something in the village you don't see.
-    You look around, noting a large building with a sign reading, "Town Hall", and another large- if shabbier- building with a sign reading, "Servant's Quarters." A fountain stands at the center of the square, and a dark-skinned woman in a pale yellow dress dances around it.
+    "It's so... much," he says, after sniffing the air. "Wait, wait, I think I see-" Kosu bounds off towards something in the village.
+    You look around, noting a large building with a sign reading "Town Hall", and another large- if shabbier- building with a sign reading, "Servant's Quarters." A fountain stands at the center of the square, and a dark-skinned woman in a pale yellow dress dances around it.
     You turn to see another dark-haired citizen, though this time an old man, sitting on a chair outside a shop.
   }
 }

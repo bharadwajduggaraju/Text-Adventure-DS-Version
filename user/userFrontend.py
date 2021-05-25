@@ -39,7 +39,7 @@ def createUser():
       time.sleep(1)
       createUser()
     else:
-      password = hash_password(input("Enter your password"))
+      password = hash_password(input("Enter your password: "))
       #Other information here will probably include location, inventory, etc.
       user = User({"password": password}, username)
       currentUser = user

@@ -117,7 +117,7 @@ class User:
 
 #Tests
 
-USERS.clear()
+#USERS.clear()
 
 # KOSU_HASHED_PASSWORD = hash_password("esteriismyhalfsister")
 
