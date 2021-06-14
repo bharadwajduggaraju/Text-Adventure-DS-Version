@@ -4,8 +4,6 @@ import time, sys
 from user.user import User
 from user.config.connectdb import connectDB
 
-currentUser = None #NEED TO BE MOVED LATER - ONLY PLACED HERE FOR TEMPORARY
-
 def getUserWithUsername(username):
   return connectDB().find_one({"username": username})
 
@@ -15,15 +13,14 @@ def createUser():
   print("2. Create a new account")
   print("3. Exit")
 
-  answer = validate_int_input([1, 2], "Please enter 1 or 2", "")
+  answer = validate_int_input([1, 2, 3], "Please enter 1, 2, or 3", "")
   
   if (answer == 1):
     username = input("Enter your username: ")
-    password = input("Enter your password: ")
-
+    password = hash_password(input("Enter your password: "))
     user = getUserWithUsername(username)
 
-    if (user != None and user["password"] == hash_password(password)):
+    if (user != None and user["password"] == password):
       print("Successfully logged in!")
       currentUser = user
     else:
@@ -41,5 +38,6 @@ def createUser():
     else:
       password = hash_password(input("Enter your password: "))
       #Other information here will probably include location, inventory, etc.
-      user = User({"password": password}, username)
+      user = User(username, password)
+      user.createUser()
       currentUser = user

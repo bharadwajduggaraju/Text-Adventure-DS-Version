@@ -42,7 +42,7 @@ class Battle:
     delay_print(str(self.intro))
     result = validate_input([], "", "Are you ready to start the battle? ", validate=False).lower()
     if result == "shaymin":
-      return
+      return 2
     #Prompt may be changed
     delay_print("Ready or not, time to begin...")
     clearConsole()
@@ -81,39 +81,49 @@ class Battle:
         for enemy in list(self.enemyTeam):
           delay_print("\n" + enemy.Name + " begins their turn.")
           enemy.turn(self.battleParty, self.enemyTeam)
-    
-    var = self.isFinished(retreated)
-    if (var == 1):
+
+    #Remove any running timers
+    clearTimers()
+    result = self.isFinished(retreated)
+    if (result == 1):
       delay_print("You and your team have won!")
     elif not retreated:
       delay_print(self.loseMessage)
-    #Remove any running timers after function
-    clearTimers()
-    return var
+    return result
 
   def turn(self, actor): 
-    timerMode = Timer.settings("timerMode")
-    timeEnd = enemies[self.primaryEnemyName].TimeGiven + locations[self.location]["time"]
-    resetTimer(timeEnd)
-    
     delay_print("\nBeginning " + str(actor.Name) + "\'s turn.")
-    
-    if timerMode == "on":
-      print("Time: 10\n")
+
+    timerOn = Timer.settings("timerMode") == "on"
+    if timerOn:
+      timeEnd = enemies[self.primaryEnemyName].TimeGiven + locations[self.location]["time"]
+      resetTimer(timeEnd)
+      print("Time:", timeEnd)
+      print()
     
     print("Your moves:\n 1. " + str(actor.Move.Name) + "\n 2. " + str(actor.Move2.Name) + "\n 3. " + str(actor.Move3.Name) + "\n 4. Use item")
     answer = validate_int_input(range(1, 6), "Invalid input.", "Enter 1, 2, 3, or 4: ")
+    clearTimers()
     
     if 1 <= answer <= 3:
-      resetTimer(timeEnd)
+      # Select move
       if answer == 1:
         move = actor.Move
       elif answer == 2:
         move = actor.Move2
       else: #answer == 3
         move = actor.Move3
-      move.use(actor, self.battleParty, self.enemyTeam)
-      resetTimer(timeEnd)
+    
+      # Play moves, with combos
+      scale = 1 - (1/(actor.PermStats["PhysicalGrace"]+1))
+      in_time = True
+      while in_time:
+        resetTimer(timeEnd)
+        try:
+          move.use(actor, self.battleParty, self.enemyTeam)
+        except TimeOut:
+          in_time = False
+        timeEnd *= scale
     elif answer == 4:
       pass
     elif answer == 5:

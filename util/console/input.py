@@ -11,7 +11,8 @@ from util.variable.variables import inventory
 #Imported for testing:
 #[currently none]
 
-def get_float_input(prompt="", print_with_delay=False):
+def get_float_input(prompt="", print_with_delay=False) -> float:
+  """Gets a float from the user."""
   no_answer = True
   while no_answer:
     try:
@@ -22,7 +23,10 @@ def get_float_input(prompt="", print_with_delay=False):
   return answer
 
 #Input with Error Message
-def validate_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True):
+def validate_input(accepted_list, errMessage, prompt="", print_with_delay=False, validate=True) -> str:
+  """Prompts the user with prompt for input until the user enters an input in accepted_list. If print_with_delay, then the prompt will be passed into
+  
+  Every time the user enters an invalid input, delay_print(errMessage) is called."""
   for i in range(len(accepted_list)):
     accepted_list[i] = accepted_list[i].upper()
   validate = validate and accepted_list != [] #Set validate False if accepted_list == []

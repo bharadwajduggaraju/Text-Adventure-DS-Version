@@ -1,9 +1,9 @@
 import argon2
-import secrets
+import requests
+from user.config.floo import slt
+#import os
 
 ##__util__ to hash the password using argon
-#Example repl: https://replit.com/@jasonthename/Argon2-Password-Hashing-in-Python
-
 def hash_password(plaintext):
-  random_string = secrets.token_hex(8)  
-  return argon2.argon2_hash(plaintext, random_string)
+  #salt = os.environ['TOKEN_SECRET']
+  return argon2.argon2_hash(plaintext, slt)

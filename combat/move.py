@@ -50,6 +50,7 @@ class Move:
     else:
       target = Move.enemy_target_select(group)
       move_subject = actor.Name
+    
     if isAttack:
       attackRoll = random.randint(0, 20) + (activeStats[self.Accuracy] * self.AccMult)
       success = attackRoll > target.AC

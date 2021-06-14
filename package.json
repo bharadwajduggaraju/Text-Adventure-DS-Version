@@ -1,0 +1,22 @@
+{
+  "name": "Legend-of-Cauliflower",
+  "version": "1.0.0",
+  "description": "We hope you've enjoyed our game!",
+  "main": "main.py",
+  "scripts": {
+    "start": "python main.py",
+    "test": "python test.py",
+    "auth": "python accounts.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bharadwajduggaraju/Text-Adventure-DS-Version.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bharadwajduggaraju/Text-Adventure-DS-Version/issues"
+  },
+  "homepage": "https://github.com/bharadwajduggaraju/Text-Adventure-DS-Version#readme"
+}

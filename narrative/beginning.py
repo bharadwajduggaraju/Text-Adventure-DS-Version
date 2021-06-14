@@ -117,10 +117,10 @@ def adventureBeg():
 
   option = yes_no(False, "Do you want to go inside?")
   if (option != "YES") and (option != "Y"):
-   	delay_print(
+    delay_print(
       "The Regent is waiting for you..."
     )
-		option = yes_no(False, "You must decide.", "Do you want to go in?")
+    option = yes_no(False, "You must decide.", "Do you want to go in?")
 
   delay_print("""
     You walk towards the door and are stopped by two guards.

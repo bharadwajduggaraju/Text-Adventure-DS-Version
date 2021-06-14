@@ -19,6 +19,7 @@ from util.console.input import validate_input, validate_int_input, yes_no, tutor
 from commerce.trade import *
 from commerce.trade import Trade
 from narrative.beginning import adventureBeg, amaliyahIntro
+from accounts import runAccount
 add_party_member(Amaliyah)
 
 #Ellipses: "…"

@@ -6,9 +6,10 @@
 import time
 from user.hashpassword import hash_password
 from user.config.connectdb import connectDB
-from util.variable.variables import party, party_money, inventory, locations, tags
-from util.variable.inventory import allItems
+from util.console.input import delay_print
+from util.console.ouput import clearConsole
 from narrative.nodes.read_file import generate_nodes
+from narrative.nodes.node import get_curr_node
 
 # from narrative.nodes.node import Node
 
@@ -30,26 +31,28 @@ USERS = connectDB() # Code Split (Get User Functions)
 def getUserWithUsername(username):
   return USERS.find_one({"username": username})
 
+def importVars(returnValues="no"):
+	from util.variable.variables import party, party_money, inventory, locations, tags
+	from util.variable.inventory import allItems
+	if returnValues == "y" or returnValues == "yes":
+		return {
+			"party":party,
+      "party_money":party_money,
+      "inventory":inventory,
+      "allItems":allItems,
+      "locations":locations,    
+      "tags":tags,
+			"node":get_curr_node()
+		}
+
 class User:
-  def __init__(self, username, password, data=None):
+  def __init__(self, username, password, data):
     self.username = username
     self.password = password
-    if data == None:
-      self.data = {
-        "party":party,
-        "party_money":party_money,
-        "inventory":inventory,
-        "allItems":allItems,
-        "locations":locations,    
-        "tags":tags,
-      }
-    else:
-      self.data = data
+    self.data = importVars("yes")
+    self.data = data
     self.createdat = time.asctime()
     self.createdUser = False
-		
-  def login():
-    pass
 
   def getUserData(self): #@method: get (get the user data)
     return {
@@ -61,15 +64,8 @@ class User:
     }
 
   def saveData(self):
-    self.data = {
-			"party":party,
-			"party_money":party_money,
-			"inventory":inventory,
-			"allItems":allItems,
-			"locations":locations,    
-			"tags":tags,
-			# "node":Node.get_curr_node()
-		}
+    self.data = importVars("yes")
+		##UNFINISHED##
 
   def getDataField(self, request):
     return self.data[request]
@@ -78,7 +74,7 @@ class User:
     return getattr(self, field)
 		
   def createUser(self): #@method post (create the user)
-    if(self.createdUser == True):
+    if (self.createdUser == True):
       raise Exception("User Already Created")
     else:
       USERS.insert_one({
@@ -89,7 +85,7 @@ class User:
       }) #Insert the User Into the DB
       self.createdUser = True
 
-  def updateAndPersist(self,newData) :#@method post (update locals and persist)
+  def updateAndPersist(self, newData): #@method post (update locals and persist)
       db_username = self.username
       db_password = self.password
       db_data = self.data
@@ -113,8 +109,19 @@ class User:
     self.createdat = None
     self.createUser = False
 	
-	
+  def login():
+    clearConsole()
+    delay_print("Please log in:")
+    userQ = input("")
+    if getUserWithUsername(userQ) == userQ:
+      print()
+      delay_print("Please enter your password:")
+      userP = input("")
+      pass
+			##UNFINISHED##
 
+  def loadData():
+    pass
 #Tests
 
 #USERS.clear()
@@ -131,8 +138,3 @@ class User:
 # BHARADWAJ.updateAndPersist({
 #   "username": "Bob"
 # })
-
-
-
-
-

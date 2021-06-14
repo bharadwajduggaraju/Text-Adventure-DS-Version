@@ -137,6 +137,9 @@ class StoryNode:
   def get_curr_node():
     return StoryNode.cur_node_name
 
+  def set_curr_node(cur_node):
+    StoryNode.cur_node_name = cur_node.name
+
   def reset():
     StoryNode.all_nodes.clear()
     StoryNode._virtual_node_names.clear()
@@ -280,7 +283,9 @@ class StoryNode:
   
   def traverse(self, variables, debug):
     """debug: 1s bit: print on enter, 2s bit: print on exit, 4s bit: print instruction data"""
+    # Begin traversal
     self.priv_traverse(variables, debug)
-    StoryNode.cur_node_name = "" #Reset Node.cur_node_name to indicate no node currently traversed.
+    # Reset Node.cur_node_name to indicate no node currently traversed.
+    StoryNode.cur_node_name = ""
 
 Node = StoryNode #Support old name of StoryNode
