@@ -6,10 +6,10 @@
 import time
 from user.hashpassword import hash_password
 from user.config.connectdb import connectDB
-from util.console.input import delay_print
-from util.console.ouput import clearConsole
 from narrative.nodes.read_file import generate_nodes
-from narrative.nodes.node import get_curr_node
+from narrative.nodes.node import get_cur_node
+from util.console.input import delay_print
+from util.console.output import clearConsole
 
 # from narrative.nodes.node import Node
 
@@ -25,7 +25,7 @@ USERS = connectDB() # Code Split (Get User Functions)
 # @format - {
 #   username: String,
 #   password: String,
-#   data: {...data} @as Dict: Key Values Storing User Dtat
+#   data: {...data} @as Dict: Key Values Storing User Data
 # }
 
 def getUserWithUsername(username):
@@ -42,11 +42,11 @@ def importVars(returnValues="no"):
       "allItems":allItems,
       "locations":locations,    
       "tags":tags,
-			"node":get_curr_node()
+			"node":get_cur_node()
 		}
 
 class User:
-  def __init__(self, username, password, data):
+  def __init__(self, username, password, data={}):
     self.username = username
     self.password = password
     self.data = importVars("yes")

@@ -134,10 +134,10 @@ class StoryNode:
   all_nodes = {}
   cur_node_name = ""
 
-  def get_curr_node():
+  def get_cur_node():
     return StoryNode.cur_node_name
 
-  def set_curr_node(cur_node):
+  def set_cur_node(cur_node):
     StoryNode.cur_node_name = cur_node.name
 
   def reset():
@@ -289,3 +289,4 @@ class StoryNode:
     StoryNode.cur_node_name = ""
 
 Node = StoryNode #Support old name of StoryNode
+get_cur_node = StoryNode.get_cur_node

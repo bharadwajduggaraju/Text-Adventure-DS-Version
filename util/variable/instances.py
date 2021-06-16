@@ -82,15 +82,15 @@ BossKirin = Enemy("The Boss Kirin", 100, 100, 4, 3, 3, 3, 9, 3, 3, 3, 3, 3, atta
 Bandit = Enemy("Bandit", 10, 10, 10, 3, 3, 3, 5, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
 BanditThug = Enemy("Bandit Thug", 15, 15, 10, 3, 3, 1, 7, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10],)
 BanditRuffian = Enemy("Bandit Ruffian", 7, 7, 10, 3, 3, 3, 5, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10],)
-# #T2 Bandits
+#T2 Bandits
 BanditFugitive = Enemy("Bandit Fugitive", 20, 20, 7,  3, 3, 4, 6, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
 BanditBruiser = Enemy("Bandit Bruiser", 30, 30, 7,  3, 3, 2, 8, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
 BanditHitman = Enemy("Bandit Hitman", 15, 15, 7, 3, 3, 5, 5, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
-# #T3 Bandits
+#T3 Bandits
 BanditElite = Enemy("Bandit Elite", 40, 40, 4, 3, 3, 4, 8, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
 BanditStalwart = Enemy("Bandit Stalwart", 65, 65, 4, 3, 3, 3, 9, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
 BanditAssassin = Enemy("Bandit Assassin", 30, 30, 4, 3, 3, 10, 6, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10])
-# #Cave Monsters
+#Cave Monsters
 Dronae = Enemy("Dronae", 20, 20, 10, 3, 3, 3, 5, 3, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10],)
 Sentinel = Enemy("Sentinel", 50, 50, 7, 3, 3, 3, 3, 5, 3, 3, 3, 3, attack, damage, rally, [60, 30, 10],)
 #Pixies

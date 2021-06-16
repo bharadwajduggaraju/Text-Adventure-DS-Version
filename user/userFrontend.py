@@ -22,7 +22,7 @@ def createUser():
 
     if (user != None and user["password"] == password):
       print("Successfully logged in!")
-      currentUser = user
+      return user
     else:
       print("Invalid username or password.")
       time.sleep(1)
@@ -40,4 +40,4 @@ def createUser():
       #Other information here will probably include location, inventory, etc.
       user = User(username, password)
       user.createUser()
-      currentUser = user
+      return user

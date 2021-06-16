@@ -115,7 +115,7 @@ class Battle:
         move = actor.Move3
     
       # Play moves, with combos
-      scale = 1 - (1/(actor.PermStats["PhysicalGrace"]+1))
+      scale = 1 - (1/(actor.PermStats["PhysicalGrace"]/10+1))
       in_time = True
       while in_time:
         resetTimer(timeEnd)

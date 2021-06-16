@@ -7,3 +7,7 @@ from user.config.floo import slt
 def hash_password(plaintext):
   #salt = os.environ['TOKEN_SECRET']
   return argon2.argon2_hash(plaintext, slt)
+
+
+
+
